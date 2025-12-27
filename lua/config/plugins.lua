@@ -1,53 +1,109 @@
+-- [[ Helper Functions ]]
 ---@diagnostic disable-next-line: unused-function
-local gh = function(x)
-  return 'https://github.com/' .. x
+local gh = function(repo)
+  return 'https://github.com/' .. repo
 end
 ---@diagnostic disable-next-line: unused-local, unused-function
-local cb = function(x)
-  return 'https://codeberg.org/' .. x
+local cb = function(repo)
+  return 'https://codeberg.org/' .. repo
 end
 
+-- [[ Plugin Declarations ]]
 vim.pack.add {
-  -- colorschemes
+  -- [[ UI & Appearance ]]
+  -- Colorschemes
   gh 'folke/tokyonight.nvim',
   {
     src = gh 'catppuccin/nvim',
     name = 'catppuccin.nvim',
   },
-  -- icons
-  vim.g.have_nerd_font and gh 'nvim-tree/nvim-web-devicons' or nil,
-  -- fuzzy search
+  -- Icons
+  vim.g.have_nerd_font and {
+      src = gh 'nvim-tree/nvim-web-devicons',
+      version = vim.version.range '0',
+    } or nil,
+  -- Statusline
+  gh 'echasnovski/mini.nvim',
+  -- File explorer
+  gh 'nvim-tree/nvim-tree.lua',
+  -- Buffer tabs
+  gh 'akinsho/bufferline.nvim',
+  -- Indent guides
+  gh 'lukas-reineke/indent-blankline.nvim',
+
+  -- [[ Search & Navigation ]]
+  -- Fuzzy finder
   gh 'nvim-lua/plenary.nvim',
   {
     src = gh 'nvim-telescope/telescope.nvim',
     version = vim.version.range '^0.2.0',
   },
-  -- completion
+
+  -- [[ Editing & Code Intelligence ]]
+  -- Completion
   {
     src = gh 'saghen/blink.cmp',
     version = vim.version.range '1',
   },
-  -- lsp
+  -- Snippets
+  gh 'rafamadriz/friendly-snippets',
+  -- Syntax highlighting
+  gh 'nvim-treesitter/nvim-treesitter',
+  -- Comment toggling
+  gh 'numToStr/Comment.nvim',
+
+  -- [[ LSP & Development Tools ]]
+  -- LSP configuration
   gh 'neovim/nvim-lspconfig',
   gh 'folke/lazydev.nvim',
+  -- LSP package manager
   gh 'mason-org/mason.nvim',
   gh 'mason-org/mason-lspconfig.nvim',
   gh 'WhoIsSethDaniel/mason-tool-installer.nvim',
+  -- LSP UI enhancements
   gh 'j-hui/fidget.nvim',
-  -- formatter
+  -- Code formatter
   gh 'stevearc/conform.nvim',
+
+  -- [[ Git Integration ]]
+  gh 'lewis6991/gitsigns.nvim',
+
+  -- [[ Utilities ]]
+  -- Key binding helper
+  gh 'folke/which-key.nvim',
 }
 
--- colorschemes
+-- [[ Plugin Configurations ]]
+
+-- [[ UI & Appearance ]]
+
+-- Colorscheme
 vim.cmd.colorscheme 'catppuccin-macchiato'
 
--- fuzzy search
+-- Statusline
+require('mini.statusline').setup {}
+
+-- File explorer
+require('nvim-tree').setup {}
+vim.keymap.set('', '<leader>e', ':NvimTreeFindFileToggle<cr>')
+
+-- Buffer tabs
+require('bufferline').setup {}
+
+-- Indent guides
+require('ibl').setup {}
+
+-- [[ Search & Navigation ]]
+
+-- Fuzzy finder keymaps
 vim.keymap.set('n', '<leader>fs', ':Telescope find_files<cr>')
 vim.keymap.set('n', '<leader>fp', ':Telescope git_files<cr>')
-vim.keymap.set('n', '<leader>fz', ':Telescope live_files<cr>')
+vim.keymap.set('n', '<leader>fz', ':Telescope live_grep<cr>')
 vim.keymap.set('n', '<leader>fo', ':Telescope oldfiles<cr>')
 
--- completion
+-- [[ Editing & Code Intelligence ]]
+
+-- Completion
 require('blink.cmp').setup {
   keymap = { preset = 'default' },
   appearance = {
@@ -62,14 +118,32 @@ require('blink.cmp').setup {
   fuzzy = { implementation = 'prefer_rust_with_warning' },
 }
 
--- lsp
+-- Syntax highlighting
+-- Auto-update treesitter parsers when pack changes
+vim.api.nvim_create_autocmd('PackChanged', {
+  group = vim.api.nvim_create_augroup('TSUpdate', {}),
+  callback = function()
+    vim.cmd 'TSUpdate'
+  end,
+})
+require('nvim-treesitter').setup {}
+
+-- Comment toggling
+require('Comment').setup()
+
+-- [[ LSP & Development Tools ]]
+
+-- LSP configuration
 require('lazydev').setup {
   library = {
     { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
   },
 }
 
+-- LSP UI enhancements
 require('fidget').setup {}
+
+-- LSP package manager
 require('mason').setup {
   ui = { border = 'rounded' },
 }
@@ -106,6 +180,7 @@ require('mason-tool-installer').setup {
   },
 }
 
+-- LSP keymaps (set on buffer attach)
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(event)
@@ -122,21 +197,22 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
     map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
   end,
-
-  vim.diagnostic.config {
-    signs = vim.g.have_nerd_font and {
-      text = {
-        [vim.diagnostic.severity.ERROR] = '󰅚 ',
-        [vim.diagnostic.severity.WARN] = '󰀪 ',
-        [vim.diagnostic.severity.INFO] = '󰋽 ',
-        [vim.diagnostic.severity.HINT] = '󰌶 ',
-      },
-    } or {},
-    virtual_text = true,
-  },
 })
 
--- formatter
+-- Diagnostic configuration
+vim.diagnostic.config {
+  signs = vim.g.have_nerd_font and {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '󰅚 ',
+      [vim.diagnostic.severity.WARN] = '󰀪 ',
+      [vim.diagnostic.severity.INFO] = '󰋽 ',
+      [vim.diagnostic.severity.HINT] = '󰌶 ',
+    },
+  } or {},
+  virtual_text = true,
+}
+
+-- Code formatter
 require('conform').setup {
   formatters_by_ft = {
     lua = { 'stylua' },
@@ -159,3 +235,12 @@ vim.keymap.set('', '<leader>ff', function()
     lsp_format = 'fallback',
   }
 end)
+
+-- [[ Git Integration ]]
+
+require('gitsigns').setup()
+
+-- [[ Utilities ]]
+
+-- Key binding helper
+require('which-key').setup()
