@@ -1,13 +1,39 @@
--- Buffer 导航
-vim.keymap.set('n', '<leader>n', ':bn<cr>')
-vim.keymap.set('n', '<leader>p', ':bp<cr>')
-vim.keymap.set('n', '<leader>d', ':bd<cr>')
+-- buffer navigation
+vim.keymap.set('n', '<S-l>', ':bnext<CR>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<S-h>', ':bprevious<CR>', { desc = 'Previous buffer' })
+vim.keymap.set('n', '<leader>bl', ':ls<CR>:b', { desc = 'List buffers and jump' })
 
--- 窗口导航
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>')
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>')
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>')
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>')
+-- buffer management
+vim.keymap.set('n', '<leader>bd', ':bdelete<CR>', { desc = 'Delete current buffer' })
+vim.keymap.set('n', '<leader>bD', ':bdelete!<CR>', { desc = 'Force delete current buffer' })
+vim.keymap.set('n', '<leader>bn', ':enew<CR>', { desc = 'New empty buffer' })
+vim.keymap.set('n', '<leader>ba', ':%bd|e#|bd#<CR>', { desc = 'Close all buffers except current' })
 
--- 按 <Esc> 清除搜索高亮
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+-- window navigation
+vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Go to Left window' })
+vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Go to Lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Go to Upper window' })
+vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Go to Right window' })
+
+-- window resizing
+vim.keymap.set('n', '<M-Up>', ':resize +2<CR>', { desc = 'Increase window height' })
+vim.keymap.set('n', '<M-Down>', ':resize -2<CR>', { desc = 'Decrease window height' })
+vim.keymap.set('n', '<M-Left>', ':vertical resize -2<CR>', { desc = 'Decrease window width' })
+vim.keymap.set('n', '<M-Right>', ':vertical resize +2<CR>', { desc = 'Increase window width' })
+vim.keymap.set('n', '<leader>se', '<C-w>=', { desc = 'Make windows equal size' })
+
+-- window split
+vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = 'Split window vertically' })
+vim.keymap.set('n', '<leader>sh', '<C-w>s', { desc = 'Split window horizontally' })
+vim.keymap.set('n', '<leader>sc', '<C-w>c', { desc = 'Close current window' })
+vim.keymap.set('n', '<leader>so', '<C-w>o', { desc = 'Close all other windows (Only)' })
+
+-- move window
+vim.keymap.set('n', '<leader>sH', '<C-w>H', { desc = 'Move window to the far left' })
+vim.keymap.set('n', '<leader>sJ', '<C-w>J', { desc = 'Move window to the bottom' })
+vim.keymap.set('n', '<leader>sK', '<C-w>K', { desc = 'Move window to the top' })
+vim.keymap.set('n', '<leader>sL', '<C-w>L', { desc = 'Move window to the far right' })
+vim.keymap.set('n', '<leader>sx', '<C-w>x', { desc = 'Swap current window with next' })
+
+-- nohlsearch
+vim.keymap.set('n', '<Esc>', ':nohlsearch<CR>', { desc = 'No search highlight' })
