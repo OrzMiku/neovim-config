@@ -110,7 +110,7 @@ require('mini.statusline').setup {}
 
 -- File explorer
 require('nvim-tree').setup {}
-vim.keymap.set('', '<leader>e', ':NvimTreeFindFileToggle<cr>')
+vim.keymap.set('', '<leader>e', ':NvimTreeFindFileToggle<cr>', { desc = 'Toggle file explorer' })
 
 -- Buffer tabs
 require('bufferline').setup {}
@@ -121,10 +121,10 @@ require('ibl').setup {}
 -- [[ Search & Navigation ]]
 
 -- Fuzzy finder keymaps
-vim.keymap.set('n', '<leader>fs', ':Telescope find_files<cr>')
-vim.keymap.set('n', '<leader>fp', ':Telescope git_files<cr>')
-vim.keymap.set('n', '<leader>fz', ':Telescope live_grep<cr>')
-vim.keymap.set('n', '<leader>fo', ':Telescope oldfiles<cr>')
+vim.keymap.set('n', '<leader>fs', ':Telescope find_files<cr>', { desc = 'Find files' })
+vim.keymap.set('n', '<leader>fp', ':Telescope git_files<cr>', { desc = 'Find git files' })
+vim.keymap.set('n', '<leader>fz', ':Telescope live_grep<cr>', { desc = 'Live grep' })
+vim.keymap.set('n', '<leader>fo', ':Telescope oldfiles<cr>', { desc = 'Find recent files' })
 
 -- [[ Editing & Code Intelligence ]]
 
@@ -252,7 +252,7 @@ vim.keymap.set('', '<leader>ff', function()
     async = true,
     lsp_format = 'fallback',
   }
-end)
+end, { desc = 'Format buffer' })
 
 -- [[ Git Integration ]]
 
