@@ -1,4 +1,27 @@
--- [[ Helper Functions ]]
+-- [[ PackChanged/PackChangedPre Handlers ]]
+local pack_changed_group = vim.api.nvim_create_augroup('UserPackChanged', { clear = true })
+vim.api.nvim_create_autocmd('PackChanged', {
+  group = pack_changed_group,
+  callback = function(event)
+    vim.notify(vim.inspect(event.data))
+    local name, kind, active = event.data.spec.name, event.data.kind, event.data.active
+    if name == 'markdown-preview.nvim' and (kind == 'install' or kind == 'update') then
+      if not active then
+        vim.cmd.packadd 'markdown-preview.nvim'
+      end
+      vim.fn['mkdp#util#install']()
+    end
+    if name == 'nvim-treesitter' and (kind == 'install' or kind == 'update') then
+      if not active then
+        vim.cmd.packadd 'nvim-treesitter'
+      end
+      vim.cmd 'TSUpdate'
+    end
+  end,
+})
+
+-- [[ Plugin Declarations ]]
+-- Helper Functions
 ---@diagnostic disable-next-line: unused-function
 local gh = function(repo)
   return 'https://github.com/' .. repo
@@ -8,14 +31,13 @@ local cb = function(repo)
   return 'https://codeberg.org/' .. repo
 end
 
--- [[ Plugin Declarations ]]
 vim.pack.add {
   -- [[ UI & Appearance ]]
   -- Colorschemes
   gh 'folke/tokyonight.nvim',
   {
     src = gh 'catppuccin/nvim',
-    name = 'catppuccin.nvim',
+    name = 'catppuccin',
   },
   -- Icons
   vim.g.have_nerd_font and {
@@ -64,6 +86,9 @@ vim.pack.add {
   gh 'j-hui/fidget.nvim',
   -- Code formatter
   gh 'stevearc/conform.nvim',
+  -- Markdown Preview
+  gh 'iamcco/markdown-preview.nvim',
+  gh 'MeanderingProgrammer/render-markdown.nvim',
 
   -- [[ Git Integration ]]
   gh 'lewis6991/gitsigns.nvim',
@@ -118,14 +143,7 @@ require('blink.cmp').setup {
   fuzzy = { implementation = 'prefer_rust_with_warning' },
 }
 
--- Syntax highlighting
--- Auto-update treesitter parsers when pack changes
-vim.api.nvim_create_autocmd('PackChanged', {
-  group = vim.api.nvim_create_augroup('TSUpdate', {}),
-  callback = function()
-    vim.cmd 'TSUpdate'
-  end,
-})
+-- Treesitter
 require('nvim-treesitter').setup {}
 
 -- Comment toggling
@@ -182,7 +200,7 @@ require('mason-tool-installer').setup {
 
 -- LSP keymaps (set on buffer attach)
 vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  group = vim.api.nvim_create_augroup('UserLspConfig', { clear = true }),
   callback = function(event)
     local map = function(keys, func, desc, mode)
       vim.keymap.set(mode or 'n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
