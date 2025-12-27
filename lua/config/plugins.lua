@@ -262,3 +262,5 @@ require('gitsigns').setup()
 
 -- Key binding helper
 require('which-key').setup()
+vim.keymap.set('n', '<leader>?', ':WhichKey<cr>', { desc = 'Show all keymaps' })
+vim.keymap.set('n', '<leader>fk', ':Telescope keymaps<CR>', { desc = 'Find keymaps' })
