@@ -125,6 +125,9 @@ vim.keymap.set('n', '<leader>fs', ':Telescope find_files<cr>', { desc = 'Find fi
 vim.keymap.set('n', '<leader>fp', ':Telescope git_files<cr>', { desc = 'Find git files' })
 vim.keymap.set('n', '<leader>fz', ':Telescope live_grep<cr>', { desc = 'Live grep' })
 vim.keymap.set('n', '<leader>fo', ':Telescope oldfiles<cr>', { desc = 'Find recent files' })
+vim.keymap.set('n', '<leader>fk', ':Telescope keymaps<CR>', { desc = 'Find keymaps' })
+vim.keymap.set('n', '<leader>fh', ':Telescope help_tags<cr>', { desc = 'Find help documentation' })
+vim.keymap.set('n', '<leader>f?', ':Telescope help_tags<cr>', { desc = 'Find help documentation' })
 
 -- [[ Editing & Code Intelligence ]]
 
@@ -263,4 +266,3 @@ require('gitsigns').setup()
 -- Key binding helper
 require('which-key').setup()
 vim.keymap.set('n', '<leader>?', ':WhichKey<cr>', { desc = 'Show all keymaps' })
-vim.keymap.set('n', '<leader>fk', ':Telescope keymaps<CR>', { desc = 'Find keymaps' })
