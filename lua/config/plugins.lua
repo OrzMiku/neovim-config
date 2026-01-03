@@ -31,6 +31,16 @@ local cb = function(repo)
   return 'https://codeberg.org/' .. repo
 end
 
+if vim.g.have_nerd_font then
+  -- Icons
+  vim.pack.add {
+    {
+      src = gh 'nvim-tree/nvim-web-devicons',
+      version = vim.version.range '0',
+    },
+  }
+end
+
 vim.pack.add {
   -- [[ UI & Appearance ]]
   -- Colorschemes
@@ -39,11 +49,6 @@ vim.pack.add {
     src = gh 'catppuccin/nvim',
     name = 'catppuccin',
   },
-  -- Icons
-  vim.g.have_nerd_font and {
-      src = gh 'nvim-tree/nvim-web-devicons',
-      version = vim.version.range '0',
-    } or nil,
   -- Statusline
   gh 'echasnovski/mini.nvim',
   -- File explorer
