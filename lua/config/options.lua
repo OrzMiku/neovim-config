@@ -18,6 +18,7 @@ vim.o.showmode = false
 -- 剪贴板
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
+  vim.g.clipboard = 'osc52'
 end)
 
 -- 缩进设置
