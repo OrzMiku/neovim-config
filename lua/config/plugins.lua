@@ -57,6 +57,10 @@ vim.pack.add {
   gh 'akinsho/bufferline.nvim',
   -- Indent guides
   gh 'lukas-reineke/indent-blankline.nvim',
+  -- Cursor Animation
+  gh 'sphamba/smear-cursor.nvim',
+  -- Smooth Scroll
+  gh 'karb94/neoscroll.nvim',
 
   -- [[ Search & Navigation ]]
   -- Fuzzy finder
@@ -123,6 +127,12 @@ require('bufferline').setup {}
 -- Indent guides
 require('ibl').setup {}
 
+-- Cursor Animation
+require('smear_cursor').setup {}
+
+-- Smooth Scroll
+require('neoscroll').setup {}
+
 -- [[ Search & Navigation ]]
 
 -- Fuzzy finder keymaps
@@ -152,7 +162,7 @@ require('blink.cmp').setup {
 }
 
 -- Treesitter
-require('nvim-treesitter').setup {}
+require('nvim-treesitter').install()
 
 -- Comment toggling
 require('Comment').setup()
