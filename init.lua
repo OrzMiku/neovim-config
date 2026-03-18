@@ -1,34 +1,29 @@
--- Enable Ahead-of-Time bytecode compilation
-if vim.loader then
-  vim.loader.enable()
-end
-
---------------------------------------------------------------------------------
---- 02 - After Lazy
---------------------------------------------------------------------------------
+----------------------------------------
+--- 02 - After LazyVimStarted
+----------------------------------------
 vim.api.nvim_create_autocmd('User', {
   pattern = 'LazyVimStarted',
   callback = function()
+    require('modules.lsp').setup()
     vim.schedule(function()
-      require('modules.lsp').setup()
       require 'modules.keymaps'
       require 'modules.options'
-      require 'modules.diagnostics'.setup()
+      require('modules.diagnostics').setup()
     end)
   end,
 })
 
---------------------------------------------------------------------------------
+----------------------------------------
 --- 00 - Preload
---------------------------------------------------------------------------------
+----------------------------------------
 require('modules.preload').setup()
 
---------------------------------------------------------------------------------
+----------------------------------------
 --- 01 - Lazy
---------------------------------------------------------------------------------
+----------------------------------------
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.uv.fs_stat(lazypath) then
-  local lazyrepo = 'https://ghfast.top/github.com/folke/lazy.nvim.git'
+  local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
   local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
   if vim.v.shell_error ~= 0 then
     error('Error cloning lazy.nvim: \n' .. out)

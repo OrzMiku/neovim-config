@@ -8,7 +8,22 @@ return {
     opts = {},
   },
   {
+    'folke/which-key.nvim',
+    event = 'VeryLazy',
+    opts = {},
+    keys = {
+      {
+        '<leader>?',
+        function()
+          require('which-key').show { global = false }
+        end,
+        desc = 'Buffer Local Keymaps (which-key)',
+      },
+    },
+  },
+  {
     'akinsho/bufferline.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
     opts = {},
@@ -21,15 +36,18 @@ return {
   },
   {
     'lukas-reineke/indent-blankline.nvim',
+    event = { 'BufReadPost', 'BufNewFile' },
     main = 'ibl',
     opts = {},
   },
   {
     'sphamba/smear-cursor.nvim',
+    event = 'VeryLazy',
     opts = {},
   },
   {
-    'lewis6991/gitsigns.nvim',
+    'j-hui/fidget.nvim',
+    event = 'LspAttach',
     opts = {},
   },
 }

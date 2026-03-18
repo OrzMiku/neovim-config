@@ -7,6 +7,7 @@ return {
       'MunifTanjim/nui.nvim',
       'nvim-tree/nvim-web-devicons',
     },
+    cmd = 'Neotree',
     lazy = false,
     keys = {
       {
@@ -15,24 +16,11 @@ return {
         desc = 'Toggle NeoTree',
       },
     },
-  },
-  {
-    'folke/which-key.nvim',
-    event = 'VeryLazy',
-    opts = {},
-    keys = {
-      {
-        '<leader>?',
-        function()
-          require('which-key').show { global = false }
-        end,
-        desc = 'Buffer Local Keymaps (which-key)',
+    opts = {
+      window = {
+        width = 36,
       },
     },
-  },
-  {
-    'numToStr/Comment.nvim',
-    opts = {},
   },
   {
     'nvim-telescope/telescope.nvim',
@@ -49,5 +37,10 @@ return {
       { '<leader>fh', '<cmd>Telescope help_tags<cr>', desc = 'Find help documentation' },
       { '<leader>f?', '<cmd>Telescope help_tags<cr>', desc = 'Find help documentation' },
     },
+  },
+  {
+    'lewis6991/gitsigns.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
+    opts = {},
   },
 }

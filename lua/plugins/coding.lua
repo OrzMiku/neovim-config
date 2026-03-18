@@ -2,6 +2,10 @@ return {
   {
     'saghen/blink.cmp',
     version = '1.*',
+    event = 'InsertEnter',
+    dependencies = {
+      'rafamadriz/friendly-snippets',
+    },
     opts = {
       keymap = { preset = 'default' },
       appearance = {
@@ -16,5 +20,9 @@ return {
       fuzzy = { implementation = 'prefer_rust_with_warning' },
     },
   },
-  'rafamadriz/friendly-snippets',
+  {
+    'numToStr/Comment.nvim',
+    event = 'VeryLazy',
+    opts = {},
+  },
 }
