@@ -10,8 +10,9 @@ vim.api.nvim_create_autocmd('User', {
   pattern = 'LazyVimStarted',
   callback = function()
     vim.schedule(function()
-      require 'modules.options'
       require 'modules.keymaps'
+      require 'modules.options'
+      require('modules.lsp').setup()
     end)
   end,
 })
@@ -37,5 +38,6 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup {
   spec = {
     { import = 'plugins' },
+    { import = 'plugins.langs' },
   },
 }
