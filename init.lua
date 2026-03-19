@@ -5,11 +5,9 @@ vim.api.nvim_create_autocmd('User', {
   pattern = 'LazyVimStarted',
   callback = function()
     require('modules.lsp').setup()
-    vim.schedule(function()
-      require 'modules.keymaps'
-      require 'modules.options'
-      require('modules.diagnostics').setup()
-    end)
+    require 'modules.options'
+    require 'modules.keymaps'
+    require('modules.diagnostics').setup()
   end,
 })
 
