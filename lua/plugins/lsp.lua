@@ -28,6 +28,7 @@ return {
           'cssls',
           'clangd',
           'marksman',
+          'texlab',
         }
         for _, name in ipairs(ensure_installed) do
           vim.lsp.enable(name)

@@ -14,6 +14,7 @@ return {
         markdown = { 'prettier', 'markdownlint' },
         c = { 'clang-format' },
         cpp = { 'clang-format' },
+        tex = { 'tex-fmt' },
       },
     },
     keys = {
