@@ -29,7 +29,8 @@ end)()
 
 ---@type vim.diagnostic.Opts
 local DiagnosticsConfig = {
-  virtual_lines = true,
+  virtual_lines = false,
+  virtual_text = true,
   underline = false,
   signs = {
     text = IconTable,

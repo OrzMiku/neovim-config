@@ -35,3 +35,6 @@ vim.keymap.set('n', '<leader>sx', '<C-w>x', { desc = 'Swap current window with n
 
 -- nohlsearch
 vim.keymap.set('n', '<Esc><Esc>', ':nohlsearch<CR>', { desc = 'No search highlight' })
+
+-- open diagnostic list
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'open diagnostic list' })
