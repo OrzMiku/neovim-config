@@ -1,9 +1,8 @@
+---@module 'lazy.core.config'
+---@type LazySpec[]
 return {
   {
     'vyfor/cord.nvim',
-  },
-  {
-    'wakatime/vim-wakatime',
-    lazy = false,
+    event = "VeryLazy",
   },
 }

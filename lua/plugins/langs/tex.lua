@@ -26,6 +26,8 @@ local function view_method_setup()
   end
 end
 
+---@module 'lazy.core.config'
+---@type LazySpec
 return {
   'lervag/vimtex',
   lazy = false,

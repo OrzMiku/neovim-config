@@ -1,3 +1,5 @@
+---@module 'lazy.core.config'
+---@type LazySpec[]
 return {
   {
     'nvim-neo-tree/neo-tree.nvim',
@@ -7,8 +9,8 @@ return {
       'MunifTanjim/nui.nvim',
       'nvim-tree/nvim-web-devicons',
     },
-    cmd = 'Neotree',
     lazy = false,
+    cmd = 'Neotree',
     keys = {
       {
         '<leader>e',
@@ -16,7 +18,15 @@ return {
         desc = 'Toggle NeoTree',
       },
     },
+    ---@module 'neo-tree'
+    ---@type neotree.Config
     opts = {
+      filesystem = {
+        use_libuv_file_watcher = true,
+        follow_current_file = {
+          enabled = true,
+        },
+      },
       window = {
         width = 36,
       },
@@ -41,6 +51,11 @@ return {
   {
     'lewis6991/gitsigns.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
-    opts = {},
+    ---@module 'gitsigns'
+    ---@type Gitsigns.Config
+    ---@diagnostic disable-next-line: missing-fields
+    opts = {
+      current_line_blame = true,
+    },
   },
 }

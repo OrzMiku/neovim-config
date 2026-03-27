@@ -1,3 +1,7 @@
+if vim.loader then
+  vim.loader.enable()
+end
+
 ----------------------------------------
 --- 02 - After LazyVimStarted
 ----------------------------------------
@@ -33,5 +37,21 @@ require('lazy').setup {
   spec = {
     { import = 'plugins' },
     { import = 'plugins.langs' },
+  },
+  performance = {
+    cache = {
+      enabled = true,
+    },
+    reset_packpath = true,
+    rtp = {
+      ---@type string[]
+      disabled_plugins = {
+        'gzip',
+        'tarPlugin',
+        'zipPlugin',
+        'netrwPlugin',
+        'tutor',
+      },
+    },
   },
 }

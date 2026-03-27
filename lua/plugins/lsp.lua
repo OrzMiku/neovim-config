@@ -1,7 +1,10 @@
+---@module 'lazy.core.config'
+---@type LazySpec[]
 return {
   {
     'mason-org/mason.nvim',
-    event = 'VeryLazy',
+    ---@module 'mason'
+    ---@type MasonSettings
     opts = {
       ui = {
         icons = {
@@ -17,28 +20,15 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       vim.schedule(function()
-        local ensure_installed = {
-          'lua_ls',
-          'jsonls',
-          'taplo',
-          'yamlls',
-          'vue_ls',
-          'vtsls',
-          'html',
-          'cssls',
-          'clangd',
-          'marksman',
-          'texlab',
-        }
-        for _, name in ipairs(ensure_installed) do
-          vim.lsp.enable(name)
-        end
+        vim.lsp.enable(require('modules.configs.langs').get_lsp_servers())
       end)
     end,
   },
   {
     'folke/lazydev.nvim',
     ft = 'lua',
+    ---@module 'lazydev'
+    ---@type lazydev.Config
     opts = {
       library = {
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },

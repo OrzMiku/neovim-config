@@ -1,21 +1,12 @@
+---@module 'lazy.core.config'
+---@type LazySpec[]
 return {
   {
     'stevearc/conform.nvim',
+    ---@module 'conform'
+    ---@type conform.setupOpts
     opts = {
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        javascript = { 'prettier' },
-        typescript = { 'prettier' },
-        javascriptreact = { 'prettier' },
-        typescriptreact = { 'prettier' },
-        json = { 'prettier' },
-        yaml = { 'prettier' },
-        toml = { 'prettier' },
-        markdown = { 'prettier', 'markdownlint' },
-        c = { 'clang-format' },
-        cpp = { 'clang-format' },
-        tex = { 'tex-fmt' },
-      },
+      formatters_by_ft = require('modules.configs.langs').get_formatters(),
     },
     keys = {
       {

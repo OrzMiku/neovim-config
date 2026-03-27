@@ -1,3 +1,5 @@
+---@module 'lazy.core.config'
+---@type LazySpec[]
 return {
   {
     'nvim-tree/nvim-web-devicons',
@@ -29,10 +31,16 @@ return {
     opts = {},
   },
   {
-    'echasnovski/mini.nvim',
-    config = function()
-      require('mini.statusline').setup()
-    end,
+    'nvim-lualine/lualine.nvim',
+    event = 'VeryLazy',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {
+      options = {
+        disabled_filetypes = {
+          statusline = { 'neo-tree' },
+        },
+      },
+    },
   },
   {
     'lukas-reineke/indent-blankline.nvim',

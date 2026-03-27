@@ -1,3 +1,5 @@
+---@module 'lazy.core.config'
+---@type LazySpec[]
 return {
   {
     'MeanderingProgrammer/render-markdown.nvim',
@@ -5,10 +7,12 @@ return {
     opts = {},
   },
   {
-    'selimacerbas/markdown-preview.nvim',
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
     ft = { 'markdown' },
-    name = 'markdown_preview',
-    dependencies = { 'selimacerbas/live-server.nvim' },
-    opts = {},
+    build = function()
+      vim.cmd [[lazy load markdown-preview.nvim]]
+      vim.fn['mkdp#util#install']()
+    end,
   },
 }
