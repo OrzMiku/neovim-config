@@ -43,8 +43,8 @@ return {
   {
     'sphamba/smear-cursor.nvim',
     event = 'VeryLazy',
-    enabled = function ()
-        return not vim.g.neovide
+    enabled = function()
+      return not vim.g.neovide
     end,
     opts = {},
   },
