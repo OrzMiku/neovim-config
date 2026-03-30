@@ -59,8 +59,15 @@ return {
       },
     },
   },
-  {
+  -- https://github.com/numToStr/Comment.nvim/issues/517
+  --[[ {
     'numToStr/Comment.nvim',
+    event = 'VeryLazy',
+    opts = {},
+  }, ]]
+  {
+    'faergeek/Comment.nvim',
+    branch = 'nvim-0.12-compatibility',
     event = 'VeryLazy',
     opts = {},
   },

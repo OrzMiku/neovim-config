@@ -129,7 +129,6 @@ return {
   },
   {
     'junegunn/fzf',
-    lazy = true,
     build = function()
       vim.fn['fzf#install']()
     end,
@@ -137,7 +136,6 @@ return {
   {
     'kevinhwang91/nvim-bqf',
     ft = { 'qf' },
-    dependencies = { { 'junegunn/fzf' } },
   },
   {
     'akinsho/toggleterm.nvim',
