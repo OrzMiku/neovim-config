@@ -12,6 +12,7 @@ vim.api.nvim_create_autocmd('User', {
     require 'modules.options'
     require 'modules.keymaps'
     require('modules.diagnostics').setup()
+    require('modules.plugins').setup()
   end,
 })
 
