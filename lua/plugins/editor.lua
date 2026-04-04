@@ -62,35 +62,12 @@ end
 ---@type LazySpec[]
 return {
   {
-    'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v3.x',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'MunifTanjim/nui.nvim',
-      'nvim-tree/nvim-web-devicons',
-    },
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    dependencies = { 'nvim-mini/mini.icons' },
     lazy = false,
-    cmd = 'Neotree',
-    keys = {
-      {
-        '<leader>e',
-        ':Neotree toggle<cr>',
-        desc = 'Toggle NeoTree',
-      },
-    },
-    ---@module 'neo-tree'
-    ---@type neotree.Config
-    opts = {
-      filesystem = {
-        use_libuv_file_watcher = true,
-        follow_current_file = {
-          enabled = true,
-        },
-      },
-      window = {
-        width = 36,
-      },
-    },
   },
   {
     'nvim-telescope/telescope.nvim',

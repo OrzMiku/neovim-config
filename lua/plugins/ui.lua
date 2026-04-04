@@ -2,45 +2,14 @@
 ---@type LazySpec[]
 return {
   {
-    'nvim-tree/nvim-web-devicons',
-    enable = function()
-      return vim.g.have_nerd_font
+    'nvim-mini/mini.icons',
+    version = false,
+    config = function()
+      require('mini.icons').setup {
+        style = vim.g.have_nerd_font and 'glyph' or 'ascii',
+      }
+      MiniIcons.mock_nvim_web_devicons()
     end,
-    lazy = true,
-    opts = {
-      override = {
-        vsh = {
-          icon = '',
-          color = '#42ff88',
-          cterm_color = '84',
-          name = 'Vsh',
-        },
-        fsh = {
-          icon = '',
-          color = '#4288ff',
-          cterm_color = '69',
-          name = 'Fsh',
-        },
-        vert = {
-          icon = '',
-          color = '#42ff88',
-          cterm_color = '84',
-          name = 'Vert',
-        },
-        frag = {
-          icon = '',
-          color = '#4288ff',
-          cterm_color = '69',
-          name = 'Frag',
-        },
-        glsl = {
-          icon = '',
-          color = '#ff4288',
-          cterm_color = '204',
-          name = 'Glsl',
-        },
-      },
-    },
   },
   {
     'folke/which-key.nvim',
@@ -57,18 +26,9 @@ return {
     },
   },
   {
-    'nvimdev/dashboard-nvim',
-    event = 'VimEnter',
-    config = function()
-      require('dashboard').setup {}
-    end,
-    dependencies = { { 'nvim-tree/nvim-web-devicons' } },
-  },
-  {
     'akinsho/bufferline.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
     version = '*',
-    dependencies = 'nvim-tree/nvim-web-devicons',
     opts = {},
   },
   {
@@ -110,14 +70,8 @@ return {
   {
     'nvim-lualine/lualine.nvim',
     event = 'VeryLazy',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    opts = {
-      options = {
-        disabled_filetypes = {
-          statusline = { 'neo-tree' },
-        },
-      },
-    },
+    dependencies = { 'nvim-mini/mini.icons' },
+    opts = {},
   },
   {
     'lukas-reineke/indent-blankline.nvim',
