@@ -68,6 +68,9 @@ return {
     opts = {},
     dependencies = { 'nvim-mini/mini.icons' },
     lazy = false,
+    keys = {
+      { '<leader>e', '<cmd>Oil<cr>', desc = 'open file explorer' },
+    },
   },
   {
     'nvim-telescope/telescope.nvim',
