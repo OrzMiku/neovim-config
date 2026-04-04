@@ -7,7 +7,40 @@ return {
       return vim.g.have_nerd_font
     end,
     lazy = true,
-    opts = {},
+    opts = {
+      override = {
+        vsh = {
+          icon = '',
+          color = '#42ff88',
+          cterm_color = '84',
+          name = 'Vsh',
+        },
+        fsh = {
+          icon = '',
+          color = '#4288ff',
+          cterm_color = '69',
+          name = 'Fsh',
+        },
+        vert = {
+          icon = '',
+          color = '#42ff88',
+          cterm_color = '84',
+          name = 'Vert',
+        },
+        frag = {
+          icon = '',
+          color = '#4288ff',
+          cterm_color = '69',
+          name = 'Frag',
+        },
+        glsl = {
+          icon = '',
+          color = '#ff4288',
+          cterm_color = '204',
+          name = 'Glsl',
+        },
+      },
+    },
   },
   {
     'folke/which-key.nvim',
