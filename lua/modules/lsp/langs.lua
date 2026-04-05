@@ -26,6 +26,7 @@ M.langs = {
   scss = { formatters = { 'prettier' } },
   html = { lsp = 'html', formatters = { 'prettier' } },
   latex = { lsp = 'texlab', formatters = { 'tex-fmt' } },
+  glsl = { lsp = 'mcshader' },
 }
 
 function M.get_lsp_servers()
