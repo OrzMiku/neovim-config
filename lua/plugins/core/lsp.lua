@@ -18,11 +18,7 @@ return {
   {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
-    config = function()
-      vim.schedule(function()
-        vim.lsp.enable(require('modules.configs.langs').get_lsp_servers())
-      end)
-    end,
+    config = require('modules.plugins.core.lsp').setup,
   },
   {
     'folke/lazydev.nvim',

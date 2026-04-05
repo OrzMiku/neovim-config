@@ -74,15 +74,30 @@ local lsp_buf_setup = function(event)
   bmap('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
   bmap('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
-  -- for vtsls plugin
   vtsls_buf_setup(event)
 end
 
+local enable_inline_completion = function()
+  vim.lsp.enable 'copilot'
+  vim.lsp.inline_completion.enable()
+  vim.keymap.set('i', '<C-.>', function()
+    if not vim.lsp.inline_completion.get() then
+      return '<C-.>'
+    end
+  end, { expr = true, desc = 'Accept the current line inline completion' })
+end
+
 function M.setup()
+  if vim.g.experimental.inline_completion then
+    enable_inline_completion()
+  end
+
   vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspAttach', { clear = true }),
     callback = lsp_buf_setup,
   })
+
+  vim.lsp.enable(require('modules.lsp.langs').get_lsp_servers())
 end
 
 return M
