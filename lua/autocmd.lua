@@ -3,6 +3,7 @@ local augroup = {
   user_pack_changed = vim.api.nvim_create_augroup('UserPackChanged', { clear = true }),
   user_lsp_progress = vim.api.nvim_create_augroup('UserLspProgress', { clear = true }),
   after_pack_add = vim.api.nvim_create_augroup('AfterPackAdd', { clear = true }),
+  user_lsp_attach = vim.api.nvim_create_augroup('UserLspAttach', { clear = true }),
 }
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -29,7 +30,10 @@ vim.api.nvim_create_autocmd('User', {
           local lang = vim.treesitter.language.get_lang(ft) or ft
           local nvim_treesitter = require 'nvim-treesitter'
           -- automatically install missing treesitter parsers
-          if _G.UserConfig.treesitter.auto_install and not vim.treesitter.language.add(lang) then
+          if _G.UserConfig.treesitter.auto_install_by_ft.enable and not vim.treesitter.language.add(lang) then
+            if vim.tbl_contains(_G.UserConfig.treesitter.auto_install_by_ft.ignore, ft) then
+              return
+            end
             local available = nvim_treesitter.get_available()
             -- check if lang is among the available parsers
             if vim.tbl_contains(available, lang) then
@@ -74,5 +78,12 @@ vim.api.nvim_create_autocmd('LspProgress', {
       status = value.kind ~= 'end' and 'running' or 'success',
       percent = value.percentage,
     })
+  end,
+})
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = augroup.user_lsp_attach,
+  callback = function(ev)
+    require('modules.lsp').lsp_buf_setup(ev)
   end,
 })

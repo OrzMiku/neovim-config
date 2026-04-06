@@ -23,6 +23,7 @@ vim.cmd.colorscheme 'catppuccin-nvim'
 vim.schedule(function()
   vim.lsp.enable {
     'lua_ls',
+    'vtsls',
   }
   require('lazydev').setup {
     library = {
