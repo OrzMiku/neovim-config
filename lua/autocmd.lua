@@ -1,6 +1,8 @@
 local augroup = {
   user_file_type = vim.api.nvim_create_augroup('UserFileType', { clear = true }),
   user_pack_changed = vim.api.nvim_create_augroup('UserPackChanged', { clear = true }),
+  user_lsp_progress = vim.api.nvim_create_augroup('UserLspProgress', { clear = true }),
+  after_pack_add = vim.api.nvim_create_augroup('AfterPackAdd', { clear = true }),
 }
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -12,27 +14,35 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-  group = augroup.user_file_type,
-  callback = function(ev)
-    vim.schedule(function()
-      local ft = vim.bo[ev.buf].filetype
-      local lang = vim.treesitter.language.get_lang(ft) or ft
-      vim.cmd.packadd 'nvim-treesitter'
-      local nvim_treesitter = require 'nvim-treesitter'
-      -- automatically install missing treesitter parsers
-      if _G.UserConfig.treesitter.auto_install and not vim.treesitter.language.add(lang) then
-        local available = nvim_treesitter.get_available()
-        -- check if lang is among the available parsers
-        if vim.tbl_contains(available, lang) then
-          nvim_treesitter.install(lang):wait(300000)
-        end
-      end
-      -- automatically start treesitter highlighting
-      if vim.treesitter.language.add(lang) then
-        vim.treesitter.start(ev.buf, lang)
-      end
-    end)
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'AfterPackAdd',
+  group = augroup.after_pack_add,
+  callback = function()
+    vim.api.nvim_create_autocmd('FileType', {
+      group = augroup.user_file_type,
+      callback = function(ev)
+        vim.schedule(function()
+          if not vim.api.nvim_buf_is_valid(ev.buf) then
+            return
+          end
+          local ft = vim.bo[ev.buf].filetype
+          local lang = vim.treesitter.language.get_lang(ft) or ft
+          local nvim_treesitter = require 'nvim-treesitter'
+          -- automatically install missing treesitter parsers
+          if _G.UserConfig.treesitter.auto_install and not vim.treesitter.language.add(lang) then
+            local available = nvim_treesitter.get_available()
+            -- check if lang is among the available parsers
+            if vim.tbl_contains(available, lang) then
+              nvim_treesitter.install(lang):wait(300000)
+            end
+          end
+          -- automatically start treesitter highlighting
+          if vim.treesitter.language.add(lang) then
+            vim.treesitter.start(ev.buf, lang)
+          end
+        end)
+      end,
+    })
   end,
 })
 
@@ -46,5 +56,23 @@ vim.api.nvim_create_autocmd('PackChanged', {
       end
       vim.cmd 'TSUpdate'
     end
+    if name == 'telescope-fzf-native.nvim' and (kind == 'install' or kind == 'update') then
+      vim.system({ 'make' }, { cwd = ev.data.path })
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('LspProgress', {
+  group = augroup.user_lsp_progress,
+  callback = function(ev)
+    local value = ev.data.params.value
+    vim.api.nvim_echo({ { value.message or 'done' } }, false, {
+      id = 'lsp.' .. ev.data.client_id,
+      kind = 'progress',
+      source = 'vim.lsp',
+      title = value.title,
+      status = value.kind ~= 'end' and 'running' or 'success',
+      percent = value.percentage,
+    })
   end,
 })
