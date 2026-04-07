@@ -61,7 +61,11 @@ vim.api.nvim_create_autocmd('PackChanged', {
       vim.cmd 'TSUpdate'
     end
     if name == 'telescope-fzf-native.nvim' and (kind == 'install' or kind == 'update') then
-      vim.system({ 'make' }, { cwd = ev.data.path })
+      if vim.fn.executable('make') == 1 then
+        vim.system({ 'make' }, { cwd = ev.data.path }):wait(300000)
+      elseif vim.fn.executable('mingw32-make') == 1 then
+        vim.system({ 'mingw32-make' }, { cwd = ev.data.path }):wait(300000)
+      end
     end
   end,
 })
