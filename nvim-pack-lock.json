@@ -4,6 +4,10 @@
       "rev": "684560e8ba8a12e8a7969e44fa9403158632b6e0",
       "src": "https://github.com/arborist-ts/arborist.nvim"
     },
+    "blink.cmp": {
+      "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
+      "src": "https://github.com/saghen/blink.cmp"
+    },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
@@ -11,6 +15,10 @@
     "mason.nvim": {
       "rev": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65",
       "src": "https://github.com/mason-org/mason.nvim"
+    },
+    "mini.nvim": {
+      "rev": "402ee6c6ec8ea44b22330446c8fb4e615fd3953e",
+      "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim": {
       "rev": "df2a1f9f3392d688397e945544a30aec8fc9b4c7",
@@ -35,6 +43,10 @@
     "vimcdoc": {
       "rev": "81c392c2232f8a587e849ac7ca92fc2687fcb64c",
       "src": "https://github.com/yianwillis/vimcdoc"
+    },
+    "vimtex": {
+      "rev": "9306903316c3ddd250676b7cf97c84a84c9c8f99",
+      "src": "https://github.com/lervag/vimtex"
     }
   }
 }

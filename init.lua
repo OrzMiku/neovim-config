@@ -1,4 +1,3 @@
-require 'options'
-require 'keymaps'
-require 'autocmd'
-require 'plugins'
+require('user.config').setup()
+require('user.basic').setup()
+require('user.plugins').setup()

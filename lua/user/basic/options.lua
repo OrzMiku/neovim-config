@@ -1,3 +1,5 @@
+local M = {}
+
 local opts = {
   number = true,
   relativenumber = true,
@@ -18,16 +20,20 @@ local opts = {
   confirm = true,
 }
 
-for k, v in pairs(opts) do
-  vim.opt[k] = v
+function M.setup()
+  for k, v in pairs(opts) do
+    vim.opt[k] = v
+  end
+
+  vim.cmd.packadd 'nvim.undotree'
+  require('vim._core.ui2').enable {
+    enable = true,
+    msg = {
+      targets = {
+        progress = 'msg',
+      },
+    },
+  }
 end
 
-vim.cmd.packadd 'nvim.undotree'
-require('vim._core.ui2').enable {
-  enable = true,
-  msg = {
-    targets = {
-      progress = 'msg',
-    },
-  },
-}
+return M
