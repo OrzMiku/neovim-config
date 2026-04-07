@@ -1,17 +1,19 @@
 local M = {}
 
 local plugins_setup = {
-  'user.plugins.catppuccin',
-  'user.plugins.mason',
-  'user.plugins.telescope',
-  'user.plugins.arborist',
-  'user.plugins.lazydev',
-  'user.plugins.telescope-fzf-native',
-  'user.plugins.vimtex',
+  'catppuccin',
+  'mason',
+  'telescope',
+  'arborist',
+  'lazydev',
+  'telescope-fzf-native',
+  'vimtex',
+  'mini-icons',
+  'oil',
 }
 
 local function gh(x)
-  return 'https://github.com' .. x
+  return 'https://github.com/' .. x
 end
 
 local function add_packs()
@@ -26,6 +28,8 @@ local function add_packs()
     gh 'nvim-lua/plenary.nvim', -- required by telescope
     gh 'arborist-ts/arborist.nvim', -- treesitter parser manager
     gh 'lervag/vimtex', -- latex
+    gh 'nvim-mini/mini.icons', -- icons
+    gh 'stevearc/oil.nvim', -- file explorer
   }
 
   vim.api.nvim_exec_autocmds('User', {
@@ -35,7 +39,7 @@ end
 
 local function setup_plugins()
   for _, name in ipairs(plugins_setup) do
-    require(name).setup()
+    require('user.plugins.' .. name).setup()
   end
 end
 
