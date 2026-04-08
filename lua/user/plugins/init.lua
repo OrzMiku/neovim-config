@@ -10,6 +10,7 @@ local plugins_setup = {
   'vimtex',
   'mini',
   'oil',
+  'blink-cmp',
 }
 
 local function gh(x)
@@ -30,6 +31,7 @@ local function add_packs()
     gh 'lervag/vimtex', -- latex
     gh 'nvim-mini/mini.nvim', -- many useful modules
     gh 'stevearc/oil.nvim', -- file explorer
+    { src = gh 'saghen/blink.cmp', version = vim.version.range '^1' }, -- completion
   }
 
   vim.api.nvim_exec_autocmds('User', {
