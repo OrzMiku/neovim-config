@@ -31,6 +31,14 @@ function M.setup()
     group = augroup 'UserLspAttach',
     callback = lsp_buf_setup,
   })
+
+  vim.api.nvim_create_autocmd('FileType', {
+    group = augroup 'UserFileType',
+    pattern = 'TelescopePrompt',
+    callback = function()
+      vim.opt_local.timeoutlen = 0
+    end,
+  })
 end
 
 return M
