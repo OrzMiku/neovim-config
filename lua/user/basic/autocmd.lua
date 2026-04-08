@@ -36,10 +36,19 @@ function M.setup()
   vim.api.nvim_create_autocmd('User', {
     pattern = 'AfterPackAdd',
     group = augroup 'UserAfterPackAdd',
-    callback = function(ev)
+    callback = function()
+      vim.filetype.add {
+        extension = {
+          vsh = 'glsl',
+          fsh = 'glsl',
+          vert = 'glsl',
+          frag = 'glsl',
+        },
+      }
       vim.lsp.enable {
         'lua_ls',
         'vtsls',
+        'texlab',
       }
     end,
   })

@@ -4,11 +4,11 @@ local plugins_setup = {
   'catppuccin',
   'mason',
   'telescope',
-  'arborist',
+  'nvim-treesitter',
   'lazydev',
   'telescope-fzf-native',
   'vimtex',
-  'mini-icons',
+  'mini',
   'oil',
 }
 
@@ -26,9 +26,9 @@ local function add_packs()
     gh 'nvim-telescope/telescope.nvim', -- fuzzy search
     gh 'nvim-telescope/telescope-fzf-native.nvim', -- fzf for telescope.nvim
     gh 'nvim-lua/plenary.nvim', -- required by telescope
-    gh 'arborist-ts/arborist.nvim', -- treesitter parser manager
+    { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' }, -- only used to install treesitter parsers
     gh 'lervag/vimtex', -- latex
-    gh 'nvim-mini/mini.icons', -- icons
+    gh 'nvim-mini/mini.nvim', -- many useful modules
     gh 'stevearc/oil.nvim', -- file explorer
   }
 
