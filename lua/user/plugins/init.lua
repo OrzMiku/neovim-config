@@ -12,6 +12,7 @@ local plugins_setup = {
   'oil',
   'blink-cmp',
   'conform',
+  'gitsigns',
 }
 
 local function gh(x)
@@ -34,6 +35,7 @@ local function add_packs()
     gh 'stevearc/oil.nvim', -- file explorer
     { src = gh 'saghen/blink.cmp', version = vim.version.range '^1' }, -- completion
     gh 'stevearc/conform.nvim', -- formatter
+    gh 'lewis6991/gitsigns.nvim', -- git integration for buffers
   }
 
   vim.api.nvim_exec_autocmds('User', {
