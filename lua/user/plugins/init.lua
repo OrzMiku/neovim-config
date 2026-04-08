@@ -13,6 +13,7 @@ local plugins_setup = {
   'blink-cmp',
   'conform',
   'gitsigns',
+  'nvim-bqf',
 }
 
 local function gh(x)
@@ -36,6 +37,7 @@ local function add_packs()
     { src = gh 'saghen/blink.cmp', version = vim.version.range '^1' }, -- completion
     gh 'stevearc/conform.nvim', -- formatter
     gh 'lewis6991/gitsigns.nvim', -- git integration for buffers
+    gh 'kevinhwang91/nvim-bqf', -- better quickfix window
   }
 
   vim.api.nvim_exec_autocmds('User', {
