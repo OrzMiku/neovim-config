@@ -11,6 +11,7 @@ local plugins_setup = {
   'mini',
   'oil',
   'blink-cmp',
+  'conform',
 }
 
 local function gh(x)
@@ -32,6 +33,7 @@ local function add_packs()
     gh 'nvim-mini/mini.nvim', -- many useful modules
     gh 'stevearc/oil.nvim', -- file explorer
     { src = gh 'saghen/blink.cmp', version = vim.version.range '^1' }, -- completion
+    gh 'stevearc/conform.nvim', -- formatter
   }
 
   vim.api.nvim_exec_autocmds('User', {
