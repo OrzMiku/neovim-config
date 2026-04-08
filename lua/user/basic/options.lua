@@ -20,9 +20,19 @@ local opts = {
   confirm = true,
 }
 
+local neovide_opts = {
+  guifont = 'Maple Mono NF CN',
+}
+
 function M.setup()
   for k, v in pairs(opts) do
     vim.opt[k] = v
+  end
+
+  if vim.g.neovide then
+    for k, v in pairs(neovide_opts) do
+      vim.opt[k] = v
+    end
   end
 
   vim.cmd.packadd 'nvim.undotree'

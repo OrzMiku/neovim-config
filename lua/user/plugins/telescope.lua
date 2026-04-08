@@ -24,20 +24,26 @@ local function lsp_buf_setup(event)
 end
 
 function M.setup()
-  require('telescope').load_extension 'fzf'
+  local telescope = require 'telescope'
+  local actions = require 'telescope.actions'
+  telescope.setup {
+    defaults = {
+      mappings = {
+        i = {
+          ['<esc>'] = actions.close,
+        },
+        n = {
+          ['<esc>'] = actions.close,
+        },
+      },
+    },
+  }
+  telescope.load_extension 'fzf'
   basic_keymaps()
 
   vim.api.nvim_create_autocmd('LspAttach', {
     group = augroup 'UserLspAttach',
     callback = lsp_buf_setup,
-  })
-
-  vim.api.nvim_create_autocmd('FileType', {
-    group = augroup 'UserFileType',
-    pattern = 'TelescopePrompt',
-    callback = function()
-      vim.opt_local.timeoutlen = 0
-    end,
   })
 end
 
