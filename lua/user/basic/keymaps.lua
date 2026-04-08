@@ -53,6 +53,13 @@ function M.setup()
   vim.keymap.set('n', '<leader>q', function()
     vim.diagnostic.setqflist()
   end, { desc = 'Show diagnostics in quickfix window' })
+
+  -- neovide keymaps
+  if vim.g.neovide then
+    vim.keymap.set('n', '<m-cr>', function()
+      vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
+    end, { desc = 'Toggle fullscreen' })
+  end
 end
 
 return M
