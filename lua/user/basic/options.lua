@@ -29,6 +29,10 @@ function M.setup()
     vim.opt[k] = v
   end
 
+  if _G.UserConfig.clipboard_osc52 then
+    vim.g.clipboard = 'osc52'
+  end
+
   if vim.g.neovide then
     for k, v in pairs(neovide_opts) do
       vim.opt[k] = v
