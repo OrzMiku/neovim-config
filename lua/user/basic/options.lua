@@ -30,7 +30,7 @@ function M.setup()
   end
 
   if _G.UserConfig.clipboard_osc52 then
-    vim.g.clipboard = 'osc52'
+    require('user.lib.osc52').setup()
   end
 
   if vim.g.neovide then
