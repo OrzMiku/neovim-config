@@ -4,7 +4,6 @@ local plugins_setup = {
   'catppuccin',
   'mason',
   'telescope',
-  'nvim-treesitter',
   'lazydev',
   'telescope-fzf-native',
   'vimtex',
@@ -14,6 +13,7 @@ local plugins_setup = {
   'conform',
   'gitsigns',
   'nvim-bqf',
+  'tree-sitter-manager',
 }
 
 local function gh(x)
@@ -22,7 +22,6 @@ end
 
 local function add_packs()
   vim.pack.add {
-    gh 'yianwillis/vimcdoc', -- chinese helpdoc for vim
     gh 'neovim/nvim-lspconfig', -- lspconfig presets
     gh 'catppuccin/nvim', -- beautiful colorscheme
     gh 'folke/lazydev.nvim', -- lua_ls setup for neovim
@@ -30,7 +29,6 @@ local function add_packs()
     gh 'nvim-telescope/telescope.nvim', -- fuzzy search
     gh 'nvim-telescope/telescope-fzf-native.nvim', -- fzf for telescope.nvim
     gh 'nvim-lua/plenary.nvim', -- required by telescope
-    { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' }, -- only used to install treesitter parsers
     gh 'lervag/vimtex', -- latex
     gh 'nvim-mini/mini.nvim', -- many useful modules
     gh 'stevearc/oil.nvim', -- file explorer
@@ -38,6 +36,7 @@ local function add_packs()
     gh 'stevearc/conform.nvim', -- formatter
     gh 'lewis6991/gitsigns.nvim', -- git integration for buffers
     gh 'kevinhwang91/nvim-bqf', -- better quickfix window
+    gh 'romus204/tree-sitter-manager.nvim', -- treesitter manager
   }
 
   vim.api.nvim_exec_autocmds('User', {

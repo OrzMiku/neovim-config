@@ -31,11 +31,13 @@ function M.setup()
         },
       }
       vim.lsp.enable {
-        'lua_ls',
-        'vtsls',
-        'texlab',
-        'clangd',
-        'pyright',
+        'lua_ls', -- lua-language-server
+        'vtsls', -- vtsls
+        'vue_ls', -- vue-language-server
+        'texlab', -- texlab
+        'clangd', -- clangd
+        'pyright', -- pyright
+        -- 'basepyright', -- basepyright
       }
     end,
   })
