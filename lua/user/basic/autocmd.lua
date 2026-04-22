@@ -34,6 +34,8 @@ function M.setup()
         'lua_ls',
         'vtsls',
         'texlab',
+        'clangd',
+        'pyright',
       }
     end,
   })
