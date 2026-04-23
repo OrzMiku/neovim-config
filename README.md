@@ -10,19 +10,6 @@ Personal Neovim config. Powered by native `pack.add` without lazy loading.
   - Linux/macOS: `make`
   - Windows: `make` or `mingw32-make`
 
-## Structure
-
-```text
-.
-|-- init.lua
-|-- after/lsp/vtsls.lua
-`-- lua/user
-    |-- basic/      # options, keymaps, autocmds, user commands
-    |-- lib/        # small helpers
-    |-- plugins/    # plugin specs and setup
-    `-- config.lua  # user-facing config
-```
-
 ## User Commands
 
 - `:LspInfo`: open LSP health information
