@@ -1,19 +1,21 @@
-local M = {}
-
-local plugins_setup = {
-  'catppuccin',
-  'mason',
-  'telescope',
-  'lazydev',
-  'telescope-fzf-native',
-  'vimtex',
-  'mini',
-  'oil',
-  'blink-cmp',
-  'conform',
-  'gitsigns',
-  'nvim-bqf',
-  'tree-sitter-manager',
+local M = {
+  plugins_build = {
+    'telescope-fzf-native',
+  },
+  plugins_setup = {
+    'catppuccin',
+    'mason',
+    'telescope',
+    'lazydev',
+    'vimtex',
+    'mini',
+    'oil',
+    'blink-cmp',
+    'conform',
+    'gitsigns',
+    'nvim-bqf',
+    'tree-sitter-manager',
+  },
 }
 
 local function gh(x)
@@ -44,13 +46,20 @@ local function add_packs()
   })
 end
 
+local function build_plugins()
+  for _, name in ipairs(M.plugins_build) do
+    require('user.plugins.' .. name).build()
+  end
+end
+
 local function setup_plugins()
-  for _, name in ipairs(plugins_setup) do
+  for _, name in ipairs(M.plugins_setup) do
     require('user.plugins.' .. name).setup()
   end
 end
 
 function M.setup()
+  build_plugins()
   add_packs()
   setup_plugins()
 end

@@ -2,7 +2,7 @@ local M = {}
 
 local augroup = require('user.lib.augroup').create
 
-function M.setup()
+function M.build()
   vim.api.nvim_create_autocmd('PackChanged', {
     group = augroup 'UserPackChanged',
     callback = function(ev)
