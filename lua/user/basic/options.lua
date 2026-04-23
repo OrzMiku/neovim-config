@@ -40,14 +40,6 @@ function M.setup()
   end
 
   vim.cmd.packadd 'nvim.undotree'
-  require('vim._core.ui2').enable {
-    enable = true,
-    msg = {
-      targets = {
-        progress = 'msg',
-      },
-    },
-  }
 end
 
 return M

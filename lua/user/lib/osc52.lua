@@ -2,7 +2,7 @@ local M = {}
 
 local function paste()
   return {
-    vim.spilt(vim.fn.getreg '', '\n'),
+    vim.split(vim.fn.getreg '', '\n'),
     vim.fn.getregtype '',
   }
 end
