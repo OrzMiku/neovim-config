@@ -1,3 +1,7 @@
+local function gh(x)
+  return 'https://github.com/' .. x
+end
+
 local M = {
   plugins_build = {
     'telescope-fzf-native',
@@ -16,14 +20,7 @@ local M = {
     'nvim-bqf',
     'tree-sitter-manager',
   },
-}
-
-local function gh(x)
-  return 'https://github.com/' .. x
-end
-
-local function add_packs()
-  vim.pack.add {
+  plugins_add = {
     gh 'neovim/nvim-lspconfig', -- lspconfig presets
     gh 'catppuccin/nvim', -- beautiful colorscheme
     gh 'folke/lazydev.nvim', -- lua_ls setup for neovim
@@ -39,7 +36,11 @@ local function add_packs()
     gh 'lewis6991/gitsigns.nvim', -- git integration for buffers
     gh 'kevinhwang91/nvim-bqf', -- better quickfix window
     gh 'romus204/tree-sitter-manager.nvim', -- treesitter manager
-  }
+  },
+}
+
+local function add_packs()
+  vim.pack.add(M.plugins_add)
 
   vim.api.nvim_exec_autocmds('User', {
     pattern = 'AfterPackAdd',
