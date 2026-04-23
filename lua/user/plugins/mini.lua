@@ -1,11 +1,13 @@
 local M = {}
 
 function M.setup()
+  local user_config = require('user.config').get_config()
+
   require('mini.ai').setup {}
   require('mini.surround').setup {}
   require('mini.bracketed').setup {}
   require('mini.icons').setup {
-    style = _G.UserConfig.have_nerd_font and 'glyph' or 'ascii',
+    style = user_config.have_nerd_font and 'glyph' or 'ascii',
   }
   MiniIcons.mock_nvim_web_devicons()
   require('mini.statusline').setup {}
