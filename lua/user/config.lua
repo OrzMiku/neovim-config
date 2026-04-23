@@ -1,6 +1,39 @@
 local M = {}
 
+--------------------------------------------------------------------------------
+--- type definition
+--------------------------------------------------------------------------------
+
+---@class User.Config.Config
+---@field features? User.Config.Config.Features
+---@field opts? table<string, any>
+---@field custom_filetypes? table<any, any>
+---@field ft_configs? User.Config.Config.FiletypeConfig[]
+
+---@class User.Config.Config.Features
+---@field clipboard_osc52? boolean
+---@field have_nerd_font? boolean
+---@field lsp_enable? table<string, boolean>
+
+---@class User.Config.Config.FiletypeConfig
+---@field ft string[]
+---@field opts? table<string, any>
+---@field on? function(bufnr)
+---@type User.Config.Config
+
+--------------------------------------------------------------------------------
+--- implementation
+--------------------------------------------------------------------------------
+
+---@type User.Config.Config
 local default_config = {
+  features = {
+    clipboard_osc52 = true,
+    have_nerd_font = true,
+    lsp_enable = {
+      lua_ls = true,
+    },
+  },
   opts = {
     number = true,
     relativenumber = true,
@@ -20,19 +53,35 @@ local default_config = {
     scrolloff = 10,
     confirm = true,
   },
-  neovide_opts = {
-    guifont = 'Maple Mono NF CN',
+  custom_filetypes = {},
+  ft_configs = {
+    {
+      ft = { 'make', 'gitconfig' },
+      opts = {
+        softtabstop = 8,
+        shiftwidth = 8,
+        expandtab = false,
+      },
+    },
   },
-  clipboard_osc52 = true,
-  have_nerd_font = true,
 }
 
 local config = vim.deepcopy(default_config)
 
+---@param user_config? User.Config.Config
 function M.setup(user_config)
+  user_config = user_config or {}
+  local user_ft_configs = user_config.ft_configs
+  user_config.ft_configs = nil
+
   config = vim.tbl_deep_extend('force', vim.deepcopy(default_config), user_config or {})
+
+  if user_ft_configs and type(user_ft_configs) == 'table' then
+    vim.list_extend(config.ft_configs, user_ft_configs)
+  end
 end
 
+---@return User.Config.Config
 function M.get_config()
   return vim.deepcopy(config)
 end

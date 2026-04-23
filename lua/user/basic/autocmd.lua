@@ -1,44 +1,39 @@
 local M = {}
 
+local user_config = require('user.config').get_config()
 local augroup = require('user.lib.augroup').create
-local lsp_buf_setup = require('user.basic.keymaps').lsp_buf_setup
 
 function M.setup()
-  vim.api.nvim_create_autocmd('FileType', {
-    pattern = { 'lua', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'css', 'less', 'scss', 'sass' },
-    group = augroup 'UserFileType',
-    callback = function()
-      vim.opt_local.softtabstop = 2
-      vim.opt_local.shiftwidth = 2
-    end,
-  })
+  for _, block in ipairs(user_config.ft_configs) do
+    local grp = augroup 'UserFileType'
+    vim.api.nvim_create_autocmd('FileType', {
+      group = grp,
+      pattern = block.ft,
+      callback = function()
+        for opt, value in pairs(block.opts) do
+          vim.opt_local[opt] = value
+        end
+        if block.on then
+          block.on(vim.api.nvim_get_current_buf())
+        end
+      end,
+    })
+  end
 
   vim.api.nvim_create_autocmd('LspAttach', {
     group = augroup 'UserLspAttach',
-    callback = lsp_buf_setup,
+    callback = require('user.basic.keymaps').lsp_keymap,
   })
 
   vim.api.nvim_create_autocmd('User', {
     pattern = 'AfterPackAdd',
     group = augroup 'UserAfterPackAdd',
     callback = function()
-      vim.filetype.add {
-        extension = {
-          vsh = 'glsl',
-          fsh = 'glsl',
-          vert = 'glsl',
-          frag = 'glsl',
-        },
-      }
-      vim.lsp.enable {
-        'lua_ls', -- lua-language-server
-        'vtsls', -- vtsls
-        'vue_ls', -- vue-language-server
-        'texlab', -- texlab
-        'clangd', -- clangd
-        'pyright', -- pyright
-        -- 'basepyright', -- basepyright
-      }
+      for lsp_config_name, is_enabled in pairs(user_config.features.lsp_enable) do
+        if is_enabled then
+          vim.lsp.enable(lsp_config_name)
+        end
+      end
     end,
   })
 end

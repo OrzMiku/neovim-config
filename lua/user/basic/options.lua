@@ -7,16 +7,11 @@ function M.setup()
     vim.opt[k] = v
   end
 
-  if user_config.clipboard_osc52 then
+  if user_config.features.clipboard_osc52 then
     require('user.lib.osc52').setup()
   end
 
-  if vim.g.neovide then
-    for k, v in pairs(user_config.neovide_opts) do
-      vim.opt[k] = v
-    end
-  end
-
+  vim.filetype.add(user_config.custom_filetypes)
   vim.cmd.packadd 'nvim.undotree'
 end
 
