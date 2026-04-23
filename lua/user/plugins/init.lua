@@ -36,6 +36,7 @@ local M = {
     gh 'lewis6991/gitsigns.nvim', -- git integration for buffers
     gh 'kevinhwang91/nvim-bqf', -- better quickfix window
     gh 'romus204/tree-sitter-manager.nvim', -- treesitter manager
+    gh 'rafamadriz/friendly-snippets', -- snippets
   },
 }
 

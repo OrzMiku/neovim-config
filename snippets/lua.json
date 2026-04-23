@@ -1,0 +1,24 @@
+{
+  "lua_module_skeleton": {
+    "prefix": "lua_mod",
+    "body": [
+      "local M = {}",
+      "",
+      "M.setup = function(opts)",
+      "  $0",
+      "end",
+      "",
+      "return M"
+    ],
+    "description": "Insert a standard Lua module skeleton with setup function"
+  },
+  "lua_comment_divider": {
+    "prefix": "---80",
+    "body": [
+      "--------------------------------------------------------------------------------",
+      "- $0",
+      "--------------------------------------------------------------------------------"
+    ],
+    "description": "Insert an 80-character section divider for comments"
+  }
+}

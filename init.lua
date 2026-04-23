@@ -21,7 +21,7 @@ require('user.config').setup {
   },
   ft_configs = {
     {
-      ft = { 'lua', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'css', 'less', 'scss', 'sass' },
+      ft = { 'lua', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'css', 'less', 'scss', 'sass', 'json' },
       opts = {
         softtabstop = 2,
         shiftwidth = 2,
