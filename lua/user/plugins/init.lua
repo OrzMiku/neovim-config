@@ -25,20 +25,20 @@ local M = {
   },
 }
 
+function M.get_spec_name(spec)
+  if type(spec) == 'string' then
+    return spec:match '[^/]+$'
+  end
+
+  return spec.name or spec.src:match '[^/]+$'
+end
+
 local function call(kind, handler, ...)
   if type(handler) == 'function' then
     handler(...)
   elseif type(handler) == 'string' then
     require('user.plugins.' .. handler)[kind](...)
   end
-end
-
-local function get_spec_name(spec)
-  if type(spec) == 'string' then
-    return spec:match '[^/]+$'
-  end
-
-  return spec.name or spec.src:match '[^/]+$'
 end
 
 local function add_packs()
@@ -58,7 +58,7 @@ end
 local function build_plugins()
   for _, plugin in ipairs(M.plugins) do
     if plugin.build then
-      local name = get_spec_name(plugin.spec)
+      local name = M.get_spec_name(plugin.spec)
 
       vim.api.nvim_create_autocmd('PackChanged', {
         group = augroup 'UserPackChanged',

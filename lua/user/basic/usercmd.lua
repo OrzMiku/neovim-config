@@ -2,27 +2,6 @@ local M = {}
 
 local create = vim.api.nvim_create_user_command
 
-local function plugin_name_from_src(src)
-  local name = vim.fs.basename(src)
-  return (name:gsub('%.git$', ''))
-end
-
-local function plugin_name_from_packadd_spec(spec)
-  if type(spec) == 'string' then
-    return plugin_name_from_src(spec)
-  end
-
-  if type(spec) == 'table' then
-    if spec.name then
-      return spec.name
-    end
-
-    if spec.src then
-      return plugin_name_from_src(spec.src)
-    end
-  end
-end
-
 local function get_plugin_names(ArgLead)
   local plugins = vim.pack.get(nil, { info = false })
   local names = {}
@@ -86,8 +65,8 @@ function M.setup()
     local added_names = {}
     local unused = {}
 
-    for _, spec in ipairs(plugin_config.plugins_add) do
-      local name = plugin_name_from_packadd_spec(spec)
+    for _, plugin in ipairs(plugin_config.plugins) do
+      local name = plugin_config.get_spec_name(plugin.spec)
       if name then
         added_names[name] = true
       end
