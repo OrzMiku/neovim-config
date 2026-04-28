@@ -3,28 +3,44 @@ local M = {}
 local uv = vim.uv or vim.loop
 local os_name = uv.os_uname().sysname
 
-local function get_sumatra_path()
-  local sumatra_path = 'SumatraPDF'
-  local local_appdata = os.getenv 'LOCALAPPDATA'
-  local default_local_path = local_appdata .. '/SumatraPDF/SumatraPDF.exe'
-  if vim.fn.executable 'SumatraPDF' == 1 then
-    sumatra_path = 'SumatraPDF'
-  elseif vim.fn.executable(default_local_path) == 1 then
-    sumatra_path = default_local_path
+local function expand_env_vars(value)
+  return (value:gsub('%${([^}]+)}', function(name)
+    return os.getenv(name) or ''
+  end))
+end
+
+local function get_first_executable(candidates)
+  if not candidates or #candidates == 0 then
+    return nil
   end
-  return sumatra_path
+
+  local fallback = expand_env_vars(candidates[1])
+  for _, candidate in ipairs(candidates) do
+    local expanded = expand_env_vars(candidate)
+    if vim.fn.executable(expanded) == 1 then
+      return expanded
+    end
+  end
+
+  return fallback
 end
 
 function M.setup()
-  if os_name == 'Windows_NT' then
-    vim.g.vimtex_view_method = 'general'
-    local sumatra_path = get_sumatra_path()
-    vim.g.vimtex_view_general_viewer = sumatra_path
-    vim.g.vimtex_view_general_options = [[-reuse-instance -forward-search @tex @line @pdf]]
-  elseif os_name == 'Linux' then
-    vim.g.vimtex_view_method = 'zathura'
-  elseif os_name == 'Darwin' then
-    vim.g.vimtex_view_method = 'skim'
+  local user_config = require('user.config').get_config()
+  local viewer_config = user_config.vimtex.viewers[os_name]
+  if not viewer_config then
+    return
+  end
+
+  vim.g.vimtex_view_method = viewer_config.method
+
+  local viewer = get_first_executable(viewer_config.viewer_candidates)
+  if viewer then
+    vim.g.vimtex_view_general_viewer = viewer
+  end
+
+  if viewer_config.options then
+    vim.g.vimtex_view_general_options = viewer_config.options
   end
 end
 

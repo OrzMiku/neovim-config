@@ -9,6 +9,7 @@ local M = {}
 ---@field opts? table<string, any>
 ---@field custom_filetypes? table<any, any>
 ---@field ft_configs? User.Config.Config.FiletypeConfig[]
+---@field vimtex? User.Config.Config.Vimtex
 
 ---@class User.Config.Config.Features
 ---@field clipboard_osc52? boolean
@@ -20,6 +21,14 @@ local M = {}
 ---@field ft string[]
 ---@field opts? table<string, any>
 ---@field on? function(bufnr)
+
+---@class User.Config.Config.Vimtex
+---@field viewers? table<string, User.Config.Config.VimtexViewer>
+
+---@class User.Config.Config.VimtexViewer
+---@field method string
+---@field viewer_candidates? string[]
+---@field options? string
 ---@type User.Config.Config
 
 --------------------------------------------------------------------------------
@@ -65,6 +74,24 @@ local default_config = {
         softtabstop = 8,
         shiftwidth = 8,
         expandtab = false,
+      },
+    },
+  },
+  vimtex = {
+    viewers = {
+      Windows_NT = {
+        method = 'general',
+        viewer_candidates = {
+          'SumatraPDF',
+          '${LOCALAPPDATA}/SumatraPDF/SumatraPDF.exe',
+        },
+        options = [[-reuse-instance -forward-search @tex @line @pdf]],
+      },
+      Linux = {
+        method = 'zathura',
+      },
+      Darwin = {
+        method = 'skim',
       },
     },
   },
