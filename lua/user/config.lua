@@ -14,6 +14,7 @@ local M = {}
 ---@field clipboard_osc52? boolean
 ---@field have_nerd_font? boolean
 ---@field lsp_enable? table<string, boolean>
+---@field formatters_by_ft? table<string, table>
 
 ---@class User.Config.Config.FiletypeConfig
 ---@field ft string[]
@@ -32,6 +33,9 @@ local default_config = {
     have_nerd_font = true,
     lsp_enable = {
       lua_ls = true,
+    },
+    formatters_by_ft = {
+      lua = { 'stylua' },
     },
   },
   opts = {

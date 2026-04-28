@@ -1,11 +1,10 @@
 local M = {}
 
+local user_config = require('user.config').get_config()
+
 function M.setup()
   require('conform').setup {
-    formatters_by_ft = {
-      lua = { 'stylua' },
-      python = { 'ruff_fix', 'ruff_organize_imports', 'ruff_format' },
-    },
+    formatters_by_ft = user_config.features.formatters_by_ft,
   }
   vim.keymap.set('n', '<leader>ff', function()
     require('conform').format {
