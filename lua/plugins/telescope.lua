@@ -1,19 +1,7 @@
-local augroup = require('lib.augroup').create
-
 local function telescope_builtin(name)
   return function()
     require('telescope.builtin')[name]()
   end
-end
-
-local function lsp_buf_setup(event)
-  local bufnr = event.buf
-  vim.keymap.set('n', 'grr', telescope_builtin 'lsp_references', { buffer = bufnr, desc = 'Telescope LSP References' })
-  vim.keymap.set('n', 'gri', telescope_builtin 'lsp_implementations', { buffer = bufnr, desc = 'Telescope LSP Implementations' })
-  vim.keymap.set('n', 'grd', telescope_builtin 'lsp_definitions', { buffer = bufnr, desc = 'Telescope LSP Definitions' })
-  vim.keymap.set('n', 'gO', telescope_builtin 'lsp_document_symbols', { buffer = bufnr, desc = 'Telescope LSP Document Symbols' })
-  vim.keymap.set('n', 'gW', telescope_builtin 'lsp_dynamic_workspace_symbols', { buffer = bufnr, desc = 'Telescope LSP Workspace Symbols' })
-  vim.keymap.set('n', 'grt', telescope_builtin 'lsp_type_definitions', { buffer = bufnr, desc = 'Telescope LSP Type Definitions' })
 end
 
 return {
@@ -22,12 +10,6 @@ return {
     'nvim-telescope/telescope-fzf-native.nvim',
     'nvim-lua/plenary.nvim',
   },
-  init = function()
-    vim.api.nvim_create_autocmd('LspAttach', {
-      group = augroup 'UserLspAttach',
-      callback = lsp_buf_setup,
-    })
-  end,
   config = function()
     local telescope = require 'telescope'
     local actions = require 'telescope.actions'
@@ -47,54 +29,18 @@ return {
   end,
   cmd = 'Telescope',
   keys = {
-    {
-      '<leader>fs',
-      function()
-        require('telescope.builtin').find_files()
-      end,
-      desc = 'Telescope find files',
-    },
-    {
-      '<leader>fz',
-      function()
-        require('telescope.builtin').live_grep()
-      end,
-      desc = 'Telescope live grep',
-    },
-    {
-      '<leader>fb',
-      function()
-        require('telescope.builtin').buffers()
-      end,
-      desc = 'Telescope buffers',
-    },
-    {
-      '<leader>fh',
-      function()
-        require('telescope.builtin').help_tags()
-      end,
-      desc = 'Telescope help tags',
-    },
-    {
-      '<leader>fk',
-      function()
-        require('telescope.builtin').keymaps()
-      end,
-      desc = 'Telescope keymaps',
-    },
-    {
-      '<leader>fp',
-      function()
-        require('telescope.builtin').git_files()
-      end,
-      desc = 'Telescope git_files',
-    },
-    {
-      '<leader>fo',
-      function()
-        require('telescope.builtin').oldfiles()
-      end,
-      desc = 'Telescope old_files',
-    },
+    { '<leader>fs', telescope_builtin 'find_files',                    desc = 'Telescope find files' },
+    { '<leader>fz', telescope_builtin 'live_grep',                     desc = 'Telescope live grep' },
+    { '<leader>fb', telescope_builtin 'buffers',                       desc = 'Telescope buffers' },
+    { '<leader>fh', telescope_builtin 'help_tags',                     desc = 'Telescope help tags' },
+    { '<leader>fk', telescope_builtin 'keymaps',                       desc = 'Telescope keymaps' },
+    { '<leader>fp', telescope_builtin 'git_files',                     desc = 'Telescope git_files' },
+    { '<leader>fo', telescope_builtin 'oldfiles',                      desc = 'Telescope old_files' },
+    { 'grr',        telescope_builtin 'lsp_references',                desc = 'Telescope LSP References' },
+    { 'gri',        telescope_builtin 'lsp_implementations',           desc = 'Telescope LSP Implementations' },
+    { 'grd',        telescope_builtin 'lsp_definitions',               desc = 'Telescope LSP Definitions' },
+    { 'gO',         telescope_builtin 'lsp_document_symbols',          desc = 'Telescope LSP Document Symbols' },
+    { 'gW',         telescope_builtin 'lsp_dynamic_workspace_symbols', desc = 'Telescope LSP Workspace Symbols' },
+    { 'grt',        telescope_builtin 'lsp_type_definitions',          desc = 'Telescope LSP Type Definitions' },
   },
 }
