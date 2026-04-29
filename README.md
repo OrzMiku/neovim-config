@@ -1,6 +1,6 @@
 # OrzMiku's Neovim Config
 
-Personal Neovim config. Powered by native `pack.add` without lazy loading.
+Personal Neovim config.
 
 ## Requirements
 
@@ -14,8 +14,4 @@ Personal Neovim config. Powered by native `pack.add` without lazy loading.
 
 - `:LspInfo`: open LSP health information
 - `:TSInfo`: open Treesitter health information
-- `:PackAdd {plugin...}`: install or add plugins
-- `:PackDelete[!] {plugin...}`: remove plugins from disk
-- `:PackUpdate[!] [plugin...]`: update all plugins or selected ones
 - `:PackStatus`: print plugin status and revisions
-

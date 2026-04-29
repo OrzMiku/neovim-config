@@ -1,11 +1,9 @@
-local M = {}
-
-function M.setup()
-  require('lazydev').setup {
+return {
+  'folke/lazydev.nvim',
+  opts = {
     library = {
       { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
     },
-  }
-end
-
-return M
+  },
+  ft = 'lua',
+}

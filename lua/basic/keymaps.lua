@@ -2,13 +2,6 @@ local M = {}
 
 local set = vim.keymap.set
 
-function M.lsp_keymap(event)
-  local bufnr = event.buf
-  set('n', 'grn', vim.lsp.buf.rename, { buffer = bufnr, desc = 'LSP Rename' })
-  set('n', 'gra', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'LSP Code Action' })
-  set('n', 'grD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'LSP Declaration' })
-end
-
 function M.setup()
   vim.g.mapleader = ' '
   vim.g.maplocalleader = ' '

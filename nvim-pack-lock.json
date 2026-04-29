@@ -5,6 +5,10 @@
       "src": "https://github.com/saghen/blink.cmp",
       "version": "1.0.0 - 2.0.0"
     },
+    "catppuccin-nvim": {
+      "rev": "426dbebe06b5c69fd846ceb17b42e12f890aedf1",
+      "src": "https://github.com/catppuccin/nvim"
+    },
     "conform.nvim": {
       "rev": "086a40dc7ed8242c03be9f47fbcee68699cc2395",
       "src": "https://github.com/stevearc/conform.nvim"
@@ -28,10 +32,6 @@
     "mini.nvim": {
       "rev": "402ee6c6ec8ea44b22330446c8fb4e615fd3953e",
       "src": "https://github.com/nvim-mini/mini.nvim"
-    },
-    "nvim": {
-      "rev": "df2a1f9f3392d688397e945544a30aec8fc9b4c7",
-      "src": "https://github.com/catppuccin/nvim"
     },
     "nvim-bqf": {
       "rev": "c282a62bec6c0621a1ef5132aa3f4c9fc4dcc2c7",
@@ -64,6 +64,10 @@
     "vimtex": {
       "rev": "9306903316c3ddd250676b7cf97c84a84c9c8f99",
       "src": "https://github.com/lervag/vimtex"
+    },
+    "zpack.nvim": {
+      "rev": "8fffbafdcf24587cad705881ae0900e4df56f95d",
+      "src": "https://github.com/zuqini/zpack.nvim"
     }
   }
 }

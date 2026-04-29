@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 --- CONFIG SETUP
 --------------------------------------------------------------------------------
-require('user.config').setup {
+require('config').setup {
   features = {
     lsp_enable = {
       bashls = true, -- bash-language-server
@@ -81,10 +81,11 @@ require('user.config').setup {
 --- BASIC SETUP
 --- Core Neovim configuration, excluding plugin configurations.
 --------------------------------------------------------------------------------
-require('user.basic').setup()
+require('basic').setup()
 
 --------------------------------------------------------------------------------
 --- PLUGIN SETUP
 --- All plugin-related configurations.
 --------------------------------------------------------------------------------
-require('user.plugins').setup()
+vim.pack.add { 'https://github.com/zuqini/zpack.nvim' }
+require('zpack').setup {}

@@ -1,21 +1,16 @@
-local M = {}
-
---------------------------------------------------------------------------------
---- type definition
---------------------------------------------------------------------------------
-
 ---@class User.Config.Config
 ---@field features? User.Config.Config.Features
 ---@field opts? table<string, any>
 ---@field custom_filetypes? table<any, any>
 ---@field ft_configs? User.Config.Config.FiletypeConfig[]
----@field vimtex? User.Config.Config.Vimtex
 
 ---@class User.Config.Config.Features
+---@field ui2? boolean
 ---@field clipboard_osc52? boolean
 ---@field have_nerd_font? boolean
 ---@field lsp_enable? table<string, boolean>
 ---@field formatters_by_ft? table<string, table>
+---@field vimtex? User.Config.Config.Vimtex
 
 ---@class User.Config.Config.FiletypeConfig
 ---@field ft string[]
@@ -23,6 +18,7 @@ local M = {}
 ---@field on? function(bufnr)
 
 ---@class User.Config.Config.Vimtex
+---@field enabled boolean
 ---@field viewers? table<string, User.Config.Config.VimtexViewer>
 
 ---@class User.Config.Config.VimtexViewer
@@ -31,13 +27,12 @@ local M = {}
 ---@field options? string
 ---@type User.Config.Config
 
---------------------------------------------------------------------------------
---- implementation
---------------------------------------------------------------------------------
+local M = {}
 
 ---@type User.Config.Config
 local default_config = {
   features = {
+    ui2 = true,
     clipboard_osc52 = true,
     have_nerd_font = true,
     lsp_enable = {
@@ -45,6 +40,25 @@ local default_config = {
     },
     formatters_by_ft = {
       lua = { 'stylua' },
+    },
+    vimtex = {
+      enabled = false,
+      viewers = {
+        Windows_NT = {
+          method = 'general',
+          viewer_candidates = {
+            'SumatraPDF',
+            '${LOCALAPPDATA}/SumatraPDF/SumatraPDF.exe',
+          },
+          options = [[-reuse-instance -forward-search @tex @line @pdf]],
+        },
+        Linux = {
+          method = 'zathura',
+        },
+        Darwin = {
+          method = 'skim',
+        },
+      },
     },
   },
   opts = {
@@ -74,24 +88,6 @@ local default_config = {
         softtabstop = 8,
         shiftwidth = 8,
         expandtab = false,
-      },
-    },
-  },
-  vimtex = {
-    viewers = {
-      Windows_NT = {
-        method = 'general',
-        viewer_candidates = {
-          'SumatraPDF',
-          '${LOCALAPPDATA}/SumatraPDF/SumatraPDF.exe',
-        },
-        options = [[-reuse-instance -forward-search @tex @line @pdf]],
-      },
-      Linux = {
-        method = 'zathura',
-      },
-      Darwin = {
-        method = 'skim',
       },
     },
   },
