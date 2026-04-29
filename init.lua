@@ -57,6 +57,9 @@ require('config').setup {
       python = { 'ruff_fix', 'ruff_organize_imports', 'ruff_format' },
       xml = { 'xmlformat' },
     },
+    vimtex = {
+      enabled = true,
+    }
   },
   custom_filetypes = {
     extension = {

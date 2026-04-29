@@ -28,8 +28,7 @@ return {
   'lervag/vimtex',
   enabled = user_config.features.vimtex.enabled,
   config = function()
-    local user_config = require('config').get_config()
-    local viewer_config = user_config.vimtex.viewers[os_name]
+    local viewer_config = user_config.features.vimtex.viewers[os_name]
     if not viewer_config then
       return
     end
