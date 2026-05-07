@@ -109,17 +109,51 @@ local default_config = {
 
 local config = vim.deepcopy(default_config)
 
+local user_config_file = vim.fn.stdpath 'config' .. '/userconf.lua'
+
+---@param base_config User.Config.Config
 ---@param user_config? User.Config.Config
-function M.setup(user_config)
+---@return User.Config.Config
+local function merge_config(base_config, user_config)
   user_config = user_config or {}
   local user_ft_configs = user_config.ft_configs
-  user_config.ft_configs = nil
+  local config_without_ft = vim.deepcopy(user_config)
+  config_without_ft.ft_configs = nil
 
-  config = vim.tbl_deep_extend('force', vim.deepcopy(default_config), user_config or {})
+  local merged_config = vim.tbl_deep_extend('force', vim.deepcopy(base_config), config_without_ft)
 
   if user_ft_configs and type(user_ft_configs) == 'table' then
-    vim.list_extend(config.ft_configs, user_ft_configs)
+    vim.list_extend(merged_config.ft_configs, user_ft_configs)
   end
+
+  return merged_config
+end
+
+---@return User.Config.Config?
+local function load_user_config()
+  if vim.fn.filereadable(user_config_file) ~= 1 then
+    return nil
+  end
+
+  local user_config = dofile(user_config_file)
+  if user_config == nil then
+    return nil
+  end
+  if type(user_config) ~= 'table' then
+    error(string.format('%s must return a table or nil', user_config_file))
+  end
+
+  return user_config
+end
+
+function M.setup()
+  config = merge_config(default_config, load_user_config())
+end
+
+---@param user_config User.Config.Config
+---@return User.Config.Config
+function M.define(user_config)
+  return user_config
 end
 
 ---@return User.Config.Config
