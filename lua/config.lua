@@ -11,6 +11,7 @@
 ---@field lsp_enable? table<string, boolean>
 ---@field formatters_by_ft? table<string, table>
 ---@field vimtex? User.Config.Config.Vimtex
+---@field orgmode? table
 
 ---@class User.Config.Config.FiletypeConfig
 ---@field ft string[]
@@ -59,6 +60,10 @@ local default_config = {
           method = 'skim',
         },
       },
+    },
+    orgmode = {
+      org_agenda_files = '~/orgfiles/**/*',
+      org_default_notes_file = '~/orgfiles/refile.org',
     },
   },
   opts = {
