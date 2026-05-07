@@ -1,8 +1,13 @@
 ---@class User.Config.Config
 ---@field features? User.Config.Config.Features
+---@field colorscheme? User.Config.Config.Colorscheme
 ---@field opts? table<string, any>
 ---@field custom_filetypes? table<any, any>
 ---@field ft_configs? User.Config.Config.FiletypeConfig[]
+
+---@class User.Config.Config.Colorscheme
+---@field name? string
+---@field preload? string
 
 ---@class User.Config.Config.Features
 ---@field ui2? boolean
@@ -65,6 +70,10 @@ local default_config = {
       org_agenda_files = '~/orgfiles/**/*',
       org_default_notes_file = '~/orgfiles/refile.org',
     },
+  },
+  colorscheme = {
+    preload = 'catppuccin',
+    name = 'catppuccin-nvim',
   },
   opts = {
     number = true,

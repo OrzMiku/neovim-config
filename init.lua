@@ -59,7 +59,7 @@ require('config').setup {
     },
     vimtex = {
       enabled = true,
-    }
+    },
   },
   custom_filetypes = {
     extension = {
@@ -85,6 +85,7 @@ require('config').setup {
 --- Core Neovim configuration, excluding plugin configurations.
 --------------------------------------------------------------------------------
 require('basic').setup()
+require('basic.colorscheme').preload()
 
 --------------------------------------------------------------------------------
 --- PLUGIN SETUP
@@ -92,3 +93,4 @@ require('basic').setup()
 --------------------------------------------------------------------------------
 vim.pack.add { 'https://github.com/zuqini/zpack.nvim' }
 require('zpack').setup {}
+require('basic.colorscheme').setup()
