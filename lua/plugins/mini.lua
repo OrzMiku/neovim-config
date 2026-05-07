@@ -10,6 +10,10 @@ return {
       style = user_config.features.have_nerd_font and 'glyph' or 'ascii',
     }
     MiniIcons.mock_nvim_web_devicons()
+    require('mini.files').setup {}
+    vim.keymap.set('n', '<leader>e', function()
+      MiniFiles.open()
+    end, { desc = 'Open File Explorer' })
     require('mini.statusline').setup {}
     require('mini.tabline').setup {}
     require('mini.indentscope').setup {
@@ -21,6 +25,7 @@ return {
     require('mini.pairs').setup {}
     require('mini.move').setup {}
     require('mini.notify').setup {}
+    require('mini.trailspace').setup {}
   end,
   event = 'VeryLazy',
 }
