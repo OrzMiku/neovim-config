@@ -93,6 +93,14 @@ local default_config = {
     cursorline = true,
     scrolloff = 10,
     confirm = true,
+    foldenable = true,
+    foldmethod = 'expr',
+    foldexpr = 'v:lua.vim.treesitter.foldexpr()',
+    foldtext = '',
+    foldlevel = 99,
+    fillchars = {
+      fold = ' ',
+    },
   },
   custom_filetypes = {},
   ft_configs = {
