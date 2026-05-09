@@ -67,8 +67,11 @@ local default_config = {
       },
     },
     orgmode = {
-      org_agenda_files = '~/orgfiles/**/*',
-      org_default_notes_file = '~/orgfiles/refile.org',
+      enabled = false,
+      opts = {
+        org_agenda_files = '~/orgfiles/**/*',
+        org_default_notes_file = '~/orgfiles/refile.org',
+      },
     },
   },
   colorscheme = {
