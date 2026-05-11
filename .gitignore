@@ -1,1 +1,2 @@
-userconf.lua
+.nvimconf.lua
+nvim-pack-load.json

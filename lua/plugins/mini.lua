@@ -1,4 +1,4 @@
-local user_config = require('config').get_config()
+local features = require('config').get_config().features
 
 return {
   { 'nvim-mini/mini.ai', opts = {}, event = 'VeryLazy' },
@@ -6,9 +6,9 @@ return {
   {
     'nvim-mini/mini.icons',
     opts = {
-      style = user_config.features.have_nerd_font and 'glyph' or 'ascii',
+      style = features.have_nerd_font and 'glyph' or 'ascii',
     },
-    config = function(opts)
+    config = function(_, opts)
       require('mini.icons').setup(opts)
       MiniIcons.mock_nvim_web_devicons()
     end,

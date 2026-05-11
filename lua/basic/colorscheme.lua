@@ -1,6 +1,7 @@
+local config = require 'config'
+
 local M = {}
 
----@param colorscheme? string
 local function apply(colorscheme)
   if not colorscheme or colorscheme == '' then
     return
@@ -13,11 +14,11 @@ local function apply(colorscheme)
 end
 
 function M.preload()
-  apply(require('config').get_config().colorscheme.preload)
+  apply(config.get_config().features.colorscheme.preload)
 end
 
 function M.setup()
-  apply(require('config').get_config().colorscheme.name)
+  apply(config.get_config().features.colorscheme.name)
 end
 
 return M

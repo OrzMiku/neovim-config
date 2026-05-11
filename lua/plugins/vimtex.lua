@@ -1,4 +1,4 @@
-local user_config = require('config').get_config()
+local plugin_config = require('config').get_config().plugin_configs.vimtex
 local uv = vim.uv or vim.loop
 local os_name = uv.os_uname().sysname
 
@@ -26,9 +26,9 @@ end
 
 return {
   'lervag/vimtex',
-  enabled = user_config.features.vimtex.enabled,
+  enabled = plugin_config.enabled,
   config = function()
-    local viewer_config = user_config.features.vimtex.viewers[os_name]
+    local viewer_config = plugin_config.viewers[os_name]
     if not viewer_config then
       return
     end

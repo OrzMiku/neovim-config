@@ -1,10 +1,10 @@
-local user_config = require('config').get_config()
+local features = require('config').get_config().features
 
 return {
   'stevearc/conform.nvim',
   dependencies = { 'mason-org/mason.nvim' },
   opts = {
-    formatters_by_ft = user_config.features.formatters_by_ft,
+    formatters_by_ft = features.formatters_by_ft,
   },
   keys = {
     {
