@@ -18,8 +18,10 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 
 vim.g.mapleader = " "
-vim.g.localmapleader = " "
+vim.g.maplocalleader = " "
 vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
 vim.keymap.set({"n", "v"}, "<leader>Y", [["+Y]])
 vim.keymap.set({"n", "v"}, "<leader>p", [["+p]])
 vim.keymap.set({"n", "v"}, "<leader>P", [["+P]])
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist)
+vim.keymap.set("n", "<leader>Q", vim.diagnostic.setqflist)
