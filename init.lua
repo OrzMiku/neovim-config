@@ -1,5 +1,9 @@
 vim.cmd 'colorscheme catppuccin'
 
+require('vim._core.ui2').enable({
+    enable = true,
+})
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.expandtab = true
@@ -20,10 +24,7 @@ vim.opt.autocomplete = true
 vim.opt.complete:append("o")
 vim.opt.completeopt = "fuzzy,menuone,popup,noselect"
 vim.opt.pumborder = "single"
-
-require('vim._core.ui2').enable({
-    enable = true,
-})
+vim.opt.statusline:append(" [%{&filetype ==# '' ? 'none' : &filetype }|%{&fileformat}]")
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
