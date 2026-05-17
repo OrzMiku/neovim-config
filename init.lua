@@ -1,7 +1,20 @@
+vim.pack.add({
+    "https://github.com/mason-org/mason.nvim",
+    "https://github.com/neovim/nvim-lspconfig",
+})
+
+require("mason").setup()
+
 vim.cmd 'colorscheme catppuccin'
 
 require('vim._core.ui2').enable({
     enable = true,
+    msg = {
+        targets = {
+            default = 'cmd',
+            progress = 'msg',
+        }
+    }
 })
 
 vim.opt.number = true
@@ -45,6 +58,7 @@ function _G.simple_tabline()
     table.insert(parts, "%#TabLineFill#%=")
     return table.concat(parts)
 end
+
 vim.opt.tabline = "%!v:lua.simple_tabline()"
 
 vim.g.mapleader = " "
@@ -76,5 +90,22 @@ vim.api.nvim_create_autocmd('LspAttach', {
         if client:supports_method('textDocument/completion') then
             vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
         end
+    end,
+})
+
+
+vim.api.nvim_create_autocmd('LspProgress', {
+    group = vim.api.nvim_create_augroup('UserLspProgressNotify', {}),
+    buffer = buf,
+    callback = function(ev)
+        local value = ev.data.params.value
+        vim.api.nvim_echo({ { value.message or 'done' } }, false, {
+            id = 'lsp.' .. ev.data.params.token,
+            kind = 'progress',
+            source = 'vim.lsp',
+            title = value.title,
+            status = value.kind ~= 'end' and 'running' or 'success',
+            percent = value.percentage,
+        })
     end,
 })
