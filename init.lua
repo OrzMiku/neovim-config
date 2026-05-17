@@ -45,14 +45,15 @@ function _G.simple_tabline()
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
         if vim.bo[bufnr].buflisted then
             local name = vim.api.nvim_buf_get_name(bufnr)
-            name = name ~= "" and vim.fn.fnamemodify(name, ":t") or "[Empty Buffer]"
+            name = name ~= "" and vim.fn.fnamemodify(name, ":t") or "[No Name]"
             name:gsub("%%", "%%%%")
             if bufnr == curr_buf then
                 table.insert(parts, "%#TabLineSel#")
             else
                 table.insert(parts, "%#TabLine#")
             end
-            table.insert(parts, " " .. name .. " ")
+            local modified = vim.bo[bufnr].modified and "*" or ""
+            table.insert(parts, " " .. name .. modified .. " ")
         end
     end
     table.insert(parts, "%#TabLineFill#%=")
