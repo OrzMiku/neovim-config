@@ -1,10 +1,3 @@
-vim.pack.add({
-    "https://github.com/mason-org/mason.nvim",
-    "https://github.com/neovim/nvim-lspconfig",
-})
-
-require("mason").setup()
-
 vim.cmd 'colorscheme catppuccin'
 
 require('vim._core.ui2').enable({
@@ -85,7 +78,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('UserLspCompletion', {}),
+    group = vim.api.nvim_create_augroup('UserLspCompletion', { clear = true }),
     callback = function(ev)
         local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
         if client:supports_method('textDocument/completion') then
@@ -96,7 +89,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 
 vim.api.nvim_create_autocmd('LspProgress', {
-    group = vim.api.nvim_create_augroup('UserLspProgressNotify', {}),
+    group = vim.api.nvim_create_augroup('UserLspProgressNotify', { clear = true }),
     buffer = buf,
     callback = function(ev)
         local value = ev.data.params.value
@@ -110,3 +103,13 @@ vim.api.nvim_create_autocmd('LspProgress', {
         })
     end,
 })
+
+vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup('UserFtIndent2', { clear = true }),
+    pattern = { 'nix', 'lua', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'css', 'less', 'scss', 'sass', 'json' },
+    callback = function()
+        vim.opt_local.softtabstop = 2;
+        vim.opt_local.shiftwidth = 2;
+    end
+})
+
