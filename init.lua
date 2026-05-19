@@ -77,7 +77,19 @@ vim.api.nvim_create_autocmd('FileType', {
 local gh = function(x)
   return 'https://github.com/' .. x
 end
-vim.pack.add { gh 'mason-org/mason.nvim', gh 'neovim/nvim-lspconfig', gh 'stevearc/conform.nvim' }
+vim.pack.add {
+  gh 'mason-org/mason.nvim',
+  gh 'neovim/nvim-lspconfig',
+  gh 'stevearc/conform.nvim',
+  gh 'romus204/tree-sitter-manager.nvim',
+  gh 'dmtrKovalenko/fff',
+}
+
+-- In windows, tree-sitter may be built with msvc.
+-- If you only have the gnu toolchain, you need to set the CC and CFLAGS environment variables for tree-sitter build.
+-- vim.env.CC = "cc"
+-- vim.env.CFLAGS = "--target=x86_64-w64-windows-gnu"
+require('tree-sitter-manager').setup()
 require('mason').setup()
 require('conform').setup {
   formatters_by_ft = {
@@ -116,6 +128,36 @@ require('conform').setup {
 vim.keymap.set('n', '<leader>ff', function()
   require('conform').format { async = true, lsp_format = 'fallback' }
 end)
+
+vim.api.nvim_create_autocmd('PackChanged', {
+  group = vim.api.nvim_create_augroup('UserFFFDownload', { clear = true }),
+  callback = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+    if name == 'fff.nvim' and (kind == 'install' or kind == 'update') then
+      if not ev.data.active then
+        vim.cmd.packadd 'fff.nvim'
+      end
+      require('fff.download').download_or_build_binary()
+    end
+  end,
+})
+vim.g.fff = {
+  lazy_sync = true,
+  git = {
+    status_text_color = true,
+  },
+}
+vim.keymap.set('n', '<leader>fs', function()
+  require('fff').find_files()
+end, { desc = 'FFFind files' })
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = vim.api.nvim_create_augroup('UserFFFDisableAutocomplete', { clear = true }),
+  callback = function(ev)
+    if vim.fn.fnamemodify(vim.api.nvim_buf_get_name(ev.buf), ':t'):sub(1, 6) == 'fffile' then
+      vim.opt_local.autocomplete = false
+    end
+  end,
+})
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspCompletion', { clear = true }),
