@@ -83,6 +83,11 @@ vim.pack.add {
   gh 'stevearc/conform.nvim',
   gh 'romus204/tree-sitter-manager.nvim',
   gh 'dmtrKovalenko/fff',
+  gh 'lewis6991/gitsigns.nvim',
+}
+
+require('gitsigns').setup {
+  current_line_blame = true
 }
 
 -- In windows, tree-sitter may be built with msvc.
@@ -149,7 +154,10 @@ vim.g.fff = {
 }
 vim.keymap.set('n', '<leader>fs', function()
   require('fff').find_files()
-end, { desc = 'FFFind files' })
+end, { desc = 'Find files' })
+vim.keymap.set('n', '<leader>fz', function()
+  require('fff').live_grep()
+end, { desc = 'Live grep' })
 vim.api.nvim_create_autocmd('BufEnter', {
   group = vim.api.nvim_create_augroup('UserFFFDisableAutocomplete', { clear = true }),
   callback = function(ev)
