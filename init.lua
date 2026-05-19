@@ -74,6 +74,39 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspCompletion', { clear = true }),
+  callback = function(ev)
+    local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
+    if client:supports_method 'textDocument/completion' then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('LspProgress', {
+  group = vim.api.nvim_create_augroup('UserLspProgressNotify', { clear = true }),
+  buffer = buf,
+  callback = function(ev)
+    local value = ev.data.params.value
+    vim.api.nvim_echo({ { value.message or 'done' } }, false, {
+      id = 'lsp.' .. ev.data.params.token,
+      kind = 'progress',
+      source = 'vim.lsp',
+      title = value.title,
+      status = value.kind ~= 'end' and 'running' or 'success',
+      percent = value.percentage,
+    })
+  end,
+})
+
+--------------------------------------------------------------------------------
+--- Plugins
+--------------------------------------------------------------------------------
+if not vim.uv.fs_stat(vim.fn.stdpath('config') .. '/enable_plugin') then
+  return
+end
+
 local gh = function(x)
   return 'https://github.com/' .. x
 end
@@ -86,16 +119,25 @@ vim.pack.add {
   gh 'lewis6991/gitsigns.nvim',
 }
 
+-- gitsigns config start
 require('gitsigns').setup {
-  current_line_blame = true
+  current_line_blame = true,
 }
+-- gitsigns config end
 
+-- tree-sitter-manager config start
 -- In windows, tree-sitter may be built with msvc.
 -- If you only have the gnu toolchain, you need to set the CC and CFLAGS environment variables for tree-sitter build.
 -- vim.env.CC = "cc"
 -- vim.env.CFLAGS = "--target=x86_64-w64-windows-gnu"
 require('tree-sitter-manager').setup()
+-- tree-sitter-manager config end
+
+-- mason config start
 require('mason').setup()
+-- mason config end
+
+-- conform config start
 require('conform').setup {
   formatters_by_ft = {
     sh = { 'shfmt' },
@@ -133,6 +175,22 @@ require('conform').setup {
 vim.keymap.set('n', '<leader>ff', function()
   require('conform').format { async = true, lsp_format = 'fallback' }
 end)
+-- conform config end
+
+-- fzf config start
+vim.g.fff = {
+  lazy_sync = true,
+  git = {
+    status_text_color = true,
+  },
+}
+
+vim.keymap.set('n', '<leader>fs', function()
+  require('fff').find_files()
+end, { desc = 'Find files' })
+vim.keymap.set('n', '<leader>fz', function()
+  require('fff').live_grep()
+end, { desc = 'Live grep' })
 
 vim.api.nvim_create_autocmd('PackChanged', {
   group = vim.api.nvim_create_augroup('UserFFFDownload', { clear = true }),
@@ -146,18 +204,7 @@ vim.api.nvim_create_autocmd('PackChanged', {
     end
   end,
 })
-vim.g.fff = {
-  lazy_sync = true,
-  git = {
-    status_text_color = true,
-  },
-}
-vim.keymap.set('n', '<leader>fs', function()
-  require('fff').find_files()
-end, { desc = 'Find files' })
-vim.keymap.set('n', '<leader>fz', function()
-  require('fff').live_grep()
-end, { desc = 'Live grep' })
+
 vim.api.nvim_create_autocmd('BufEnter', {
   group = vim.api.nvim_create_augroup('UserFFFDisableAutocomplete', { clear = true }),
   callback = function(ev)
@@ -166,40 +213,4 @@ vim.api.nvim_create_autocmd('BufEnter', {
     end
   end,
 })
-
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspCompletion', { clear = true }),
-  callback = function(ev)
-    local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
-    if client:supports_method 'textDocument/completion' then
-      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-    end
-  end,
-})
-
-vim.api.nvim_create_autocmd('LspProgress', {
-  group = vim.api.nvim_create_augroup('UserLspProgressNotify', { clear = true }),
-  buffer = buf,
-  callback = function(ev)
-    local value = ev.data.params.value
-    vim.api.nvim_echo({ { value.message or 'done' } }, false, {
-      id = 'lsp.' .. ev.data.params.token,
-      kind = 'progress',
-      source = 'vim.lsp',
-      title = value.title,
-      status = value.kind ~= 'end' and 'running' or 'success',
-      percent = value.percentage,
-    })
-  end,
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  group = vim.api.nvim_create_augroup('UserTSAutoStart', { clear = true }),
-  pattern = '*',
-  callback = function(ev)
-    local lang = ev.match
-    if vim.treesitter.language.add(lang) then
-      vim.treesitter.start(ev.buf, lang)
-    end
-  end,
-})
+-- fzf config end
