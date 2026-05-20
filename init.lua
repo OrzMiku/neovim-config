@@ -100,10 +100,29 @@ vim.api.nvim_create_autocmd('LspProgress', {
   end,
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('UserTSAutoStart', { clear = true }),
+  pattern = '*',
+  callback = function(ev)
+    local lang = ev.match
+    if vim.treesitter.language.add(lang) then
+      vim.treesitter.start(ev.buf, lang)
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = vim.api.nvim_create_augroup('UserDisableAutocomplete', { clear = true }),
+  callback = function(ev)
+print(vim.bo[ev.buf].buftype)
+    if vim.bo[ev.buf].buftype ~= "" then vim.bo[ev.buf].autocomplete = false end
+  end,
+})
+
 --------------------------------------------------------------------------------
 --- Plugins
 --------------------------------------------------------------------------------
-if not vim.uv.fs_stat(vim.fn.stdpath('config') .. '/enable_plugin') then
+if not vim.uv.fs_stat(vim.fn.stdpath 'config' .. '/enable_plugin') then
   return
 end
 
@@ -115,8 +134,9 @@ vim.pack.add {
   gh 'neovim/nvim-lspconfig',
   gh 'stevearc/conform.nvim',
   gh 'romus204/tree-sitter-manager.nvim',
-  gh 'dmtrKovalenko/fff',
   gh 'lewis6991/gitsigns.nvim',
+  gh 'nvim-lua/plenary.nvim',
+  gh 'nvim-telescope/telescope.nvim',
 }
 
 -- gitsigns config start
@@ -177,40 +197,51 @@ vim.keymap.set('n', '<leader>ff', function()
 end)
 -- conform config end
 
--- fzf config start
-vim.g.fff = {
-  lazy_sync = true,
-  git = {
-    status_text_color = true,
-  },
-}
-
+-- telescope config start
+local telescope_builtin = require 'telescope.builtin'
 vim.keymap.set('n', '<leader>fs', function()
-  require('fff').find_files()
-end, { desc = 'Find files' })
+  telescope_builtin.find_files()
+end, { desc = 'Telescope find files' })
 vim.keymap.set('n', '<leader>fz', function()
-  require('fff').live_grep()
-end, { desc = 'Live grep' })
+  telescope_builtin.live_grep()
+end, { desc = 'Telescope live grep' })
+vim.keymap.set('n', '<leader>fb', function()
+  telescope_builtin.buffers()
+end, { desc = 'Telescope buffers' })
+vim.keymap.set('n', '<leader>fh', function()
+  telescope_builtin.help_tags()
+end, { desc = 'Telescope help tags' })
+vim.keymap.set('n', '<leader>fk', function()
+  telescope_builtin.keymaps()
+end, { desc = 'Telescope keymaps' })
+vim.keymap.set('n', '<leader>fp', function()
+  telescope_builtin.git_files()
+end, { desc = 'Telescope git_files' })
+vim.keymap.set('n', '<leader>fo', function()
+  telescope_builtin.oldfiles()
+end, { desc = 'Telescope old_files' })
 
-vim.api.nvim_create_autocmd('PackChanged', {
-  group = vim.api.nvim_create_augroup('UserFFFDownload', { clear = true }),
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserTelescopeLspKeymap', { clear = true }),
   callback = function(ev)
-    local name, kind = ev.data.spec.name, ev.data.kind
-    if name == 'fff.nvim' and (kind == 'install' or kind == 'update') then
-      if not ev.data.active then
-        vim.cmd.packadd 'fff.nvim'
-      end
-      require('fff.download').download_or_build_binary()
-    end
+    vim.keymap.set('n', 'grr', function()
+      telescope_builtin.lsp_references()
+    end, { desc = 'Telescope LSP References' })
+    vim.keymap.set('n', 'gri', function()
+      telescope_builtin.lsp_implementations()
+    end, { desc = 'Telescope LSP Implementations' })
+    vim.keymap.set('n', 'grd', function()
+      telescope_builtin.lsp_definitions()
+    end, { desc = 'Telescope LSP Definitions' })
+    vim.keymap.set('n', 'gO', function()
+      telescope_builtin.lsp_document_symbols()
+    end, { desc = 'Telescope LSP Document Symbols' })
+    vim.keymap.set('n', 'gW', function()
+      telescope_builtin.lsp_dynamic_workspace_symbols()
+    end, { desc = 'Telescope LSP Workspace Symbols' })
+    vim.keymap.set('n', 'grt', function()
+      telescope_builtin.lsp_type_definitions()
+    end, { desc = 'Telescope LSP Type Definitions' })
   end,
 })
-
-vim.api.nvim_create_autocmd('BufEnter', {
-  group = vim.api.nvim_create_augroup('UserFFFDisableAutocomplete', { clear = true }),
-  callback = function(ev)
-    if vim.fn.fnamemodify(vim.api.nvim_buf_get_name(ev.buf), ':t'):sub(1, 6) == 'fffile' then
-      vim.opt_local.autocomplete = false
-    end
-  end,
-})
--- fzf config end
+-- telescope config end
