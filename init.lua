@@ -11,7 +11,7 @@ require('vim._core.ui2').enable {
 }
 
 vim.opt.number = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false
 vim.opt.expandtab = true
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
@@ -282,19 +282,3 @@ do
   })
 end
 
--- yazi start
-do
-  vim.pack.add {
-    gh 'nvim-lua/plenary.nvim',
-    gh 'mikavilpas/yazi.nvim',
-  }
-
-  vim.g.loaded_netrwPlugin = 1
-  require('yazi').setup {
-    open_for_directories = true,
-  }
-
-  vim.keymap.set({ 'n', 'v' }, '<leader>-', '<cmd>Yazi<cr>', { desc = 'Open yazi at the current file' })
-  vim.keymap.set({ 'n', 'v' }, '<leader>cw', '<cmd>Yazi cwd<cr>', { desc = "Open the file manager in nvim's working directory" })
-  vim.keymap.set({ 'n', 'v' }, '<c-up>', '<cmd>Yazi toggle<cr>', { desc = 'Resume the last yazi session' })
-end
