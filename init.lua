@@ -1,4 +1,4 @@
-vim.cmd 'colorscheme catppuccin'
+vim.cmd.colorscheme 'catppuccin'
 
 require('vim._core.ui2').enable {
   enable = true,
@@ -38,8 +38,7 @@ function _G.simple_tabline()
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if vim.bo[bufnr].buflisted then
       local name = vim.api.nvim_buf_get_name(bufnr)
-      name = name ~= '' and vim.fn.fnamemodify(name, ':t') or '[No Name]'
-      name:gsub('%%', '%%%%')
+      name = (name ~= '' and vim.fn.fnamemodify(name, ':t') or '[No Name]'):gsub('%%', '%%%%')
       if bufnr == curr_buf then
         table.insert(parts, '%#TabLineSel#')
       else
@@ -86,7 +85,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 vim.api.nvim_create_autocmd('LspProgress', {
   group = vim.api.nvim_create_augroup('UserLspProgressNotify', { clear = true }),
-  buffer = buf,
   callback = function(ev)
     local value = ev.data.params.value
     vim.api.nvim_echo({ { value.message or 'done' } }, false, {
@@ -114,8 +112,9 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd('BufEnter', {
   group = vim.api.nvim_create_augroup('UserDisableAutocomplete', { clear = true }),
   callback = function(ev)
-print(vim.bo[ev.buf].buftype)
-    if vim.bo[ev.buf].buftype ~= "" then vim.bo[ev.buf].autocomplete = false end
+    if vim.bo[ev.buf].buftype ~= '' then
+      vim.bo[ev.buf].autocomplete = false
+    end
   end,
 })
 
@@ -129,119 +128,173 @@ end
 local gh = function(x)
   return 'https://github.com/' .. x
 end
-vim.pack.add {
-  gh 'mason-org/mason.nvim',
-  gh 'neovim/nvim-lspconfig',
-  gh 'stevearc/conform.nvim',
-  gh 'romus204/tree-sitter-manager.nvim',
-  gh 'lewis6991/gitsigns.nvim',
-  gh 'nvim-lua/plenary.nvim',
-  gh 'nvim-telescope/telescope.nvim',
-}
 
--- gitsigns config start
-require('gitsigns').setup {
-  current_line_blame = true,
-}
--- gitsigns config end
+-- catppuccin
+do
+  vim.pack.add {
+    {
+      src = gh 'catppuccin/nvim',
+      name = 'catppuccin',
+    },
+  }
 
--- tree-sitter-manager config start
+  vim.cmd.colorscheme 'catppuccin-nvim'
+end
+
+-- nvim-lspconfig
+do
+  vim.pack.add {
+    gh 'neovim/nvim-lspconfig',
+  }
+end
+
+-- gitsigns
+do
+  vim.pack.add {
+    gh 'lewis6991/gitsigns.nvim',
+  }
+
+  require('gitsigns').setup {
+    current_line_blame = true,
+  }
+end
+
+-- tree-sitter-manager
 -- In windows, tree-sitter may be built with msvc.
 -- If you only have the gnu toolchain, you need to set the CC and CFLAGS environment variables for tree-sitter build.
 -- vim.env.CC = "cc"
 -- vim.env.CFLAGS = "--target=x86_64-w64-windows-gnu"
-require('tree-sitter-manager').setup()
--- tree-sitter-manager config end
+do
+  vim.pack.add {
+    gh 'romus204/tree-sitter-manager.nvim',
+  }
 
--- mason config start
-require('mason').setup()
--- mason config end
+  require('tree-sitter-manager').setup()
+end
 
--- conform config start
-require('conform').setup {
-  formatters_by_ft = {
-    sh = { 'shfmt' },
-    bash = { 'shfmt' },
-    zsh = { 'shfmt' },
-    fish = { 'fish_indent' },
-    json = { 'prettierd', 'prettier', stop_after_first = true },
-    jsonc = { 'prettierd', 'prettier', stop_after_first = true },
-    yaml = { 'prettierd', 'prettier', stop_after_first = true },
-    yml = { 'prettierd', 'prettier', stop_after_first = true },
-    toml = { 'taplo' },
-    markdown = { 'prettierd', 'prettier', stop_after_first = true },
-    ['markdown.mdx'] = { 'prettierd', 'prettier', stop_after_first = true },
-    mdx = { 'prettierd', 'prettier', stop_after_first = true },
-    html = { 'prettierd', 'prettier', stop_after_first = true },
-    css = { 'prettierd', 'prettier', stop_after_first = true },
-    scss = { 'prettierd', 'prettier', stop_after_first = true },
-    less = { 'prettierd', 'prettier', stop_after_first = true },
-    javascript = { 'prettierd', 'prettier', stop_after_first = true },
-    javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-    typescript = { 'prettierd', 'prettier', stop_after_first = true },
-    typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-    vue = { 'prettierd', 'prettier', stop_after_first = true },
-    c = { 'clang_format' },
-    cpp = { 'clang_format' },
-    objc = { 'clang_format' },
-    objcpp = { 'clang_format' },
-    cuda = { 'clang_format' },
-    rust = { 'rustfmt' },
-    lua = { 'stylua' },
-    python = { 'ruff_fix', 'ruff_organize_imports', 'ruff_format' },
-    xml = { 'xmlformat' },
-  },
-}
-vim.keymap.set('n', '<leader>ff', function()
-  require('conform').format { async = true, lsp_format = 'fallback' }
-end)
--- conform config end
+-- mason start
+do
+  vim.pack.add {
+    gh 'mason-org/mason.nvim',
+  }
 
--- telescope config start
-local telescope_builtin = require 'telescope.builtin'
-vim.keymap.set('n', '<leader>fs', function()
-  telescope_builtin.find_files()
-end, { desc = 'Telescope find files' })
-vim.keymap.set('n', '<leader>fz', function()
-  telescope_builtin.live_grep()
-end, { desc = 'Telescope live grep' })
-vim.keymap.set('n', '<leader>fb', function()
-  telescope_builtin.buffers()
-end, { desc = 'Telescope buffers' })
-vim.keymap.set('n', '<leader>fh', function()
-  telescope_builtin.help_tags()
-end, { desc = 'Telescope help tags' })
-vim.keymap.set('n', '<leader>fk', function()
-  telescope_builtin.keymaps()
-end, { desc = 'Telescope keymaps' })
-vim.keymap.set('n', '<leader>fp', function()
-  telescope_builtin.git_files()
-end, { desc = 'Telescope git_files' })
-vim.keymap.set('n', '<leader>fo', function()
-  telescope_builtin.oldfiles()
-end, { desc = 'Telescope old_files' })
+  require('mason').setup()
+end
 
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserTelescopeLspKeymap', { clear = true }),
-  callback = function(ev)
-    vim.keymap.set('n', 'grr', function()
-      telescope_builtin.lsp_references()
-    end, { desc = 'Telescope LSP References' })
-    vim.keymap.set('n', 'gri', function()
-      telescope_builtin.lsp_implementations()
-    end, { desc = 'Telescope LSP Implementations' })
-    vim.keymap.set('n', 'grd', function()
-      telescope_builtin.lsp_definitions()
-    end, { desc = 'Telescope LSP Definitions' })
-    vim.keymap.set('n', 'gO', function()
-      telescope_builtin.lsp_document_symbols()
-    end, { desc = 'Telescope LSP Document Symbols' })
-    vim.keymap.set('n', 'gW', function()
-      telescope_builtin.lsp_dynamic_workspace_symbols()
-    end, { desc = 'Telescope LSP Workspace Symbols' })
-    vim.keymap.set('n', 'grt', function()
-      telescope_builtin.lsp_type_definitions()
-    end, { desc = 'Telescope LSP Type Definitions' })
-  end,
-})
--- telescope config end
+-- conform start
+do
+  vim.pack.add {
+    gh 'stevearc/conform.nvim',
+  }
+
+  require('conform').setup {
+    formatters_by_ft = {
+      sh = { 'shfmt' },
+      bash = { 'shfmt' },
+      zsh = { 'shfmt' },
+      fish = { 'fish_indent' },
+      json = { 'prettierd', 'prettier', stop_after_first = true },
+      jsonc = { 'prettierd', 'prettier', stop_after_first = true },
+      yaml = { 'prettierd', 'prettier', stop_after_first = true },
+      yml = { 'prettierd', 'prettier', stop_after_first = true },
+      toml = { 'taplo' },
+      markdown = { 'prettierd', 'prettier', stop_after_first = true },
+      ['markdown.mdx'] = { 'prettierd', 'prettier', stop_after_first = true },
+      mdx = { 'prettierd', 'prettier', stop_after_first = true },
+      html = { 'prettierd', 'prettier', stop_after_first = true },
+      css = { 'prettierd', 'prettier', stop_after_first = true },
+      scss = { 'prettierd', 'prettier', stop_after_first = true },
+      less = { 'prettierd', 'prettier', stop_after_first = true },
+      javascript = { 'prettierd', 'prettier', stop_after_first = true },
+      javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+      typescript = { 'prettierd', 'prettier', stop_after_first = true },
+      typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+      vue = { 'prettierd', 'prettier', stop_after_first = true },
+      c = { 'clang_format' },
+      cpp = { 'clang_format' },
+      objc = { 'clang_format' },
+      objcpp = { 'clang_format' },
+      cuda = { 'clang_format' },
+      rust = { 'rustfmt' },
+      lua = { 'stylua' },
+      python = { 'ruff_fix', 'ruff_organize_imports', 'ruff_format' },
+      xml = { 'xmlformat' },
+    },
+  }
+
+  vim.keymap.set('n', '<leader>ff', function()
+    require('conform').format { async = true, lsp_format = 'fallback' }
+  end)
+end
+
+-- telescope start
+do
+  vim.pack.add {
+    gh 'nvim-lua/plenary.nvim',
+    gh 'nvim-telescope/telescope.nvim',
+  }
+
+  local telescope_builtin = require 'telescope.builtin'
+  vim.keymap.set('n', '<leader>fs', function()
+    telescope_builtin.find_files()
+  end, { desc = 'Telescope find files' })
+  vim.keymap.set('n', '<leader>fz', function()
+    telescope_builtin.live_grep()
+  end, { desc = 'Telescope live grep' })
+  vim.keymap.set('n', '<leader>fb', function()
+    telescope_builtin.buffers()
+  end, { desc = 'Telescope buffers' })
+  vim.keymap.set('n', '<leader>fh', function()
+    telescope_builtin.help_tags()
+  end, { desc = 'Telescope help tags' })
+  vim.keymap.set('n', '<leader>fk', function()
+    telescope_builtin.keymaps()
+  end, { desc = 'Telescope keymaps' })
+  vim.keymap.set('n', '<leader>fp', function()
+    telescope_builtin.git_files()
+  end, { desc = 'Telescope git_files' })
+  vim.keymap.set('n', '<leader>fo', function()
+    telescope_builtin.oldfiles()
+  end, { desc = 'Telescope old_files' })
+
+  vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('UserTelescopeLspKeymap', { clear = true }),
+    callback = function(ev)
+      vim.keymap.set('n', 'grr', function()
+        telescope_builtin.lsp_references()
+      end, { desc = 'Telescope LSP References', buf = ev.buf })
+      vim.keymap.set('n', 'gri', function()
+        telescope_builtin.lsp_implementations()
+      end, { desc = 'Telescope LSP Implementations', buf = ev.buf })
+      vim.keymap.set('n', 'grd', function()
+        telescope_builtin.lsp_definitions()
+      end, { desc = 'Telescope LSP Definitions', buf = ev.buf })
+      vim.keymap.set('n', 'gO', function()
+        telescope_builtin.lsp_document_symbols()
+      end, { desc = 'Telescope LSP Document Symbols', buf = ev.buf })
+      vim.keymap.set('n', 'gW', function()
+        telescope_builtin.lsp_dynamic_workspace_symbols()
+      end, { desc = 'Telescope LSP Workspace Symbols', buf = ev.buf })
+      vim.keymap.set('n', 'grt', function()
+        telescope_builtin.lsp_type_definitions()
+      end, { desc = 'Telescope LSP Type Definitions', buf = ev.buf })
+    end,
+  })
+end
+
+-- yazi start
+do
+  vim.pack.add {
+    gh 'nvim-lua/plenary.nvim',
+    gh 'mikavilpas/yazi.nvim',
+  }
+
+  vim.g.loaded_netrwPlugin = 1
+  require('yazi').setup {
+    open_for_directories = true,
+  }
+
+  vim.keymap.set({ 'n', 'v' }, '<leader>-', '<cmd>Yazi<cr>', { desc = 'Open yazi at the current file' })
+  vim.keymap.set({ 'n', 'v' }, '<leader>cw', '<cmd>Yazi cwd<cr>', { desc = "Open the file manager in nvim's working directory" })
+  vim.keymap.set({ 'n', 'v' }, '<c-up>', '<cmd>Yazi toggle<cr>', { desc = 'Resume the last yazi session' })
+end
