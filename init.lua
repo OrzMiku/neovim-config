@@ -52,6 +52,7 @@ function _G.simple_tabline()
   return table.concat(parts)
 end
 vim.opt.tabline = '%!v:lua.simple_tabline()'
+vim.opt.scrolloff = 3
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -281,4 +282,3 @@ do
     end,
   })
 end
-
