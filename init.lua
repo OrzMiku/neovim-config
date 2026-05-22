@@ -62,8 +62,9 @@ vim.keymap.set({ 'n', 'v' }, '<leader>p', [["+p]])
 vim.keymap.set({ 'n', 'v' }, '<leader>P', [["+P]])
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
-vim.keymap.set('n', '<S-h>', ':bp<CR>')
-vim.keymap.set('n', '<S-l>', ':bn<CR>')
+vim.keymap.set('n', '<S-h>', ':bp<cr>')
+vim.keymap.set('n', '<S-l>', ':bn<cr>')
+vim.keymap.set('n', '<esc>', ':nohl<cr>')
 
 vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('UserFtIndent2', { clear = true }),
@@ -81,10 +82,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if client:supports_method 'textDocument/completion' then
       vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
     end
-    if client:supports_method('textDocument/inlineCompletion', bufnr) then
-      vim.lsp.inline_completion.enable(true, { bufnr = bufnr })
-      vim.keymap.set('i', '<C-F>', vim.lsp.inline_completion.get, { desc = 'LSP: accept inline completion', buffer = bufnr })
-      vim.keymap.set('i', '<C-G>', vim.lsp.inline_completion.select, { desc = 'LSP: switch inline completion', buffer = bufnr })
+    if client:supports_method('textDocument/inlineCompletion', ev.buf) then
+      vim.lsp.inline_completion.enable(true, { bufnr = ev.buf })
+      vim.keymap.set('i', '<C-F>', vim.lsp.inline_completion.get, { desc = 'LSP: accept inline completion', buf = ev.buf })
+      vim.keymap.set('i', '<C-G>', vim.lsp.inline_completion.select, { desc = 'LSP: switch inline completion', buf = ev.buf })
     end
   end,
 })
