@@ -51,6 +51,7 @@ function _G.simple_tabline()
   table.insert(parts, '%#TabLineFill#%=')
   return table.concat(parts)
 end
+
 vim.opt.tabline = '%!v:lua.simple_tabline()'
 vim.opt.scrolloff = 3
 
@@ -288,3 +289,13 @@ do
     end,
   })
 end
+
+-- fidget
+do
+  vim.pack.add { gh 'j-hui/fidget.nvim' }
+  vim.api.nvim_clear_autocmds {
+    group = 'UserLspProgressNotify',
+  }
+  require('fidget').setup {}
+end
+
