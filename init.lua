@@ -1,14 +1,52 @@
+--------------------------------------------------------------------------------
+--- Preload
+--------------------------------------------------------------------------------
+
+require('config').setup()
+local userconfig = require('config').get_config()
+
+--------------------------------------------------------------------------------
+--- Basic
+--------------------------------------------------------------------------------
+
+userconfig.hooks.before_basic()
+
 vim.cmd.colorscheme 'catppuccin'
 
-require('vim._core.ui2').enable {
-  enable = true,
-  msg = {
-    targets = {
-      default = 'cmd',
-      progress = 'msg',
+if userconfig.features.ui2 then
+  require('vim._core.ui2').enable {
+    enable = true,
+    msg = {
+      targets = {
+        default = 'cmd',
+        progress = 'msg',
+      },
     },
-  },
-}
+  }
+end
+
+if userconfig.features.clipboard_osc52 then
+  local function paste()
+    return {
+      vim.split(vim.fn.getreg '', '\n'),
+      vim.fn.getregtype '',
+    }
+  end
+
+  if vim.env.SSH_TTY then
+    vim.g.clipboard = {
+      name = 'OSC 52',
+      copy = {
+        ['+'] = require('vim.ui.clipboard.osc52').copy '+',
+        ['*'] = require('vim.ui.clipboard.osc52').copy '*',
+      },
+      paste = {
+        ['+'] = paste,
+        ['*'] = paste,
+      },
+    }
+  end
+end
 
 vim.opt.number = true
 vim.opt.relativenumber = false
@@ -126,10 +164,15 @@ vim.api.nvim_create_autocmd('BufEnter', {
   end,
 })
 
+userconfig.hooks.after_basic()
+
 --------------------------------------------------------------------------------
 --- Plugins
 --------------------------------------------------------------------------------
-if not vim.uv.fs_stat(vim.fn.stdpath 'config' .. '/enable_plugin') then
+
+userconfig.hooks.before_plugin()
+
+if not userconfig.features.enable_plugin then
   return
 end
 
@@ -197,6 +240,7 @@ do
 
   require('conform').setup {
     formatters_by_ft = {
+      nix = { 'nixfmt' },
       sh = { 'shfmt' },
       bash = { 'shfmt' },
       zsh = { 'shfmt' },
@@ -299,3 +343,11 @@ do
   require('fidget').setup {}
 end
 
+-- oil.nvim
+do
+  vim.pack.add { gh 'stevearc/oil.nvim' }
+  require('oil').setup()
+  vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+end
+
+userconfig.hooks.after_plugin()

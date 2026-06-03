@@ -1,2 +1,4 @@
 nvim-pack-lock.json
-enable_plugin
+userconfig.lua
+lua/user/*
+!lua/user/config.example.lua
