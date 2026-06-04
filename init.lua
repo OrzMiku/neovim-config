@@ -170,11 +170,11 @@ userconfig.hooks.after_basic()
 --- Plugins
 --------------------------------------------------------------------------------
 
-userconfig.hooks.before_plugin()
-
 if not userconfig.features.enable_plugin then
   return
 end
+
+userconfig.hooks.before_plugin()
 
 local gh = function(x)
   return 'https://github.com/' .. x
