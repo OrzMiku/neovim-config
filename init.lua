@@ -121,6 +121,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if client:supports_method 'textDocument/completion' then
       vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
     end
+  end,
+})
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspInlineCompletion', { clear = true }),
+  callback = function(ev)
+    local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
     if client:supports_method('textDocument/inlineCompletion', ev.buf) then
       vim.lsp.inline_completion.enable(true, { bufnr = ev.buf })
       vim.keymap.set('i', '<C-F>', vim.lsp.inline_completion.get, { desc = 'LSP: accept inline completion', buf = ev.buf })
@@ -348,6 +355,34 @@ do
   vim.pack.add { gh 'stevearc/oil.nvim' }
   require('oil').setup()
   vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+end
+
+-- blink.cmp
+do
+  vim.opt.autocomplete = false
+  vim.opt.complete:remove 'o'
+  vim.api.nvim_clear_autocmds {
+    group = 'UserLspCompletion',
+  }
+  for _, client in ipairs(vim.lsp.get_clients()) do
+    for bufnr, _ in pairs(client.attached_buffers or {}) do
+      pcall(vim.lsp.completion.enable, false, client.id, bufnr)
+    end
+  end
+
+  vim.pack.add {
+    { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' },
+  }
+
+  require('blink.cmp').setup {
+    completion = {
+      list = {
+        selection = {
+          preselect = false,
+        },
+      },
+    },
+  }
 end
 
 userconfig.hooks.after_plugin()
