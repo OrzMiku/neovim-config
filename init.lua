@@ -171,6 +171,15 @@ vim.api.nvim_create_autocmd('BufEnter', {
   end,
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('UserQuickFixWrap', { clear = true }),
+  pattern = { 'qf' },
+  callback = function()
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
+  end,
+})
+
 userconfig.hooks.after_basic()
 
 --------------------------------------------------------------------------------
