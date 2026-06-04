@@ -3,6 +3,7 @@
 ---    enable_plugin: boolean,
 ---    ui2: boolean,
 ---    clipboard_osc52: boolean,
+---    have_nerd_font: boolean,
 ---  },
 ---  hooks: {
 ---    before_basic: fun(),
@@ -23,6 +24,7 @@ local default_config = {
     enable_plugin = false,
     ui2 = true,
     clipboard_osc52 = true,
+    have_nerd_font = false,
   },
   hooks = {
     before_basic = function() end,

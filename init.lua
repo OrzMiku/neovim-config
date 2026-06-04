@@ -199,6 +199,16 @@ do
   vim.cmd.colorscheme 'catppuccin-nvim'
 end
 
+-- icon
+do
+  vim.pack.add { gh 'nvim-mini/mini.icons' }
+  local mini_icons = require 'mini.icons'
+  mini_icons.setup {
+    style = userconfig.features.have_nerd_font and 'glyph' or 'ascii',
+  }
+  mini_icons.mock_nvim_web_devicons()
+end
+
 -- nvim-lspconfig
 do
   vim.pack.add {
@@ -383,6 +393,56 @@ do
       },
     },
   }
+end
+
+-- bufferline
+do
+  vim.pack.add { gh 'akinsho/bufferline.nvim' }
+  require('bufferline').setup()
+end
+
+-- bqf
+do
+  vim.pack.add { gh 'kevinhwang91/nvim-bqf' }
+  vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup('NvimBqfEnableByFileType', { clear = true }),
+    pattern = { 'qf' },
+    callback = function()
+      require('bqf').setup {}
+    end,
+  })
+end
+
+-- mini.nvim
+do
+  vim.pack.add {
+    gh 'nvim-mini/mini.ai',
+    gh 'nvim-mini/mini.surround',
+    gh 'nvim-mini/mini.statusline',
+    gh 'nvim-mini/mini.indentscope',
+    gh 'nvim-mini/mini.pairs',
+    gh 'nvim-mini/mini.move',
+  }
+  require('mini.ai').setup()
+  require('mini.surround').setup()
+  require('mini.statusline').setup()
+  require('mini.indentscope').setup {
+    draw = {
+      delay = 0,
+      animation = require('mini.indentscope').gen_animation.none(),
+    },
+  }
+  require('mini.pairs').setup()
+  require('mini.move').setup()
+end
+
+-- which-key
+do
+  vim.pack.add {
+    gh 'folke/which-key.nvim',
+  }
+
+  require('which-key').setup()
 end
 
 userconfig.hooks.after_plugin()
