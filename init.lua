@@ -180,6 +180,8 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+vim.cmd.packadd 'nvim.difftool'
+
 userconfig.hooks.after_basic()
 
 --------------------------------------------------------------------------------
@@ -231,9 +233,26 @@ do
     gh 'lewis6991/gitsigns.nvim',
   }
 
-  require('gitsigns').setup {
+  local gitsigns = require 'gitsigns'
+
+  gitsigns.setup {
     current_line_blame = true,
   }
+
+  vim.keymap.set('n', ']c', gitsigns.next_hunk, { desc = 'Gitsigns next_hunk' })
+  vim.keymap.set('n', '[c', gitsigns.prev_hunk, { desc = 'Gitsigns prev_hunk' })
+  vim.keymap.set('n', 'gp', gitsigns.preview_hunk, { desc = 'Gitsigns preview_hunk' })
+  vim.keymap.set('n', 'gP', gitsigns.preview_hunk_inline, { desc = 'Gitsigns preview_hunk_inline' })
+end
+
+-- neogit
+do
+  vim.pack.add {
+    gh 'NeogitOrg/neogit',
+    gh 'dlyongemallo/diffview-plus.nvim',
+  }
+
+  vim.keymap.set('n', '<leader>gg', '<cmd>Neogit<cr>', { desc = 'Show Neogit UI' })
 end
 
 -- tree-sitter-manager
@@ -484,6 +503,29 @@ do
   }
 
   require('which-key').setup()
+end
+
+-- markview
+do
+  vim.pack.add {
+    gh 'OXY2DEV/markview.nvim',
+  }
+end
+
+-- tiny-inline-diagnostic
+do
+  vim.pack.add {
+    gh 'rachartier/tiny-inline-diagnostic.nvim',
+  }
+
+  require('tiny-inline-diagnostic').setup {
+    options = {
+      multilines = {
+        enabled = true,
+      },
+    },
+  }
+  vim.diagnostic.config { virtual_text = false }
 end
 
 userconfig.hooks.after_plugin()
