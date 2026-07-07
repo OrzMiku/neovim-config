@@ -107,7 +107,7 @@ vim.keymap.set('n', '<esc>', ':nohl<cr>')
 
 vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('UserFtIndent2', { clear = true }),
-  pattern = { 'xml', 'nix', 'lua', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'css', 'less', 'scss', 'sass', 'json' },
+  pattern = { 'nix', 'lua', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'css', 'less', 'scss', 'sass', 'json' },
   callback = function()
     vim.opt_local.softtabstop = 2
     vim.opt_local.shiftwidth = 2
@@ -300,9 +300,9 @@ do
     },
   }
 
-  vim.keymap.set('n', '<leader>ff', function()
+  vim.keymap.set('n', '<leader>cf', function()
     require('conform').format { async = true, lsp_format = 'fallback' }
-  end)
+  end, { desc = 'Code format' })
 end
 
 -- telescope start
@@ -312,25 +312,57 @@ do
     gh 'nvim-telescope/telescope.nvim',
   }
 
+  require('telescope').setup {
+    defaults = {
+      path_display = {
+        'smart',
+        'filename_first',
+      },
+    },
+  }
+
   local telescope_builtin = require 'telescope.builtin'
-  vim.keymap.set('n', '<leader>fs', function()
+
+  vim.keymap.set('n', '<leader>ff', function()
     telescope_builtin.find_files()
-  end, { desc = 'Telescope find files' })
-  vim.keymap.set('n', '<leader>fz', function()
+  end, { desc = 'Telescope find_files' })
+
+  vim.keymap.set('n', '<leader>fg', function()
     telescope_builtin.live_grep()
-  end, { desc = 'Telescope live grep' })
+  end, { desc = 'Telescope live_grep' })
+
   vim.keymap.set('n', '<leader>fb', function()
     telescope_builtin.buffers()
   end, { desc = 'Telescope buffers' })
+
   vim.keymap.set('n', '<leader>fh', function()
     telescope_builtin.help_tags()
-  end, { desc = 'Telescope help tags' })
+  end, { desc = 'Telescope help_tags' })
+
   vim.keymap.set('n', '<leader>fk', function()
     telescope_builtin.keymaps()
   end, { desc = 'Telescope keymaps' })
-  vim.keymap.set('n', '<leader>fp', function()
+
+  vim.keymap.set('n', '<leader>gf', function()
     telescope_builtin.git_files()
   end, { desc = 'Telescope git_files' })
+
+  vim.keymap.set('n', '<leader>gs', function()
+    telescope_builtin.git_status()
+  end, { desc = 'Telescope git_status' })
+
+  vim.keymap.set('n', '<leader>gS', function()
+    telescope_builtin.git_stash()
+  end, { desc = 'Telescope git_stash' })
+
+  vim.keymap.set('n', '<leader>gb', function()
+    telescope_builtin.git_branches()
+  end, { desc = 'Telescope git_branches' })
+
+  vim.keymap.set('n', '<leader>gc', function()
+    telescope_builtin.git_commits()
+  end, { desc = 'Telescope git_commits' })
+
   vim.keymap.set('n', '<leader>fo', function()
     telescope_builtin.oldfiles()
   end, { desc = 'Telescope old_files' })
