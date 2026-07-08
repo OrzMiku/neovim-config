@@ -1,17 +1,18 @@
----@alias UserConfig {
----  features: {
----    enable_plugin: boolean,
----    ui2: boolean,
----    clipboard_osc52: boolean,
----    have_nerd_font: boolean,
----  },
----  hooks: {
----    before_basic: fun(),
----    after_basic: fun(),
----    before_plugin: fun(),
----    after_plugin: fun(),
----  },
----}
+---@class UserConfigFeatures
+---@field enable_plugin boolean
+---@field ui2 boolean
+---@field clipboard_osc52 boolean
+---@field have_nerd_font boolean
+
+---@class UserConfigHooks
+---@field before_basic fun()
+---@field after_basic fun()
+---@field before_plugin fun()
+---@field after_plugin fun()
+
+---@class UserConfig
+---@field features UserConfigFeatures
+---@field hooks UserConfigHooks
 
 local M = {}
 
@@ -41,11 +42,34 @@ local function merge_config(src_config, dst_config)
   return vim.tbl_deep_extend('force', src_config, dst_config)
 end
 
-function M.setup()
-  if not vim.uv.fs_stat(userconfig_path) then
-    vim.uv.fs_copyfile(userconfig_example_path, userconfig_path)
+local function ensure_user_config()
+  if vim.uv.fs_stat(userconfig_path) then
+    return
   end
-  local userconfig = require 'user.config'
+
+  local ok, err = vim.uv.fs_copyfile(userconfig_example_path, userconfig_path)
+  if not ok then
+    error(('Failed to create user config from example: %s'):format(err), 0)
+  end
+end
+
+local function load_user_config()
+  local ok, userconfig = pcall(require, 'user.config')
+  if not ok then
+    error(('Failed to load user config `%s`: %s'):format(userconfig_path, userconfig), 0)
+  end
+
+  if type(userconfig) ~= 'table' then
+    error(('User config `%s` must return a table'):format(userconfig_path), 0)
+  end
+
+  return userconfig
+end
+
+function M.setup()
+  ensure_user_config()
+
+  local userconfig = load_user_config()
   config = merge_config(default_config, userconfig)
 end
 
