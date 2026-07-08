@@ -1,4 +1,4 @@
----@type UserConfig
+---@type UserConfigOverrides
 return {
   features = {
     enable_plugin = false,

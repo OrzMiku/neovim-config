@@ -14,6 +14,22 @@
 ---@field features UserConfigFeatures
 ---@field hooks UserConfigHooks
 
+---@class UserConfigFeatureOverrides
+---@field enable_plugin? boolean
+---@field ui2? boolean
+---@field clipboard_osc52? boolean
+---@field have_nerd_font? boolean
+
+---@class UserConfigHookOverrides
+---@field before_basic? fun()
+---@field after_basic? fun()
+---@field before_plugin? fun()
+---@field after_plugin? fun()
+
+---@class UserConfigOverrides
+---@field features? UserConfigFeatureOverrides
+---@field hooks? UserConfigHookOverrides
+
 local M = {}
 
 local userconfig_path = vim.fn.stdpath 'config' .. '/lua/user/config.lua'
@@ -36,7 +52,7 @@ local default_config = {
 }
 
 ---@type UserConfig
-local config = {}
+local config = default_config
 
 local function merge_config(src_config, dst_config)
   return vim.tbl_deep_extend('force', src_config, dst_config)
@@ -63,6 +79,7 @@ local function load_user_config()
     error(('User config `%s` must return a table'):format(userconfig_path), 0)
   end
 
+  ---@cast userconfig UserConfigOverrides
   return userconfig
 end
 
