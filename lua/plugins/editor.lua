@@ -113,7 +113,11 @@ return {
       { '<leader>bl', '<cmd>BufferLineCloseLeft<cr>', desc = 'Delete buffers left' },
       { '<leader>bj', '<cmd>BufferLinePick<cr>', desc = 'Pick buffer' },
     },
-    opts = {},
+    opts = function()
+      return {
+        highlights = require('catppuccin.special.bufferline').get_theme(),
+      }
+    end,
   },
   {
     url = gh 'Bekaboo/dropbar.nvim',
