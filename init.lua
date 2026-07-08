@@ -326,77 +326,94 @@ do
     gh 'ibhagwan/fzf-lua',
   }
 
-  require('fzf-lua').setup {
-    files = {
-      formatter = 'path.filename_first',
-    },
-  }
+  local fzf = require 'fzf-lua'
 
   vim.keymap.set('n', '<leader>ff', function()
-    require('fzf-lua').files()
+    fzf.files()
   end, { desc = 'FzfLua find_files' })
 
   vim.keymap.set('n', '<leader>fg', function()
-    require('fzf-lua').live_grep()
+    fzf.live_grep()
   end, { desc = 'FzfLua live_grep' })
 
   vim.keymap.set('n', '<leader>fb', function()
-    require('fzf-lua').buffers()
+    fzf.buffers()
   end, { desc = 'FzfLua buffers' })
 
+  vim.keymap.set('n', '<leader>ft', function()
+    fzf.tabs()
+  end, { desc = 'FzfLua tabs' })
+
   vim.keymap.set('n', '<leader>fh', function()
-    require('fzf-lua').help_tags()
+    fzf.help_tags()
   end, { desc = 'FzfLua help_tags' })
 
   vim.keymap.set('n', '<leader>fk', function()
-    require('fzf-lua').keymaps()
+    fzf.keymaps()
   end, { desc = 'FzfLua keymaps' })
 
   vim.keymap.set('n', '<leader>fo', function()
-    require('fzf-lua').oldfiles()
+    fzf.oldfiles()
   end, { desc = 'FzfLua old_files' })
 
   vim.keymap.set('n', '<leader>gf', function()
-    require('fzf-lua').git_files()
+    fzf.git_files()
   end, { desc = 'FzfLua git_files' })
 
   vim.keymap.set('n', '<leader>gs', function()
-    require('fzf-lua').git_status()
+    fzf.git_status()
   end, { desc = 'FzfLua git_status' })
 
   vim.keymap.set('n', '<leader>gS', function()
-    require('fzf-lua').git_stash()
+    fzf.git_stash()
   end, { desc = 'FzfLua git_stash' })
 
   vim.keymap.set('n', '<leader>gb', function()
-    require('fzf-lua').git_branches()
+    fzf.git_branches()
   end, { desc = 'FzfLua git_branches' })
 
   vim.keymap.set('n', '<leader>gc', function()
-    require('fzf-lua').git_commits()
+    fzf.git_commits()
   end, { desc = 'FzfLua git_commits' })
 
   vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserFzfLuaLspKeymap', { clear = true }),
     callback = function(ev)
-      vim.keymap.set('n', 'grr', function()
-        require('fzf-lua').lsp_references()
-      end, { desc = 'FzfLua LSP References', buf = ev.buf })
-      vim.keymap.set('n', 'gri', function()
-        require('fzf-lua').lsp_implementations()
-      end, { desc = 'FzfLua LSP Implementations', buf = ev.buf })
-      vim.keymap.set('n', 'grd', function()
-        require('fzf-lua').lsp_definitions()
-      end, { desc = 'FzfLua LSP Definitions', buf = ev.buf })
       vim.keymap.set('n', 'gO', function()
-        require('fzf-lua').lsp_document_symbols()
-      end, { desc = 'FzfLua LSP Document Symbols', buf = ev.buf })
+        fzf.lsp_document_symbols()
+      end, { desc = 'FzfLua lsp_document_symbols', buf = ev.buf })
+
       vim.keymap.set('n', 'gW', function()
-        require('fzf-lua').lsp_workspace_symbols()
-      end, { desc = 'FzfLua LSP Workspace Symbols', buf = ev.buf })
+        fzf.lsp_workspace_symbols()
+      end, { desc = 'FzfLua lsp_workspace_symbols', buf = ev.buf })
+
+      vim.keymap.set('n', 'gra', function()
+        fzf.lsp_code_actions()
+      end, { desc = 'FzfLua lsp_code_actions', buf = ev.buf })
+
+      vim.keymap.set('n', 'gri', function()
+        fzf.lsp_implementations()
+      end, { desc = 'FzfLua lsp_implementations', buf = ev.buf })
+
+      vim.keymap.set('n', 'grr', function()
+        fzf.lsp_references()
+      end, { desc = 'FzfLua lsp_references', buf = ev.buf })
+
       vim.keymap.set('n', 'grt', function()
-        require('fzf-lua').lsp_typedefs()
-      end, { desc = 'FzfLua LSP Type Definitions', buf = ev.buf })
+        fzf.lsp_typedefs()
+      end, { desc = 'FzfLua lsp_typedefs', buf = ev.buf })
+
+      vim.keymap.set('n', 'grd', function()
+        fzf.lsp_definitions()
+      end, { desc = 'FzfLua lsp_definitions', buf = ev.buf })
+
+      vim.keymap.set('n', 'grq', function()
+        fzf.lsp_document_diagnostics()
+      end, { desc = 'lsp_document_diagnostics', buf = ev.buf })
+
+      vim.keymap.set('n', 'grQ', function()
+        fzf.lsp_workspace_diagnostics()
+      end, { desc = 'lsp_workspace_diagnostics', buf = ev.buf })
     end,
   })
 end
@@ -541,7 +558,6 @@ do
   vim.pack.add {
     gh 'MagicDuck/grug-far.nvim',
   }
-  require('grug-far').setup {}
 end
 
 -- dropbar
