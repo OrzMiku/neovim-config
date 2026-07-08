@@ -505,10 +505,10 @@ do
   require('which-key').setup()
 end
 
--- markview
+-- render-markdown
 do
   vim.pack.add {
-    gh 'OXY2DEV/markview.nvim',
+    gh 'MeanderingProgrammer/render-markdown.nvim',
   }
 end
 
