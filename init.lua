@@ -99,8 +99,8 @@ vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
 vim.keymap.set({ 'n', 'v' }, '<leader>Y', [["+Y]])
 vim.keymap.set({ 'n', 'v' }, '<leader>p', [["+p]])
 vim.keymap.set({ 'n', 'v' }, '<leader>P', [["+P]])
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
-vim.keymap.set('n', '<leader>Q', vim.diagnostic.setqflist)
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setqflist)
+vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist)
 vim.keymap.set('n', '<S-h>', ':bp<cr>')
 vim.keymap.set('n', '<S-l>', ':bn<cr>')
 vim.keymap.set('n', '<esc>', ':nohl<cr>')
@@ -195,7 +195,7 @@ end
 userconfig.hooks.before_plugin()
 
 local gh = function(x)
-  return 'https://github.com/' .. x
+  return 'https://ghfast.top/github.com/' .. x
 end
 
 -- catppuccin
@@ -239,8 +239,8 @@ do
     current_line_blame = true,
   }
 
-  vim.keymap.set('n', ']c', gitsigns.next_hunk, { desc = 'Gitsigns next_hunk' })
-  vim.keymap.set('n', '[c', gitsigns.prev_hunk, { desc = 'Gitsigns prev_hunk' })
+  vim.keymap.set('n', ']h', gitsigns.next_hunk, { desc = 'Gitsigns next_hunk' })
+  vim.keymap.set('n', '[h', gitsigns.prev_hunk, { desc = 'Gitsigns prev_hunk' })
   vim.keymap.set('n', 'gp', gitsigns.preview_hunk, { desc = 'Gitsigns preview_hunk' })
   vim.keymap.set('n', 'gP', gitsigns.preview_hunk_inline, { desc = 'Gitsigns preview_hunk_inline' })
 end
@@ -256,10 +256,6 @@ do
 end
 
 -- tree-sitter-manager
--- In windows, tree-sitter may be built with msvc.
--- If you only have the gnu toolchain, you need to set the CC and CFLAGS environment variables for tree-sitter build.
--- vim.env.CC = "cc"
--- vim.env.CFLAGS = "--target=x86_64-w64-windows-gnu"
 do
   vim.pack.add {
     gh 'romus204/tree-sitter-manager.nvim',
@@ -324,89 +320,83 @@ do
   end, { desc = 'Code format' })
 end
 
--- telescope start
+-- fzf-lua
 do
   vim.pack.add {
-    gh 'nvim-lua/plenary.nvim',
-    gh 'nvim-telescope/telescope.nvim',
+    gh 'ibhagwan/fzf-lua',
   }
 
-  require('telescope').setup {
-    defaults = {
-      path_display = {
-        'smart',
-        'filename_first',
-      },
+  require('fzf-lua').setup {
+    files = {
+      formatter = 'path.filename_first',
     },
   }
 
-  local telescope_builtin = require 'telescope.builtin'
-
   vim.keymap.set('n', '<leader>ff', function()
-    telescope_builtin.find_files()
-  end, { desc = 'Telescope find_files' })
+    require('fzf-lua').files()
+  end, { desc = 'FzfLua find_files' })
 
   vim.keymap.set('n', '<leader>fg', function()
-    telescope_builtin.live_grep()
-  end, { desc = 'Telescope live_grep' })
+    require('fzf-lua').live_grep()
+  end, { desc = 'FzfLua live_grep' })
 
   vim.keymap.set('n', '<leader>fb', function()
-    telescope_builtin.buffers()
-  end, { desc = 'Telescope buffers' })
+    require('fzf-lua').buffers()
+  end, { desc = 'FzfLua buffers' })
 
   vim.keymap.set('n', '<leader>fh', function()
-    telescope_builtin.help_tags()
-  end, { desc = 'Telescope help_tags' })
+    require('fzf-lua').help_tags()
+  end, { desc = 'FzfLua help_tags' })
 
   vim.keymap.set('n', '<leader>fk', function()
-    telescope_builtin.keymaps()
-  end, { desc = 'Telescope keymaps' })
-
-  vim.keymap.set('n', '<leader>gf', function()
-    telescope_builtin.git_files()
-  end, { desc = 'Telescope git_files' })
-
-  vim.keymap.set('n', '<leader>gs', function()
-    telescope_builtin.git_status()
-  end, { desc = 'Telescope git_status' })
-
-  vim.keymap.set('n', '<leader>gS', function()
-    telescope_builtin.git_stash()
-  end, { desc = 'Telescope git_stash' })
-
-  vim.keymap.set('n', '<leader>gb', function()
-    telescope_builtin.git_branches()
-  end, { desc = 'Telescope git_branches' })
-
-  vim.keymap.set('n', '<leader>gc', function()
-    telescope_builtin.git_commits()
-  end, { desc = 'Telescope git_commits' })
+    require('fzf-lua').keymaps()
+  end, { desc = 'FzfLua keymaps' })
 
   vim.keymap.set('n', '<leader>fo', function()
-    telescope_builtin.oldfiles()
-  end, { desc = 'Telescope old_files' })
+    require('fzf-lua').oldfiles()
+  end, { desc = 'FzfLua old_files' })
+
+  vim.keymap.set('n', '<leader>gf', function()
+    require('fzf-lua').git_files()
+  end, { desc = 'FzfLua git_files' })
+
+  vim.keymap.set('n', '<leader>gs', function()
+    require('fzf-lua').git_status()
+  end, { desc = 'FzfLua git_status' })
+
+  vim.keymap.set('n', '<leader>gS', function()
+    require('fzf-lua').git_stash()
+  end, { desc = 'FzfLua git_stash' })
+
+  vim.keymap.set('n', '<leader>gb', function()
+    require('fzf-lua').git_branches()
+  end, { desc = 'FzfLua git_branches' })
+
+  vim.keymap.set('n', '<leader>gc', function()
+    require('fzf-lua').git_commits()
+  end, { desc = 'FzfLua git_commits' })
 
   vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('UserTelescopeLspKeymap', { clear = true }),
+    group = vim.api.nvim_create_augroup('UserFzfLuaLspKeymap', { clear = true }),
     callback = function(ev)
       vim.keymap.set('n', 'grr', function()
-        telescope_builtin.lsp_references()
-      end, { desc = 'Telescope LSP References', buf = ev.buf })
+        require('fzf-lua').lsp_references()
+      end, { desc = 'FzfLua LSP References', buf = ev.buf })
       vim.keymap.set('n', 'gri', function()
-        telescope_builtin.lsp_implementations()
-      end, { desc = 'Telescope LSP Implementations', buf = ev.buf })
+        require('fzf-lua').lsp_implementations()
+      end, { desc = 'FzfLua LSP Implementations', buf = ev.buf })
       vim.keymap.set('n', 'grd', function()
-        telescope_builtin.lsp_definitions()
-      end, { desc = 'Telescope LSP Definitions', buf = ev.buf })
+        require('fzf-lua').lsp_definitions()
+      end, { desc = 'FzfLua LSP Definitions', buf = ev.buf })
       vim.keymap.set('n', 'gO', function()
-        telescope_builtin.lsp_document_symbols()
-      end, { desc = 'Telescope LSP Document Symbols', buf = ev.buf })
+        require('fzf-lua').lsp_document_symbols()
+      end, { desc = 'FzfLua LSP Document Symbols', buf = ev.buf })
       vim.keymap.set('n', 'gW', function()
-        telescope_builtin.lsp_dynamic_workspace_symbols()
-      end, { desc = 'Telescope LSP Workspace Symbols', buf = ev.buf })
+        require('fzf-lua').lsp_workspace_symbols()
+      end, { desc = 'FzfLua LSP Workspace Symbols', buf = ev.buf })
       vim.keymap.set('n', 'grt', function()
-        telescope_builtin.lsp_type_definitions()
-      end, { desc = 'Telescope LSP Type Definitions', buf = ev.buf })
+        require('fzf-lua').lsp_typedefs()
+      end, { desc = 'FzfLua LSP Type Definitions', buf = ev.buf })
     end,
   })
 end
@@ -473,15 +463,17 @@ do
   })
 end
 
+-- quicker
+do
+  vim.pack.add { gh 'stevearc/quicker.nvim' }
+  require('quicker').setup {}
+end
+
 -- mini.nvim
 do
   vim.pack.add {
-    gh 'nvim-mini/mini.ai',
-    gh 'nvim-mini/mini.surround',
-    gh 'nvim-mini/mini.statusline',
-    gh 'nvim-mini/mini.indentscope',
-    gh 'nvim-mini/mini.pairs',
-    gh 'nvim-mini/mini.move',
+    gh 'nvim-mini/mini.nvim',
+    gh 'rafamadriz/friendly-snippets',
   }
   require('mini.ai').setup()
   require('mini.surround').setup()
@@ -494,6 +486,14 @@ do
   }
   require('mini.pairs').setup()
   require('mini.move').setup()
+  require('mini.comment').setup()
+  -- snippets
+  local gen_loader = require('mini.snippets').gen_loader
+  require('mini.snippets').setup {
+    snippets = {
+      gen_loader.from_lang(),
+    },
+  }
 end
 
 -- which-key
@@ -526,6 +526,30 @@ do
     },
   }
   vim.diagnostic.config { virtual_text = false }
+end
+
+-- flash
+do
+  vim.pack.add {
+    gh 'folke/flash.nvim',
+  }
+  require('flash').setup {}
+end
+
+-- grug-far
+do
+  vim.pack.add {
+    gh 'MagicDuck/grug-far.nvim',
+  }
+  require('grug-far').setup {}
+end
+
+-- dropbar
+do
+  vim.pack.add {
+    gh 'Bekaboo/dropbar.nvim',
+  }
+  require('dropbar').setup {}
 end
 
 userconfig.hooks.after_plugin()
