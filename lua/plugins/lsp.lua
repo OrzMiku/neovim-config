@@ -17,6 +17,16 @@ return {
     opts = {},
   },
   {
+    url = gh 'folke/lazydev.nvim',
+    ft = 'lua',
+    opts = {
+      library = {
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      },
+    },
+    cmd = 'LazyDev',
+  },
+  {
     url = gh 'j-hui/fidget.nvim',
     name = 'fidget.nvim',
     event = 'LspAttach',
