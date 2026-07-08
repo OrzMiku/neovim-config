@@ -550,7 +550,17 @@ do
   vim.pack.add {
     gh 'folke/flash.nvim',
   }
-  require('flash').setup {}
+
+  local flash = require 'flash'
+  flash.setup {}
+
+  vim.keymap.set({ 'n', 'x', 'o' }, '<leader>j', function()
+    flash.jump()
+  end, { desc = 'Flash' })
+
+  vim.keymap.set({ 'n', 'x', 'o' }, '<leader>J', function()
+    flash.treesitter()
+  end, { desc = 'Flash Treesitter' })
 end
 
 -- grug-far
