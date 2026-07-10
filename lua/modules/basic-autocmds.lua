@@ -27,7 +27,7 @@ function M.setup()
     group = vim.api.nvim_create_augroup('UserLspCompletion', { clear = true }),
     callback = function(ev)
       local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
-      if client:supports_method 'textDocument/completion' then
+      if client:supports_method('textDocument/completion', ev.buf) then
         vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
       end
     end,
@@ -38,9 +38,13 @@ function M.setup()
     callback = function(ev)
       local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
       if client:supports_method('textDocument/inlineCompletion', ev.buf) then
-        vim.lsp.inline_completion.enable(true, { bufnr = ev.buf })
-        vim.keymap.set('i', '<C-F>', vim.lsp.inline_completion.get, { desc = 'LSP: accept inline completion', buf = ev.buf })
-        vim.keymap.set('i', '<C-G>', vim.lsp.inline_completion.select, { desc = 'LSP: switch inline completion', buf = ev.buf })
+        vim.lsp.inline_completion.enable(true, { bufnr = ev.buf, client_id = client.id })
+        vim.keymap.set('i', '<C-F>', function()
+          vim.lsp.inline_completion.get { bufnr = ev.buf }
+        end, { desc = 'LSP: accept inline completion', buffer = ev.buf })
+        vim.keymap.set('i', '<C-G>', function()
+          vim.lsp.inline_completion.select { bufnr = ev.buf }
+        end, { desc = 'LSP: switch inline completion', buffer = ev.buf })
       end
     end,
   })
@@ -64,9 +68,14 @@ function M.setup()
     group = vim.api.nvim_create_augroup('UserTSAutoStart', { clear = true }),
     pattern = '*',
     callback = function(ev)
-      local lang = ev.match
-      if vim.treesitter.language.add(lang) then
-        vim.treesitter.start(ev.buf, lang)
+      local lang = vim.treesitter.language.get_lang(ev.match)
+      if not lang then
+        return
+      end
+
+      local ok, loaded = pcall(vim.treesitter.language.add, lang)
+      if ok and loaded then
+        pcall(vim.treesitter.start, ev.buf, lang)
       end
     end,
   })

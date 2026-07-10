@@ -2,31 +2,26 @@ local gh = require('modules.plugin-util').gh
 
 return {
   {
-    url = gh 'nvim-mini/mini.icons',
-    name = 'mini.icons',
-    lazy = false,
-    config = function()
-      local userconfig = require('config').get_config()
-      local mini_icons = require 'mini.icons'
-      mini_icons.setup {
-        style = userconfig.features.have_nerd_font and 'glyph' or 'ascii',
-      }
-      mini_icons.mock_nvim_web_devicons()
-    end,
-  },
-  {
     url = gh 'nvim-mini/mini.nvim',
     name = 'mini.nvim',
     event = 'VeryLazy',
-    dependencies = {
-      {
-        url = gh 'rafamadriz/friendly-snippets',
-        name = 'friendly-snippets',
-      },
-    },
+    init = function()
+      package.preload['nvim-web-devicons'] = function()
+        require('mini.icons').mock_nvim_web_devicons()
+        return package.loaded['nvim-web-devicons']
+      end
+    end,
     config = function()
+      local userconfig = require('config').get_config()
+      require('mini.icons').setup {
+        style = userconfig.features.have_nerd_font and 'glyph' or 'ascii',
+      }
       require('mini.ai').setup {
         n_lines = 500,
+        mappings = {
+          around_next = 'aN',
+          inside_next = 'iN',
+        },
       }
       require('mini.surround').setup()
       require('mini.statusline').setup()
@@ -44,14 +39,6 @@ return {
         markdown = true,
       }
       require('mini.move').setup()
-      require('mini.comment').setup()
-
-      local gen_loader = require('mini.snippets').gen_loader
-      require('mini.snippets').setup {
-        snippets = {
-          gen_loader.from_lang(),
-        },
-      }
     end,
   },
   {
@@ -79,10 +66,13 @@ return {
         {
           mode = { 'n', 'x' },
           { '<leader>c', group = 'code' },
+          { '<leader>b', group = 'buffer' },
           { '<leader>d', group = 'debug' },
           { '<leader>f', group = 'find' },
           { '<leader>g', group = 'git' },
           { '<leader>gh', group = 'hunks' },
+          { '<leader>s', group = 'search' },
+          { '<leader>x', group = 'diagnostics/quickfix' },
           { '[', group = 'previous' },
           { ']', group = 'next' },
           { 'g', group = 'goto' },
@@ -123,6 +113,30 @@ return {
   {
     url = gh 'Bekaboo/dropbar.nvim',
     name = 'dropbar.nvim',
-    lazy = false,
+    event = 'UIEnter',
+    keys = {
+      {
+        '<leader>;',
+        function()
+          require('dropbar.api').pick()
+        end,
+        desc = 'Pick winbar symbols',
+      },
+      {
+        '[;',
+        function()
+          require('dropbar.api').goto_context_start()
+        end,
+        desc = 'Go to context start',
+      },
+      {
+        '];',
+        function()
+          require('dropbar.api').select_next_context()
+        end,
+        desc = 'Select next context',
+      },
+    },
+    opts = {},
   },
 }

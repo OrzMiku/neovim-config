@@ -11,6 +11,11 @@ return {
     url = gh 'ibhagwan/fzf-lua',
     name = 'fzf-lua',
     cmd = 'FzfLua',
+    opts = {
+      winopts = {
+        zindex = 100,
+      },
+    },
     keys = {
       { '<leader>ff', fzf_call 'files', desc = 'FzfLua find files' },
       { '<leader>fg', fzf_call 'live_grep', desc = 'FzfLua live grep' },
@@ -26,7 +31,7 @@ return {
       { '<leader>gc', fzf_call 'git_commits', desc = 'FzfLua git commits' },
       { 'gO', fzf_call 'lsp_document_symbols', desc = 'FzfLua LSP document symbols' },
       { 'gW', fzf_call 'lsp_workspace_symbols', desc = 'FzfLua LSP workspace symbols' },
-      { 'gra', fzf_call 'lsp_code_actions', desc = 'FzfLua LSP code actions' },
+      { 'gra', fzf_call 'lsp_code_actions', mode = { 'n', 'x' }, desc = 'FzfLua LSP code actions' },
       { 'gri', fzf_call 'lsp_implementations', desc = 'FzfLua LSP implementations' },
       { 'grr', fzf_call 'lsp_references', desc = 'FzfLua LSP references' },
       { 'grt', fzf_call 'lsp_typedefs', desc = 'FzfLua LSP typedefs' },

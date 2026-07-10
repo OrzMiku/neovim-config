@@ -30,17 +30,23 @@ function M.setup()
   vim.opt.expandtab = true
   vim.opt.softtabstop = 4
   vim.opt.shiftwidth = 4
+  vim.opt.shiftround = true
   vim.opt.smartindent = true
+  vim.opt.breakindent = true
   vim.opt.list = true
   vim.opt.foldtext = ''
   vim.opt.foldlevel = 99
+  vim.opt.foldlevelstart = 99
   vim.opt.foldmethod = 'expr'
   vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
   vim.opt.undofile = true
   vim.opt.ignorecase = true
   vim.opt.smartcase = true
   vim.opt.splitbelow = true
+  vim.opt.splitkeep = 'screen'
   vim.opt.splitright = true
+  vim.opt.signcolumn = 'yes'
+  vim.opt.confirm = true
   vim.opt.autocomplete = true
   vim.opt.complete:append 'o'
   vim.opt.completeopt = 'fuzzy,menuone,popup,noselect'
@@ -49,6 +55,9 @@ function M.setup()
   vim.opt.showtabline = 2
   vim.opt.tabline = '%!v:lua.simple_tabline()'
   vim.opt.scrolloff = 3
+  vim.opt.smoothscroll = true
+  vim.opt.timeoutlen = 500
+  vim.opt.updatetime = 250
 end
 
 return M

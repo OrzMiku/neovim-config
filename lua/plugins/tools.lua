@@ -17,6 +17,7 @@ return {
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
         end,
+        mode = { 'n', 'x' },
         desc = 'Code format',
       },
     },
@@ -66,7 +67,40 @@ return {
     url = gh 'stevearc/quicker.nvim',
     name = 'quicker.nvim',
     ft = 'qf',
-    opts = {},
+    keys = {
+      {
+        '<leader>xq',
+        function()
+          require('quicker').toggle { focus = true }
+        end,
+        desc = 'Toggle quickfix',
+      },
+      {
+        '<leader>xl',
+        function()
+          require('quicker').toggle { focus = true, loclist = true }
+        end,
+        desc = 'Toggle location list',
+      },
+    },
+    opts = {
+      keys = {
+        {
+          '>',
+          function()
+            require('quicker').expand { before = 2, after = 2, add_to_existing = true }
+          end,
+          desc = 'Expand quickfix context',
+        },
+        {
+          '<',
+          function()
+            require('quicker').collapse()
+          end,
+          desc = 'Collapse quickfix context',
+        },
+      },
+    },
   },
   {
     url = gh 'MeanderingProgrammer/render-markdown.nvim',

@@ -8,10 +8,10 @@ function M.setup()
   vim.g.mapleader = ' '
   vim.g.maplocalleader = ' '
 
-  map({ 'n', 'v' }, '<leader>y', [["+y]], { desc = 'Yank to system clipboard' })
-  map({ 'n', 'v' }, '<leader>Y', [["+Y]], { desc = 'Yank line to system clipboard' })
-  map({ 'n', 'v' }, '<leader>p', [["+p]], { desc = 'Paste from system clipboard' })
-  map({ 'n', 'v' }, '<leader>P', [["+P]], { desc = 'Paste before from system clipboard' })
+  map({ 'n', 'x' }, '<leader>y', [["+y]], { desc = 'Yank to system clipboard' })
+  map({ 'n', 'x' }, '<leader>Y', [["+Y]], { desc = 'Yank line to system clipboard' })
+  map({ 'n', 'x' }, '<leader>p', [["+p]], { desc = 'Paste from system clipboard' })
+  map({ 'n', 'x' }, '<leader>P', [["+P]], { desc = 'Paste before from system clipboard' })
 
   map('n', '<leader>q', vim.diagnostic.setqflist, { desc = 'Diagnostics to quickfix' })
   map('n', '<leader>l', vim.diagnostic.setloclist, { desc = 'Diagnostics to loclist' })
