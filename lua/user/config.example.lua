@@ -6,6 +6,9 @@ return {
     clipboard_osc52 = true,
     have_nerd_font = false,
   },
+  extra_plugins = {
+    vim_wakatime = false,
+  },
   hooks = {
     after_plugin = function()
       vim.lsp.enable {

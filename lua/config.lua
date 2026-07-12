@@ -3,6 +3,11 @@
 ---@field ui2 boolean
 ---@field clipboard_osc52 boolean
 ---@field have_nerd_font boolean
+---@field gh_proxy GhProxy
+
+---@class GhProxy
+---@field enabled boolean
+---@field url string
 
 ---@class UserConfigHooks
 ---@field before_basic fun()
@@ -13,6 +18,7 @@
 ---@class UserConfig
 ---@field features UserConfigFeatures
 ---@field hooks UserConfigHooks
+---@field extra_plugins table<string, boolean>
 
 ---@class UserConfigFeatureOverrides
 ---@field enable_plugin? boolean
@@ -28,6 +34,7 @@
 
 ---@class UserConfigOverrides
 ---@field features? UserConfigFeatureOverrides
+---@field extra_plugins? table<string, boolean>
 ---@field hooks? UserConfigHookOverrides
 
 local M = {}
@@ -42,6 +49,13 @@ local default_config = {
     ui2 = true,
     clipboard_osc52 = true,
     have_nerd_font = false,
+    gh_proxy = {
+      enabled = false,
+      url = "https://ghfast.top/"
+    },
+  },
+  extra_plugins = {
+    vim_wakatime = false,
   },
   hooks = {
     before_basic = function() end,
