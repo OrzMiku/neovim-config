@@ -173,7 +173,7 @@ if true then
   vim.api.nvim_clear_autocmds {
     group = 'UserLspProgressNotify',
   }
-  require('fidget').setup()
+  require('fidget').setup {}
 end
 
 -- blink.cmp
@@ -316,7 +316,6 @@ if true then
         gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
       end, 'Reset hunk')
       buffer_map('n', '<leader>ghS', gitsigns.stage_buffer, 'Stage buffer')
-      buffer_map('n', '<leader>ghu', gitsigns.undo_stage_hunk, 'Undo stage hunk')
       buffer_map('n', '<leader>ghR', gitsigns.reset_buffer, 'Reset buffer')
       buffer_map('n', '<leader>ghp', gitsigns.preview_hunk_inline, 'Preview hunk')
       buffer_map('n', '<leader>ghb', function()
@@ -355,6 +354,9 @@ if true then
   vim.pack.add { gh 'stevearc/conform.nvim' }
   local conform = require 'conform'
   conform.setup {
+    default_format_opts = {
+      lsp_format = 'fallback',
+    },
     formatters_by_ft = {
       nix = { 'nixfmt' },
       sh = { 'shfmt' },
@@ -390,7 +392,7 @@ if true then
     },
   }
   map({ 'n', 'x' }, '<leader>cf', function()
-    conform.format { async = true, lsp_format = 'fallback' }
+    conform.format {}
   end, { desc = 'Code format' })
 end
 
@@ -433,6 +435,11 @@ if true then
   vim.pack.add { gh 'MeanderingProgrammer/render-markdown.nvim' }
 end
 
+-- live-preview
+if true then
+  vim.pack.add { gh 'brianhuster/live-preview.nvim' }
+end
+
 -- grug-far.nvim
 if true then
   vim.pack.add { gh 'MagicDuck/grug-far.nvim' }
@@ -452,6 +459,6 @@ end
 --------------------------------------------------------------------------------
 
 -- vim-wakatime
-if false then
+if true then
   vim.pack.add { gh 'wakatime/vim-wakatime' }
 end

@@ -16,6 +16,7 @@ require('vim._core.ui2').enable {
   },
 }
 vim.cmd.packadd 'nvim.difftool'
+vim.cmd.packadd 'nvim.undotree'
 
 -- UI
 vim.cmd.colorscheme 'catppuccin'
@@ -23,6 +24,7 @@ vim.cmd.colorscheme 'catppuccin'
 vim.opt.number = true
 vim.opt.list = true
 vim.opt.pumborder = 'single'
+vim.opt.pummaxwidth = 80
 vim.opt.winborder = 'single'
 vim.opt.scrolloff = 3
 vim.opt.signcolumn = 'yes'
@@ -68,6 +70,7 @@ vim.opt.splitright = true
 vim.opt.autocomplete = true
 vim.opt.complete:append 'o'
 vim.opt.completeopt = 'fuzzy,menuone,popup,noselect'
+vim.opt.autocompletedelay = 80
 
 -- Fold
 vim.opt.foldtext = ''
@@ -137,8 +140,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if client:supports_method('textDocument/inlineCompletion', ev.buf) then
       vim.lsp.inline_completion.enable(true, { bufnr = ev.buf, client_id = client.id })
       vim.keymap.set('i', '<C-F>', function()
-        vim.lsp.inline_completion.get { bufnr = ev.buf }
-      end, { desc = 'LSP: accept inline completion', buffer = ev.buf })
+        if vim.lsp.inline_completion.get { bufnr = ev.buf } then
+          return ''
+        end
+        return '<C-F>'
+      end, { expr = true, desc = 'LSP: accept inline completion', buffer = ev.buf })
       vim.keymap.set('i', '<C-G>', function()
         vim.lsp.inline_completion.select { bufnr = ev.buf }
       end, { desc = 'LSP: switch inline completion', buffer = ev.buf })
@@ -150,8 +156,11 @@ vim.api.nvim_create_autocmd('LspProgress', {
   group = vim.api.nvim_create_augroup('UserLspProgressNotify', { clear = true }),
   callback = function(ev)
     local value = ev.data.params.value
+    local params = ev.data.params
+    local id = ('lsp.%d.%s'):format(ev.data.client_id, tostring(params.token))
     vim.api.nvim_echo({ { value.message or 'done' } }, false, {
-      id = 'lsp.' .. ev.data.params.token,
+      -- id = 'lsp.' .. ev.data.params.token,
+      id = id,
       kind = 'progress',
       source = 'vim.lsp',
       title = value.title,
@@ -165,15 +174,7 @@ vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('UserTSAutoStart', { clear = true }),
   pattern = '*',
   callback = function(ev)
-    local lang = vim.treesitter.language.get_lang(ev.match)
-    if not lang then
-      return
-    end
-
-    local ok, loaded = pcall(vim.treesitter.language.add, lang)
-    if ok and loaded then
-      pcall(vim.treesitter.start, ev.buf, lang)
-    end
+    pcall(vim.treesitter.start, ev.buf)
   end,
 })
 

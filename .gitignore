@@ -1,4 +1,1 @@
 nvim-pack-lock.json
-userconfig.lua
-lua/user/*
-!lua/user/config.example.lua
