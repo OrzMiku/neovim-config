@@ -1,12 +1,12 @@
 --------------------------------------------------------------------------------
---- 20-plugins
+--- 10-plugins
 --------------------------------------------------------------------------------
 
 if not Config.enable_plugins then
   return
 end
 
-local gh = Config.gh
+local gh = ChimiMisc.gh
 local map = vim.keymap.set
 
 --------------------------------------------------------------------------------
@@ -142,8 +142,7 @@ end
 if true then
   vim.pack.add { gh 'neovim/nvim-lspconfig' }
 
-  local lsp_override = require 'modules.lsp_override'
-  vim.lsp.config['vtsls'] = lsp_override.vtsls
+  vim.lsp.config['vtsls'] = ChimiMisc.lsp_override.vtsls
 
   vim.lsp.enable {
     'lua_ls',
@@ -171,7 +170,7 @@ end
 if true then
   vim.pack.add { gh 'j-hui/fidget.nvim' }
   vim.api.nvim_clear_autocmds {
-    group = 'UserLspProgressNotify',
+    group = 'ChimiBasicsLspProgressNotify',
   }
   require('fidget').setup {}
 end
@@ -181,7 +180,7 @@ if true then
   vim.opt.autocomplete = false
   vim.opt.complete:remove 'o'
   vim.api.nvim_clear_autocmds {
-    group = 'UserLspCompletion',
+    group = 'ChimiBasicsLspCompletion',
   }
   for _, client in ipairs(vim.lsp.get_clients()) do
     for bufnr in pairs(client.attached_buffers or {}) do
