@@ -452,12 +452,3 @@ if true then
     }
   end, { desc = 'Search and replace' })
 end
-
---------------------------------------------------------------------------------
---- Others
---------------------------------------------------------------------------------
-
--- vim-wakatime
-if true then
-  vim.pack.add { gh 'wakatime/vim-wakatime' }
-end
