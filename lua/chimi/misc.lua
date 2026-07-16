@@ -5,8 +5,8 @@ ChimiMisc.setup = function(config)
   -- export module
   _G.ChimiMisc = ChimiMisc
 
-  -- setup config
-  config = H.setup_config(config)
+  -- setup and apply config
+  ChimiMisc.config = H.setup_config(config)
 end
 
 ChimiMisc.config = {
@@ -19,7 +19,7 @@ ChimiMisc.config = {
 H.default_config = vim.deepcopy(ChimiMisc.config)
 
 H.setup_config = function(config)
-  config = vim.tbl_deep_extend('force', H.default_config, config or {})
+  config = vim.tbl_deep_extend('force', vim.deepcopy(H.default_config), config or {})
   return config
 end
 

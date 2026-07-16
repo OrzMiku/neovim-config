@@ -35,7 +35,7 @@ ChimiBasics.config = {
 H.default_config = vim.deepcopy(ChimiBasics.config)
 
 H.setup_config = function(config)
-  config = vim.tbl_deep_extend('force', H.default_config, config or {})
+  config = vim.tbl_deep_extend('force', vim.deepcopy(H.default_config), config or {})
   return config
 end
 
