@@ -6,28 +6,23 @@ ChimiBasics.setup = function(config)
   _G.ChimiBasics = ChimiBasics
 
   -- setup config
-  config = H.setup_config(config)
+  ChimiBasics.config = H.setup_config(config)
 
   -- apply config
-  H.apply_config(config)
+  H.apply_config(ChimiBasics.config)
 end
 
 ChimiBasics.config = {
   options = {
     basic = true,
-    statusline = true,
-    tabline = true,
     fold = true,
     ui2 = true,
-    complete = true,
   },
   mappings = {
     basic = true,
   },
   autocmds = {
     osc_52 = true,
-    lsp_complete = true,
-    lsp_progress_notify = true,
     treesitter_autostart = true,
   },
 }
@@ -80,38 +75,6 @@ H.apply_options = function(config)
     vim.opt.splitright = true
   end
 
-  if options.statusline then
-    opt.statusline = vim.opt.statusline + " [%{&filetype ==# '' ? 'none' : &filetype }|%{&fileformat}]"
-  end
-
-  if options.tabline then
-    ChimiBasics.tabline = function()
-      local curr_buf = vim.api.nvim_get_current_buf()
-      local parts = {}
-
-      for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.bo[bufnr].buflisted then
-          local name = vim.api.nvim_buf_get_name(bufnr)
-          name = (name ~= '' and vim.fn.fnamemodify(name, ':t') or '[No Name]'):gsub('%%', '%%%%')
-
-          if bufnr == curr_buf then
-            table.insert(parts, '%#TabLineSel#')
-          else
-            table.insert(parts, '%#TabLine#')
-          end
-
-          local modified = vim.bo[bufnr].modified and '*' or ''
-          table.insert(parts, ' ' .. name .. modified .. ' ')
-        end
-      end
-
-      table.insert(parts, '%#TabLineFill#%=')
-      return table.concat(parts)
-    end
-    opt.showtabline = 2
-    opt.tabline = '%!v:lua.ChimiBasics.tabline()'
-  end
-
   if options.fold then
     opt.foldtext = ''
     opt.foldlevel = 99
@@ -130,21 +93,12 @@ H.apply_options = function(config)
       },
     }
   end
-
-  if options.complete then
-    opt.autocomplete = true
-    opt.complete = vim.opt.complete + 'o'
-    opt.completeopt = 'fuzzy,menuone,popup,noselect'
-    opt.autocompletedelay = 80
-  end
 end
 
 H.apply_mappings = function(config)
   local map, mappings = H.map, config.mappings
   if mappings.basic then
     map('n', '<esc>', '<cmd>nohlsearch<cr>', { desc = 'Clear search highlight' })
-    map('n', '<leader>xQ', vim.diagnostic.setqflist, { desc = 'Diagnostics to quickfix' })
-    map('n', '<leader>xL', vim.diagnostic.setloclist, { desc = 'Diagnostics to loclist' })
     map({ 'n', 'x' }, '<leader>y', [["+y]], { desc = 'Yank to system clipboard' })
     map({ 'n', 'x' }, '<leader>Y', [["+Y]], { desc = 'Yank line to system clipboard' })
     map({ 'n', 'x' }, '<leader>p', [["+p]], { desc = 'Paste from system clipboard' })
@@ -153,30 +107,7 @@ H.apply_mappings = function(config)
 end
 
 H.apply_autocmds = function(config)
-  local options, autocmds = config.options, config.autocmds
-
-  if options.complete then
-    vim.api.nvim_create_autocmd('BufEnter', {
-      group = vim.api.nvim_create_augroup('ChimiBasicsDisableAutocomplete', { clear = true }),
-      callback = function(ev)
-        if vim.bo[ev.buf].buftype ~= '' then
-          vim.bo[ev.buf].autocomplete = false
-        end
-      end,
-    })
-  end
-
-  if autocmds.lsp_complete then
-    vim.api.nvim_create_autocmd('LspAttach', {
-      group = vim.api.nvim_create_augroup('ChimiBasicsLspCompletion', { clear = true }),
-      callback = function(ev)
-        local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
-        if client:supports_method('textDocument/completion', ev.buf) then
-          vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-        end
-      end,
-    })
-  end
+  local autocmds = config.autocmds
 
   if autocmds.osc_52 then
     local function paste()
@@ -199,25 +130,6 @@ H.apply_autocmds = function(config)
         },
       }
     end
-  end
-
-  if autocmds.lsp_progress_notify then
-    vim.api.nvim_create_autocmd('LspProgress', {
-      group = vim.api.nvim_create_augroup('ChimiBasicsLspProgressNotify', { clear = true }),
-      callback = function(ev)
-        local value = ev.data.params.value
-        local params = ev.data.params
-        local id = ('lsp.%d.%s'):format(ev.data.client_id, tostring(params.token))
-        vim.api.nvim_echo({ { value.message or 'done' } }, false, {
-          id = id,
-          kind = 'progress',
-          source = 'vim.lsp',
-          title = value.title,
-          status = value.kind ~= 'end' and 'running' or 'success',
-          percent = value.percentage,
-        })
-      end,
-    })
   end
 
   if autocmds.treesitter_autostart then

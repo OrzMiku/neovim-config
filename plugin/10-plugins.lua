@@ -2,11 +2,14 @@
 --- 10-plugins
 --------------------------------------------------------------------------------
 
+local use = Config.plugin_enabled
+local use_feature = Config.plugin_feature_enabled
+
 if not Config.enable_plugins then
   return
 end
 
-local gh = ChimiMisc.gh
+local gh = Config.github_url
 local map = vim.keymap.set
 
 --------------------------------------------------------------------------------
@@ -14,7 +17,7 @@ local map = vim.keymap.set
 --------------------------------------------------------------------------------
 
 -- catppuccin
-if true then
+if use 'catppuccin' then
   vim.pack.add {
     {
       src = gh 'catppuccin/nvim',
@@ -29,17 +32,17 @@ end
 --------------------------------------------------------------------------------
 
 -- mini.nvim
-if true then
+if use 'mini' then
   vim.pack.add { gh 'nvim-mini/mini.nvim' }
 
-  if true then
+  if use_feature('mini', 'icons') then
     require('mini.icons').setup {
       style = Config.have_nerd_font and 'glyph' or 'ascii',
     }
     MiniIcons.mock_nvim_web_devicons()
   end
 
-  if true then
+  if use_feature('mini', 'ai') then
     local ai = require 'mini.ai'
     ai.setup {
       custom_textobjects = {
@@ -49,41 +52,41 @@ if true then
     }
   end
 
-  if true then
+  if use_feature('mini', 'surround') then
     require('mini.surround').setup()
   end
 
-  if true then
+  if use_feature('mini', 'statusline') then
     require('mini.statusline').setup()
   end
 
-  if true then
+  if use_feature('mini', 'indentscope') then
     require('mini.indentscope').setup {}
   end
 
-  if true then
+  if use_feature('mini', 'pairs') then
     require('mini.pairs').setup {
       modes = { command = true },
     }
   end
 
-  if true then
+  if use_feature('mini', 'move') then
     require('mini.move').setup()
   end
 end
 
 -- oil.nvim
-if true then
+if use 'oil' then
   vim.pack.add { gh 'stevearc/oil.nvim' }
   require('oil').setup()
   map('n', '-', '<cmd>Oil<cr>', { desc = 'Open parent directory' })
 end
 
 -- bufferline.nvim
-if true then
+if use 'bufferline' then
   vim.pack.add { gh 'akinsho/bufferline.nvim' }
   require('bufferline').setup {
-    highlights = require('catppuccin.special.bufferline').get_theme(),
+    highlights = use 'catppuccin' and require('catppuccin.special.bufferline').get_theme() or nil,
   }
   map('n', '[b', '<cmd>BufferLineCyclePrev<cr>', { desc = 'Previous buffer' })
   map('n', ']b', '<cmd>BufferLineCycleNext<cr>', { desc = 'Next buffer' })
@@ -97,7 +100,7 @@ if true then
 end
 
 -- dropbar.nvim
-if true then
+if use 'dropbar' then
   vim.pack.add { gh 'Bekaboo/dropbar.nvim' }
   require('dropbar').setup()
   map('n', '<leader>;', require('dropbar.api').pick, { desc = 'Pick winbar symbols' })
@@ -106,7 +109,7 @@ if true then
 end
 
 -- which-key.nvim
-if true then
+if use 'which_key' then
   vim.pack.add { gh 'folke/which-key.nvim' }
   local which_key = require 'which-key'
   which_key.setup {
@@ -133,31 +136,25 @@ end
 --------------------------------------------------------------------------------
 
 -- tree-sitter-manager.nvim
-if true then
+if use 'tree_sitter_manager' then
   vim.pack.add { gh 'romus204/tree-sitter-manager.nvim' }
   require('tree-sitter-manager').setup()
 end
 
 -- nvim-lspconfig
-if true then
+if use 'lspconfig' then
   vim.pack.add { gh 'neovim/nvim-lspconfig' }
-
-  vim.lsp.config['vtsls'] = ChimiMisc.lsp_override.vtsls
-
-  vim.lsp.enable {
-    'lua_ls',
-  }
 end
 
 -- mason.nvim
-if true then
+if use 'mason' then
   vim.pack.add { gh 'mason-org/mason.nvim' }
   require('mason').setup()
   map('n', '<leader>cm', '<cmd>Mason<cr>', { desc = 'Mason' })
 end
 
 -- lazydev.nvim
-if true then
+if use 'lazydev' then
   vim.pack.add { gh 'folke/lazydev.nvim' }
   require('lazydev').setup {
     library = {
@@ -167,27 +164,13 @@ if true then
 end
 
 -- fidget.nvim
-if true then
+if use 'fidget' then
   vim.pack.add { gh 'j-hui/fidget.nvim' }
-  vim.api.nvim_clear_autocmds {
-    group = 'ChimiBasicsLspProgressNotify',
-  }
   require('fidget').setup {}
 end
 
 -- blink.cmp
-if true then
-  vim.opt.autocomplete = false
-  vim.opt.complete:remove 'o'
-  vim.api.nvim_clear_autocmds {
-    group = 'ChimiBasicsLspCompletion',
-  }
-  for _, client in ipairs(vim.lsp.get_clients()) do
-    for bufnr in pairs(client.attached_buffers or {}) do
-      pcall(vim.lsp.completion.enable, false, client.id, bufnr)
-    end
-  end
-
+if use 'blink_cmp' then
   vim.pack.add {
     gh 'rafamadriz/friendly-snippets',
     {
@@ -207,9 +190,8 @@ if true then
 end
 
 -- tiny-inline-diagnostic.nvim
-if true then
+if use 'tiny_inline_diagnostic' then
   vim.pack.add { gh 'rachartier/tiny-inline-diagnostic.nvim' }
-  vim.diagnostic.config { virtual_text = false }
   require('tiny-inline-diagnostic').setup {
     options = {
       multilines = {
@@ -224,7 +206,7 @@ end
 --------------------------------------------------------------------------------
 
 -- fzf-lua
-if true then
+if use 'fzf_lua' then
   vim.pack.add { gh 'ibhagwan/fzf-lua' }
   local fzf = require 'fzf-lua'
   fzf.setup {
@@ -257,13 +239,13 @@ if true then
   map('n', 'gri', fzf_call 'lsp_implementations', { desc = 'Implementations' })
   map('n', 'grr', fzf_call 'lsp_references', { desc = 'References' })
   map('n', 'grt', fzf_call 'lsp_typedefs', { desc = 'Type definitions' })
-  map('n', 'grd', fzf_call 'lsp_definitions', { desc = 'Definitions' })
+  map('n', 'gd', fzf_call 'lsp_definitions', { desc = 'Definitions' })
   map('n', 'grq', fzf_call 'diagnostics_document', { desc = 'Document diagnostics' })
   map('n', 'grQ', fzf_call 'diagnostics_workspace', { desc = 'Workspace diagnostics' })
 end
 
 -- flash.nvim
-if true then
+if use 'flash' then
   vim.pack.add { gh 'folke/flash.nvim' }
   local flash = require 'flash'
   flash.setup()
@@ -276,7 +258,7 @@ end
 --------------------------------------------------------------------------------
 
 -- gitsigns.nvim
-if true then
+if use 'gitsigns' then
   vim.pack.add { gh 'lewis6991/gitsigns.nvim' }
   require('gitsigns').setup {
     on_attach = function(bufnr)
@@ -332,7 +314,7 @@ if true then
 end
 
 -- neogit
-if true then
+if use 'neogit' then
   vim.pack.add {
     gh 'nvim-lua/plenary.nvim',
     {
@@ -349,7 +331,7 @@ end
 --------------------------------------------------------------------------------
 
 -- conform.nvim
-if true then
+if use 'conform' then
   vim.pack.add { gh 'stevearc/conform.nvim' }
   local conform = require 'conform'
   conform.setup {
@@ -396,13 +378,13 @@ if true then
 end
 
 -- nvim-bqf
-if true then
+if use 'bqf' then
   vim.pack.add { gh 'kevinhwang91/nvim-bqf' }
   require('bqf').setup()
 end
 
 -- quicker.nvim
-if true then
+if use 'quicker' then
   vim.pack.add { gh 'stevearc/quicker.nvim' }
   local quicker = require 'quicker'
   quicker.setup {
@@ -430,17 +412,17 @@ if true then
 end
 
 -- render-markdown.nvim
-if true then
+if use 'render_markdown' then
   vim.pack.add { gh 'MeanderingProgrammer/render-markdown.nvim' }
 end
 
 -- live-preview
-if true then
+if use 'live_preview' then
   vim.pack.add { gh 'brianhuster/live-preview.nvim' }
 end
 
 -- grug-far.nvim
-if true then
+if use 'grug_far' then
   vim.pack.add { gh 'MagicDuck/grug-far.nvim' }
   map({ 'n', 'x' }, '<leader>sr', function()
     local ext = vim.bo.buftype == '' and vim.fn.expand '%:e'
