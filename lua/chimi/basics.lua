@@ -88,7 +88,6 @@ H.apply_options = function(config)
       msg = {
         targets = {
           default = 'cmd',
-          progress = 'msg',
         },
       },
     }

@@ -5,10 +5,6 @@ ChimiQuickfix.config = {
   mappings = {
     toggle_quickfix = '<leader>xq',
     toggle_loclist = '<leader>xl',
-    previous_quickfix = '[q',
-    next_quickfix = ']q',
-    previous_loclist = '[l',
-    next_loclist = ']l',
   },
 }
 
@@ -21,10 +17,6 @@ ChimiQuickfix.setup = function(config)
 
   H.map(mappings.toggle_quickfix, ChimiQuickfix.toggle_quickfix, 'Toggle quickfix')
   H.map(mappings.toggle_loclist, ChimiQuickfix.toggle_loclist, 'Toggle location list')
-  H.map(mappings.previous_quickfix, vim.cmd.cprevious, 'Previous quickfix item')
-  H.map(mappings.next_quickfix, vim.cmd.cnext, 'Next quickfix item')
-  H.map(mappings.previous_loclist, vim.cmd.lprevious, 'Previous location item')
-  H.map(mappings.next_loclist, vim.cmd.lnext, 'Next location item')
 end
 
 ChimiQuickfix.toggle_quickfix = function()

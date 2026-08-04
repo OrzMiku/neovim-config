@@ -3,7 +3,7 @@ _G.Config = {
   have_nerd_font = true,
   github = {
     proxy = {
-      enabled = true,
+      enabled = false,
       base_url = 'https://ghfast.top/https://github.com/',
     },
   },

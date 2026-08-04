@@ -25,7 +25,6 @@ if not use_feature('mini', 'statusline') then
 end
 if not use 'bufferline' then
   require('chimi.tabline').setup {}
-  require('chimi.buffers').setup {}
 end
 if not use 'fzf_lua' then
   require('chimi.picker').setup {}

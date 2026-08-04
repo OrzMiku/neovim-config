@@ -138,7 +138,7 @@ end
 -- tree-sitter-manager.nvim
 if use 'tree_sitter_manager' then
   vim.pack.add { gh 'romus204/tree-sitter-manager.nvim' }
-  require('tree-sitter-manager').setup()
+  require('tree-sitter-manager').setup { highlight = false }
 end
 
 -- nvim-lspconfig
@@ -347,11 +347,8 @@ if use 'conform' then
       json = { 'prettierd', 'prettier', stop_after_first = true },
       jsonc = { 'prettierd', 'prettier', stop_after_first = true },
       yaml = { 'prettierd', 'prettier', stop_after_first = true },
-      yml = { 'prettierd', 'prettier', stop_after_first = true },
       toml = { 'taplo' },
       markdown = { 'prettierd', 'prettier', stop_after_first = true },
-      ['markdown.mdx'] = { 'prettierd', 'prettier', stop_after_first = true },
-      mdx = { 'prettierd', 'prettier', stop_after_first = true },
       html = { 'prettierd', 'prettier', stop_after_first = true },
       css = { 'prettierd', 'prettier', stop_after_first = true },
       scss = { 'prettierd', 'prettier', stop_after_first = true },
