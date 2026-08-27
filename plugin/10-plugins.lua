@@ -210,9 +210,7 @@ if use 'fzf_lua' then
   vim.pack.add { gh 'ibhagwan/fzf-lua' }
   local fzf = require 'fzf-lua'
   fzf.setup {
-    winopts = {
-      zindex = 100,
-    },
+    fzf_colors = true,
   }
 
   local function fzf_call(method)
