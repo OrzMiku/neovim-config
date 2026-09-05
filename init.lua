@@ -5,15 +5,21 @@ _G.UserConfig = {
   enable_plugin = vim.env.NVIM_PLUGINS ~= '0',
   have_nerd_font = true,
   lsp = {
-    servers = { lua_ls = true },
+    servers = {
+      lua_ls = true,
+      vtsls = true,
+      cssls = true,
+      css_variables = true,
+      cssmodules_ls = true,
+      eslint = true,
+      stylelint_lsp = true,
+    },
   },
   formatter = {
     default_format_opts = { lsp_format = 'fallback' },
     formatters_by_ft = {
       nix = { 'nixfmt' },
       sh = { 'shfmt' },
-      bash = { 'shfmt' },
-      zsh = { 'shfmt' },
       fish = { 'fish_indent' },
       json = { 'prettierd', 'prettier', stop_after_first = true },
       jsonc = { 'prettierd', 'prettier', stop_after_first = true },
@@ -31,13 +37,9 @@ _G.UserConfig = {
       vue = { 'prettierd', 'prettier', stop_after_first = true },
       c = { 'clang-format' },
       cpp = { 'clang-format' },
-      objc = { 'clang-format' },
-      objcpp = { 'clang-format' },
-      cuda = { 'clang-format' },
       rust = { 'rustfmt' },
       lua = { 'stylua' },
       python = { 'ruff_fix', 'ruff_organize_imports', 'ruff_format' },
-      xml = { 'xmlformatter' },
     },
   },
   treesitter = {

@@ -52,9 +52,6 @@ return {
   {
     'nvim-mini/mini.ai',
     event = 'VeryLazy',
-    dependencies = {
-      'nvim-mini/mini.extra',
-    },
     opts = {
       custom_textobjects = {
         B = function(...)
@@ -189,7 +186,7 @@ return {
   {
     'romus204/tree-sitter-manager.nvim',
     cmd = { 'TSManager', 'TSInstall', 'TSInstallSync', 'TSUninstall', 'TSUpdate', 'TSUpdateSync' },
-    event = 'VeryLazy',
+    event = 'FileType',
     opts = vim.deepcopy(UserConfig.treesitter),
     keys = {
       { '<leader>ts', '<cmd>TSManager<cr>', desc = 'Treesitter manager' },
@@ -269,9 +266,9 @@ return {
   },
   {
     'saghen/blink.cmp',
-    version = "1.*",
+    version = '1.*',
     event = { 'InsertEnter', 'CmdlineEnter' },
-    dependencies = { 'rafamadriz/friendly-snippets', 'folke/lazydev.nvim' },
+    dependencies = { 'rafamadriz/friendly-snippets' },
     opts = {
       sources = {
         per_filetype = {
