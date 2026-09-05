@@ -1,118 +1,78 @@
-_G.Config = {
-  enable_plugins = vim.env.NVIM_PLUGINS ~= '0',
+--------------------------------------------------------------------------------
+--- user config
+--------------------------------------------------------------------------------
+_G.UserConfig = {
+  enable_plugin = vim.env.NVIM_PLUGINS ~= '0',
   have_nerd_font = true,
-  github = {
-    proxy = {
-      enabled = false,
-      base_url = 'https://ghfast.top/https://github.com/',
-    },
-  },
   lsp = {
-    servers = { 'lua_ls' },
+    servers = { lua_ls = true },
   },
-  plugins = {
-    catppuccin = true,
-    mini = {
-      enabled = true,
-      icons = true,
-      ai = true,
-      surround = true,
-      statusline = true,
-      indentscope = true,
-      pairs = true,
-      move = true,
+  formatter = {
+    default_format_opts = { lsp_format = 'fallback' },
+    formatters_by_ft = {
+      nix = { 'nixfmt' },
+      sh = { 'shfmt' },
+      bash = { 'shfmt' },
+      zsh = { 'shfmt' },
+      fish = { 'fish_indent' },
+      json = { 'prettierd', 'prettier', stop_after_first = true },
+      jsonc = { 'prettierd', 'prettier', stop_after_first = true },
+      yaml = { 'prettierd', 'prettier', stop_after_first = true },
+      toml = { 'taplo' },
+      markdown = { 'prettierd', 'prettier', stop_after_first = true },
+      html = { 'prettierd', 'prettier', stop_after_first = true },
+      css = { 'prettierd', 'prettier', stop_after_first = true },
+      scss = { 'prettierd', 'prettier', stop_after_first = true },
+      less = { 'prettierd', 'prettier', stop_after_first = true },
+      javascript = { 'prettierd', 'prettier', stop_after_first = true },
+      javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+      typescript = { 'prettierd', 'prettier', stop_after_first = true },
+      typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+      vue = { 'prettierd', 'prettier', stop_after_first = true },
+      c = { 'clang-format' },
+      cpp = { 'clang-format' },
+      objc = { 'clang-format' },
+      objcpp = { 'clang-format' },
+      cuda = { 'clang-format' },
+      rust = { 'rustfmt' },
+      lua = { 'stylua' },
+      python = { 'ruff_fix', 'ruff_organize_imports', 'ruff_format' },
+      xml = { 'xmlformatter' },
     },
-    oil = true,
-    bufferline = true,
-    dropbar = true,
-    which_key = true,
-    tree_sitter_manager = true,
-    lspconfig = true,
-    mason = true,
-    lazydev = true,
-    fidget = true,
-    blink_cmp = true,
-    tiny_inline_diagnostic = true,
-    fzf_lua = true,
-    flash = true,
-    gitsigns = true,
-    neogit = true,
-    conform = true,
-    bqf = true,
-    quicker = true,
-    render_markdown = true,
-    live_preview = true,
-    grug_far = true,
+  },
+  treesitter = {
+    ensure_installed = { 'lua', 'markdown', 'markdown_inline' },
+    auto_install = false,
+    highlight = true,
   },
 }
 
-Config.github_url = function(repo)
-  local proxy = Config.github.proxy
-  return (proxy.enabled and proxy.base_url or 'https://github.com/') .. repo
-end
-
-Config.plugin_enabled = function(name)
-  if not Config.enable_plugins then
-    return false
-  end
-
-  local value = Config.plugins[name]
-  if type(value) == 'table' then
-    return value.enabled ~= false
-  end
-
-  return value == true
-end
-
-Config.plugin_feature_enabled = function(name, feature)
-  if not Config.plugin_enabled(name) then
-    return false
-  end
-
-  local value = Config.plugins[name]
-  return type(value) ~= 'table' or value[feature] ~= false
-end
+--------------------------------------------------------------------------------
+--- preload
+--------------------------------------------------------------------------------
+vim.g.mapleader = ' '
 
 --------------------------------------------------------------------------------
---- Plugin manager: lazy.nvim
+--- lazy.nvim bootstrap
 --------------------------------------------------------------------------------
-
--- mapleader 需在 lazy 加载期前就位（早于 00-core.lua 执行）
-if vim.g.mapleader == nil then
-  vim.g.mapleader = ' '
-end
-
-if Config.enable_plugins then
+if UserConfig.enable_plugin then
   local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+
   if not vim.uv.fs_stat(lazypath) then
-    vim.fn.system {
-      'git',
-      'clone',
-      '--filter=blob:none',
-      Config.github_url 'folke/lazy.nvim',
-      '--branch=stable',
-      lazypath,
-    }
+    local repo = 'https://github.com/folke/lazy.nvim.git'
+    vim.fn.system { 'git', 'clone', '--filter=blob:none', repo, '--branch=stable', lazypath }
   end
+
   vim.opt.rtp:prepend(lazypath)
+
   require('lazy').setup {
     spec = require 'plugins',
-    defaults = {
-      lazy = true,
-    },
-    performance = {
-      rtp = {
-        disabled_plugins = {
-          'gzip',
-          'matchit',
-          'netrwPlugin',
-          'rplugin',
-          'spellfile',
-          'tarPlugin',
-          'tutor',
-          'zipPlugin',
-        },
-      },
-    },
+    install = { colorscheme = { 'catppuccin' } },
   }
 end
+
+--------------------------------------------------------------------------------
+--- configs
+--------------------------------------------------------------------------------
+require 'options'
+require 'keymaps'
