@@ -43,11 +43,9 @@ if use 'mini' then
   end
 
   if use_feature('mini', 'ai') then
-    local ai = require 'mini.ai'
-    ai.setup {
+    require('mini.ai').setup {
       custom_textobjects = {
         B = require('mini.extra').gen_ai_spec.buffer(),
-        F = ai.gen_spec.treesitter { a = '@function.outer', i = '@function.inner' },
       },
     }
   end
@@ -103,7 +101,7 @@ end
 if use 'dropbar' then
   vim.pack.add { gh 'Bekaboo/dropbar.nvim' }
   require('dropbar').setup()
-  map('n', '<leader>;', require('dropbar.api').pick, { desc = 'Pick winbar symbols' })
+  map('n', '<leader>ns', require('dropbar.api').pick, { desc = 'Pick winbar symbols' })
   map('n', '[;', require('dropbar.api').goto_context_start, { desc = 'Go to context start' })
   map('n', '];', require('dropbar.api').select_next_context, { desc = 'Select next context' })
 end
@@ -114,19 +112,23 @@ if use 'which_key' then
   local which_key = require 'which-key'
   which_key.setup {
     spec = {
-      { '<leader>b', group = 'buffer' },
-      { '<leader>c', group = 'code', mode = { 'n', 'x' } },
-      { '<leader>f', group = 'find' },
-      { '<leader>g', group = 'git', mode = { 'n', 'x' } },
-      { '<leader>gh', group = 'hunks', mode = { 'n', 'x' } },
-      { '<leader>s', group = 'search', mode = { 'n', 'x' } },
-      { '<leader>x', group = 'diagnostics/quickfix' },
-      { '[', group = 'previous' },
-      { ']', group = 'next' },
-      { 'g', group = 'goto' },
+      { '<leader>b', group = 'buffer', icon = { icon = '󰈔', color = 'cyan' } },
+      { '<leader>c', group = 'code', icon = { icon = '', color = 'orange' }, mode = { 'n', 'x' } },
+      { '<leader>f', group = 'find', icon = { icon = '', color = 'green' } },
+      { '<leader>g', group = 'git', icon = { icon = '', color = 'orange' }, mode = { 'n', 'x' } },
+      { '<leader>s', group = 'search', icon = { icon = '', color = 'green' }, mode = { 'n', 'x' } },
+      { '<leader>x', group = 'lists', icon = { icon = '', color = 'yellow' } },
+      { '<leader>n', group = 'navigation', icon = { icon = '', color = 'blue' }, mode = { 'n', 'x', 'o' } },
+      { '<leader>t', group = 'tools', icon = { icon = '', color = 'purple' } },
+      { '<leader>h', group = 'help', icon = { icon = '󰋖', color = 'cyan' } },
+      { '<leader>y', icon = { icon = '', color = 'yellow' }, mode = { 'n', 'x' } },
+      { '<leader>p', icon = { icon = '', color = 'green' }, mode = { 'n', 'x' } },
+      { '[', group = 'previous', icon = { icon = '', color = 'blue' } },
+      { ']', group = 'next', icon = { icon = '', color = 'blue' } },
+      { 'g', group = 'goto', icon = { icon = '', color = 'blue' } },
     },
   }
-  map('n', '<leader>?', function()
+  map('n', '<leader>hk', function()
     which_key.show { global = false }
   end, { desc = 'Buffer Local Keymaps' })
 end
@@ -138,7 +140,12 @@ end
 -- tree-sitter-manager.nvim
 if use 'tree_sitter_manager' then
   vim.pack.add { gh 'romus204/tree-sitter-manager.nvim' }
-  require('tree-sitter-manager').setup { highlight = false }
+  require('tree-sitter-manager').setup {
+    highlight = false,
+    -- Install languages on demand with :TSInstall (see README).
+    auto_install = false,
+  }
+  map('n', '<leader>ts', '<cmd>TSManager<cr>', { desc = 'Treesitter manager' })
 end
 
 -- nvim-lspconfig
@@ -150,7 +157,7 @@ end
 if use 'mason' then
   vim.pack.add { gh 'mason-org/mason.nvim' }
   require('mason').setup()
-  map('n', '<leader>cm', '<cmd>Mason<cr>', { desc = 'Mason' })
+  map('n', '<leader>tm', '<cmd>Mason<cr>', { desc = 'Mason' })
 end
 
 -- lazydev.nvim
@@ -179,6 +186,18 @@ if use 'blink_cmp' then
     },
   }
   require('blink.cmp').setup {
+    sources = use 'lazydev' and {
+      per_filetype = {
+        lua = { inherit_defaults = true, 'lazydev' },
+      },
+      providers = {
+        lazydev = {
+          name = 'LazyDev',
+          module = 'lazydev.integrations.blink',
+          score_offset = 100,
+        },
+      },
+    } or nil,
     completion = {
       list = {
         selection = {
@@ -211,54 +230,26 @@ if use 'fzf_lua' then
   local fzf = require 'fzf-lua'
   fzf.setup {
     fzf_colors = true,
+    ui_select = {},
   }
 
-  local function fzf_call(method, opts)
-    return function()
-      fzf[method](opts)
-    end
-  end
+  map('n', '<leader>ff', fzf.global, { desc = 'Find files, buffers and symbols' })
+  map('n', '<leader>sg', fzf.live_grep, { desc = 'Live grep' })
+  map('n', '<leader>hh', fzf.helptags, { desc = 'Find help' })
+  map('n', '<leader>fr', fzf.resume, { desc = 'Resume last picker' })
+  map('n', '<leader>f?', fzf.builtin, { desc = 'Find pickers' })
+  map('n', '<leader>sb', fzf.blines, { desc = 'Lines in buffer' })
 
-  map('n', '<leader>ff', fzf_call 'files', { desc = 'Find files' })
-  map('n', '<leader>fF', fzf_call('files', { hidden = true }), { desc = 'Find files (hidden)' })
-  map('n', '<leader>fg', fzf_call 'live_grep', { desc = 'Live grep' })
-  map('n', '<leader>fb', fzf_call 'buffers', { desc = 'Find buffers' })
-  map('n', '<leader>fB', fzf_call('buffers', { cwd_only = true }), { desc = 'Find buffers (cwd)' })
-  map('n', '<leader>ft', fzf_call 'tabs', { desc = 'Find tabs' })
-  map('n', '<leader>fh', fzf_call 'help_tags', { desc = 'Find help' })
-  map('n', '<leader>fk', fzf_call 'keymaps', { desc = 'Find keymaps' })
-  map('n', '<leader>fo', fzf_call 'oldfiles', { desc = 'Find old files' })
-  map('n', '<leader>fO', fzf_call('oldfiles', { cwd_only = true }), { desc = 'Find old files (cwd)' })
-  map('n', '<leader>fm', fzf_call 'marks', { desc = 'Find marks' })
-  map('n', '<leader>fj', fzf_call 'jumps', { desc = 'Find jumps' })
-  map('n', '<leader>fc', fzf_call 'commands', { desc = 'Find commands' })
-  map('n', '<leader>fC', fzf_call 'colorschemes', { desc = 'Pick colorscheme' })
-  map('n', '<leader>fq', fzf_call 'quickfix', { desc = 'Quickfix list' })
-  map('n', '<leader>fl', fzf_call 'loclist', { desc = 'Location list' })
-  map('n', '<leader>fR', fzf_call 'resume', { desc = 'Resume last picker' })
-  map('n', '<leader>sg', fzf_call 'grep', { desc = 'Grep' })
-  map('n', '<leader>sb', fzf_call 'blines', { desc = 'Lines in buffer' })
-  map('n', '<leader>sl', fzf_call 'lines', { desc = 'Lines in all buffers' })
-  map('n', '<leader>sh', fzf_call 'search_history', { desc = 'Search history' })
-  map('n', '<leader>sc', fzf_call 'command_history', { desc = 'Command history' })
-  map('n', '<leader>gf', fzf_call 'git_files', { desc = 'Git files' })
-  map('n', '<leader>gs', fzf_call 'git_status', { desc = 'Git status' })
-  map('n', '<leader>gS', fzf_call 'git_stash', { desc = 'Git stash' })
-  map('n', '<leader>gb', fzf_call 'git_branches', { desc = 'Git branches' })
-  map('n', '<leader>gc', fzf_call 'git_commits', { desc = 'Git commits' })
-  map('n', '<leader>gC', fzf_call 'git_bcommits', { desc = 'Commits (buffer)' })
-  map('n', '<leader>gt', fzf_call 'git_tags', { desc = 'Git tags' })
-  map('n', '<leader>gw', fzf_call 'git_worktrees', { desc = 'Git worktrees' })
-  map('n', 'gO', fzf_call 'lsp_document_symbols', { desc = 'Document symbols' })
-  map('n', 'gW', fzf_call 'lsp_workspace_symbols', { desc = 'Workspace symbols' })
-  map({ 'n', 'x' }, 'gra', fzf_call 'lsp_code_actions', { desc = 'Code actions' })
-  map('n', 'gri', fzf_call 'lsp_implementations', { desc = 'Implementations' })
-  map('n', 'grr', fzf_call 'lsp_references', { desc = 'References' })
-  map('n', 'grt', fzf_call 'lsp_typedefs', { desc = 'Type definitions' })
-  map('n', 'gd', fzf_call 'lsp_definitions', { desc = 'Definitions' })
-  map('n', 'gD', fzf_call 'lsp_declarations', { desc = 'Declarations' })
-  map('n', 'grq', fzf_call 'diagnostics_document', { desc = 'Document diagnostics' })
-  map('n', 'grQ', fzf_call 'diagnostics_workspace', { desc = 'Workspace diagnostics' })
+  map('n', 'gO', fzf.lsp_document_symbols, { desc = 'Document symbols' })
+  map('n', 'gW', fzf.lsp_workspace_symbols, { desc = 'Workspace symbols' })
+  map({ 'n', 'x' }, 'gra', fzf.lsp_code_actions, { desc = 'Code actions' })
+  map('n', 'gri', fzf.lsp_implementations, { desc = 'Implementations' })
+  map('n', 'grr', fzf.lsp_references, { desc = 'References' })
+  map('n', 'grt', fzf.lsp_typedefs, { desc = 'Type definitions' })
+  map('n', 'gd', fzf.lsp_definitions, { desc = 'Definitions' })
+  map('n', 'gD', fzf.lsp_declarations, { desc = 'Declarations' })
+  map('n', '<leader>xd', fzf.diagnostics_document, { desc = 'Document diagnostics' })
+  map('n', '<leader>xD', fzf.diagnostics_workspace, { desc = 'Workspace diagnostics' })
 end
 
 -- flash.nvim
@@ -266,8 +257,8 @@ if use 'flash' then
   vim.pack.add { gh 'folke/flash.nvim' }
   local flash = require 'flash'
   flash.setup()
-  map({ 'n', 'x', 'o' }, '<leader>j', flash.jump, { desc = 'Flash' })
-  map({ 'n', 'x', 'o' }, '<leader>J', flash.treesitter, { desc = 'Flash Treesitter' })
+  map({ 'n', 'x', 'o' }, '<leader>nj', flash.jump, { desc = 'Flash' })
+  map({ 'n', 'x', 'o' }, '<leader>nt', flash.treesitter, { desc = 'Flash Treesitter' })
 end
 
 --------------------------------------------------------------------------------
@@ -305,26 +296,26 @@ if use 'gitsigns' then
         gitsigns.nav_hunk 'first'
       end, 'First hunk')
 
-      buffer_map('n', '<leader>ghs', gitsigns.stage_hunk, 'Stage hunk')
-      buffer_map('x', '<leader>ghs', function()
+      buffer_map('n', '<leader>gs', gitsigns.stage_hunk, 'Stage hunk')
+      buffer_map('x', '<leader>gs', function()
         gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
       end, 'Stage hunk')
-      buffer_map('n', '<leader>ghr', gitsigns.reset_hunk, 'Reset hunk')
-      buffer_map('x', '<leader>ghr', function()
+      buffer_map('n', '<leader>gr', gitsigns.reset_hunk, 'Reset hunk')
+      buffer_map('x', '<leader>gr', function()
         gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
       end, 'Reset hunk')
-      buffer_map('n', '<leader>ghS', gitsigns.stage_buffer, 'Stage buffer')
-      buffer_map('n', '<leader>ghR', gitsigns.reset_buffer, 'Reset buffer')
-      buffer_map('n', '<leader>ghp', gitsigns.preview_hunk_inline, 'Preview hunk')
-      buffer_map('n', '<leader>ghb', function()
+      buffer_map('n', '<leader>gS', gitsigns.stage_buffer, 'Stage buffer')
+      buffer_map('n', '<leader>gR', gitsigns.reset_buffer, 'Reset buffer')
+      buffer_map('n', '<leader>gp', gitsigns.preview_hunk_inline, 'Preview hunk')
+      buffer_map('n', '<leader>gb', function()
         gitsigns.blame_line { full = true }
       end, 'Blame line')
-      buffer_map('n', '<leader>ghB', gitsigns.blame, 'Blame buffer')
-      buffer_map('n', '<leader>ghd', gitsigns.diffthis, 'Diff this')
-      buffer_map('n', '<leader>ghD', function()
+      buffer_map('n', '<leader>gB', gitsigns.blame, 'Blame buffer')
+      buffer_map('n', '<leader>gd', gitsigns.diffthis, 'Diff this')
+      buffer_map('n', '<leader>gD', function()
         gitsigns.diffthis '~'
       end, 'Diff this ~')
-      buffer_map('n', '<leader>ght', gitsigns.toggle_current_line_blame, 'Toggle line blame')
+      buffer_map('n', '<leader>gt', gitsigns.toggle_current_line_blame, 'Toggle line blame')
       buffer_map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, 'Select hunk')
     end,
   }
