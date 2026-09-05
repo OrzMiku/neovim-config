@@ -72,3 +72,47 @@ Config.plugin_feature_enabled = function(name, feature)
   local value = Config.plugins[name]
   return type(value) ~= 'table' or value[feature] ~= false
 end
+
+--------------------------------------------------------------------------------
+--- Plugin manager: lazy.nvim
+--------------------------------------------------------------------------------
+
+-- mapleader 需在 lazy 加载期前就位（早于 00-core.lua 执行）
+if vim.g.mapleader == nil then
+  vim.g.mapleader = ' '
+end
+
+if Config.enable_plugins then
+  local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+  if not vim.uv.fs_stat(lazypath) then
+    vim.fn.system {
+      'git',
+      'clone',
+      '--filter=blob:none',
+      Config.github_url 'folke/lazy.nvim',
+      '--branch=stable',
+      lazypath,
+    }
+  end
+  vim.opt.rtp:prepend(lazypath)
+  require('lazy').setup {
+    spec = require 'plugins',
+    defaults = {
+      lazy = true,
+    },
+    performance = {
+      rtp = {
+        disabled_plugins = {
+          'gzip',
+          'matchit',
+          'netrwPlugin',
+          'rplugin',
+          'spellfile',
+          'tarPlugin',
+          'tutor',
+          'zipPlugin',
+        },
+      },
+    },
+  }
+end

@@ -4,9 +4,6 @@ local map = vim.keymap.set
 -- General
 vim.cmd.packadd 'nvim.difftool'
 vim.cmd.packadd 'nvim.undotree'
-if vim.g.mapleader == nil then
-  vim.g.mapleader = ' '
-end
 opt.undofile = true
 
 -- UI
