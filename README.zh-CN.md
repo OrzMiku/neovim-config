@@ -10,18 +10,3 @@
 - LSP、格式化工具及其运行环境按所使用的语言安装，其中许多工具可以通过 Mason 管理。
 - 设置 `NVIM_PLUGINS=0` 可禁用外部插件。
 
-## 快捷键
-
-Leader 默认为空格。自定义命令使用 `<leader><group><action>`，剪贴板快捷键除外：`<leader>y/Y/p/P`，以及复制相对/绝对路径的 `<leader>yr/ya`。
-
-| Group | Meaning |
-| --- | --- |
-| `b` | buffer |
-| `c` | code |
-| `f` | find |
-| `s` | search |
-| `g` | git |
-| `x` | lists |
-| `n` | navigation |
-| `t` | tools |
-| `h` | help |

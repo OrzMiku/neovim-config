@@ -165,21 +165,11 @@ return {
         { '<leader>x', group = 'lists', icon = { icon = '', color = 'yellow' } },
         { '<leader>n', group = 'navigation', icon = { icon = '', color = 'blue' }, mode = { 'n', 'x', 'o' } },
         { '<leader>t', group = 'tools', icon = { icon = '', color = 'purple' } },
-        { '<leader>h', group = 'help', icon = { icon = '󰋖', color = 'cyan' } },
         { '<leader>y', icon = { icon = '', color = 'yellow' }, mode = { 'n', 'x' } },
         { '<leader>p', icon = { icon = '', color = 'green' }, mode = { 'n', 'x' } },
         { '[', group = 'previous', icon = { icon = '', color = 'blue' } },
         { ']', group = 'next', icon = { icon = '', color = 'blue' } },
         { 'g', group = 'goto', icon = { icon = '', color = 'blue' } },
-      },
-    },
-    keys = {
-      {
-        '<leader>hk',
-        function()
-          require('which-key').show { global = false }
-        end,
-        desc = 'Buffer Local Keymaps',
       },
     },
   },
@@ -320,9 +310,16 @@ return {
       {
         '<leader>ff',
         function()
-          require('fzf-lua').global()
+          require('fzf-lua').files()
         end,
-        desc = 'Find files, buffers and symbols',
+        desc = 'Find files',
+      },
+      {
+        '<leader>fb',
+        function()
+          require('fzf-lua').buffers()
+        end,
+        desc = 'Find buffers',
       },
       {
         '<leader>sg',
@@ -332,18 +329,18 @@ return {
         desc = 'Live grep',
       },
       {
-        '<leader>hh',
+        '<leader>fh',
         function()
           require('fzf-lua').helptags()
         end,
         desc = 'Find help',
       },
       {
-        '<leader>fr',
+        '<leader>fk',
         function()
-          require('fzf-lua').resume()
+          require('fzf-lua').keymaps()
         end,
-        desc = 'Resume last picker',
+        desc = 'Find keymaps',
       },
       {
         '<leader>f?',
