@@ -6,10 +6,6 @@ opt.cursorline = true
 opt.list = true
 opt.scrolloff = 3
 opt.signcolumn = 'yes'
-opt.winborder = 'single'
-opt.pumborder = 'single'
-opt.pummaxwidth = 80
-opt.pumheight = 10
 require('vim._core.ui2').enable {
   enable = true,
   msg = {

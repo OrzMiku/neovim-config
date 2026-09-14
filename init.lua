@@ -43,7 +43,28 @@ _G.UserConfig = {
     },
   },
   treesitter = {
-    ensure_installed = { 'lua', 'markdown', 'markdown_inline' },
+    ensure_installed = {
+      'bash',
+      'c',
+      'cpp',
+      'css',
+      'fish',
+      'html',
+      'javascript',
+      'json',
+      'lua',
+      'markdown',
+      'markdown_inline',
+      'nix',
+      'python',
+      'rust',
+      'scss',
+      'toml',
+      'tsx',
+      'typescript',
+      'vue',
+      'yaml',
+    },
     auto_install = false,
     highlight = true,
   },
@@ -71,6 +92,8 @@ if UserConfig.enable_plugin then
     spec = require 'plugins',
     install = { colorscheme = { 'catppuccin' } },
   }
+
+  vim.keymap.set('n', '<leader>tl', '<cmd>Lazy<cr>', { desc = 'Lazy' })
 end
 
 --------------------------------------------------------------------------------

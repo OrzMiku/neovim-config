@@ -12,11 +12,6 @@ return {
     end,
   },
   {
-    'nvim-mini/mini.extra',
-    lazy = true,
-    opts = {},
-  },
-  {
     'rafamadriz/friendly-snippets',
     lazy = true,
   },
@@ -27,16 +22,6 @@ return {
   {
     'junegunn/fzf',
     lazy = true,
-  },
-  {
-    'folke/lazydev.nvim',
-    ft = 'lua',
-    cmd = 'LazyDev',
-    opts = {
-      library = {
-        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-      },
-    },
   },
   {
     'catppuccin/nvim',
@@ -50,22 +35,6 @@ return {
     end,
   },
   {
-    'nvim-mini/mini.ai',
-    event = 'VeryLazy',
-    opts = {
-      custom_textobjects = {
-        B = function(...)
-          return require('mini.extra').gen_ai_spec.buffer()(...)
-        end,
-      },
-    },
-  },
-  {
-    'nvim-mini/mini.surround',
-    event = 'VeryLazy',
-    opts = {},
-  },
-  {
     'nvim-mini/mini.statusline',
     event = 'VeryLazy',
     opts = {},
@@ -75,13 +44,6 @@ return {
     'nvim-mini/mini.indentscope',
     event = { 'BufReadPost', 'BufNewFile' },
     opts = {},
-  },
-  {
-    'nvim-mini/mini.pairs',
-    event = { 'InsertEnter', 'CmdlineEnter' },
-    opts = {
-      modes = { command = true },
-    },
   },
   {
     'nvim-mini/mini.move',
@@ -122,35 +84,6 @@ return {
     },
   },
   {
-    'Bekaboo/dropbar.nvim',
-    dependencies = { 'nvim-mini/mini.icons' },
-    event = 'VeryLazy',
-    opts = {},
-    keys = {
-      {
-        '<leader>ns',
-        function()
-          require('dropbar.api').pick()
-        end,
-        desc = 'Pick winbar symbols',
-      },
-      {
-        '[;',
-        function()
-          require('dropbar.api').goto_context_start()
-        end,
-        desc = 'Go to context start',
-      },
-      {
-        '];',
-        function()
-          require('dropbar.api').select_next_context()
-        end,
-        desc = 'Select next context',
-      },
-    },
-  },
-  {
     'folke/which-key.nvim',
     cmd = 'WhichKey',
     dependencies = { 'nvim-mini/mini.icons' },
@@ -163,7 +96,6 @@ return {
         { '<leader>g', group = 'git', icon = { icon = '', color = 'orange' }, mode = { 'n', 'x' } },
         { '<leader>s', group = 'search', icon = { icon = '', color = 'green' }, mode = { 'n', 'x' } },
         { '<leader>x', group = 'lists', icon = { icon = '', color = 'yellow' } },
-        { '<leader>n', group = 'navigation', icon = { icon = '', color = 'blue' }, mode = { 'n', 'x', 'o' } },
         { '<leader>t', group = 'tools', icon = { icon = '', color = 'purple' } },
         { '<leader>y', icon = { icon = '', color = 'yellow' }, mode = { 'n', 'x' } },
         { '<leader>p', icon = { icon = '', color = 'green' }, mode = { 'n', 'x' } },
@@ -260,18 +192,6 @@ return {
     event = { 'InsertEnter', 'CmdlineEnter' },
     dependencies = { 'rafamadriz/friendly-snippets' },
     opts = {
-      sources = {
-        per_filetype = {
-          lua = { inherit_defaults = true, 'lazydev' },
-        },
-        providers = {
-          lazydev = {
-            name = 'LazyDev',
-            module = 'lazydev.integrations.blink',
-            score_offset = 100,
-          },
-        },
-      },
       completion = {
         list = {
           selection = {
@@ -322,6 +242,13 @@ return {
         desc = 'Find buffers',
       },
       {
+        '<leader>fo',
+        function()
+          require('fzf-lua').oldfiles()
+        end,
+        desc = 'Find old files',
+      },
+      {
         '<leader>sg',
         function()
           require('fzf-lua').live_grep()
@@ -356,7 +283,6 @@ return {
         end,
         desc = 'Lines in buffer',
       },
-
       {
         'gO',
         function()
@@ -427,29 +353,6 @@ return {
           require('fzf-lua').diagnostics_workspace()
         end,
         desc = 'Workspace diagnostics',
-      },
-    },
-  },
-  {
-    'folke/flash.nvim',
-    event = 'VeryLazy',
-    opts = {},
-    keys = {
-      {
-        '<leader>nj',
-        function()
-          require('flash').jump()
-        end,
-        mode = { 'n', 'x', 'o' },
-        desc = 'Flash',
-      },
-      {
-        '<leader>nt',
-        function()
-          require('flash').treesitter()
-        end,
-        mode = { 'n', 'x', 'o' },
-        desc = 'Flash Treesitter',
       },
     },
   },
@@ -528,27 +431,18 @@ return {
   {
     'NeogitOrg/neogit',
     cmd = 'Neogit',
-    opts = { integrations = { diffview = true, fzf_lua = true } },
+    opts = { integrations = { fzf_lua = true } },
     keys = {
       { '<leader>gg', '<cmd>Neogit<cr>', desc = 'Show Neogit UI' },
     },
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'dlyongemallo/diffview-plus.nvim',
       'ibhagwan/fzf-lua',
     },
   },
   {
-    'dlyongemallo/diffview-plus.nvim',
-    main = 'diffview',
-    cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewToggleFiles', 'DiffviewFocusFiles', 'DiffviewRefresh', 'DiffviewFileHistory' },
-    dependencies = { 'nvim-lua/plenary.nvim', 'nvim-mini/mini.icons' },
-    opts = {},
-  },
-  {
     'stevearc/conform.nvim',
     cmd = 'ConformInfo',
-    event = 'BufWritePre',
     opts = vim.deepcopy(UserConfig.formatter),
     keys = {
       {
@@ -566,52 +460,6 @@ return {
     ft = 'qf',
     dependencies = { 'junegunn/fzf' },
     opts = {},
-  },
-  {
-    'stevearc/quicker.nvim',
-    ft = 'qf',
-    dependencies = { 'kevinhwang91/nvim-bqf' },
-    opts = {
-      keys = {
-        {
-          '>',
-          function()
-            require('quicker').expand {
-              before = 2,
-              after = 2,
-              add_to_existing = true,
-            }
-          end,
-          desc = 'Expand quickfix context',
-        },
-        {
-          '<',
-          function()
-            require('quicker').collapse()
-          end,
-          desc = 'Collapse quickfix context',
-        },
-      },
-    },
-    keys = {
-      {
-        '<leader>xq',
-        function()
-          require('quicker').toggle { focus = true }
-        end,
-        desc = 'Toggle quickfix',
-      },
-      {
-        '<leader>xl',
-        function()
-          require('quicker').toggle {
-            focus = true,
-            loclist = true,
-          }
-        end,
-        desc = 'Toggle location list',
-      },
-    },
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
