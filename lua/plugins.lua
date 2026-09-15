@@ -117,7 +117,6 @@ return {
   {
     'neovim/nvim-lspconfig',
     lazy = false,
-    dependencies = { 'mason-org/mason.nvim' },
     opts = vim.deepcopy(UserConfig.lsp),
     config = function(_, opts)
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -184,6 +183,14 @@ return {
     opts = {},
     keys = {
       { '<leader>tm', '<cmd>Mason<cr>', desc = 'Mason' },
+    },
+  },
+  {
+    'mason-org/mason-lspconfig.nvim',
+    opts = {},
+    dependencies = {
+      { 'mason-org/mason.nvim', opts = {} },
+      'neovim/nvim-lspconfig',
     },
   },
   {
