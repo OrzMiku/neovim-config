@@ -4,7 +4,11 @@
 _G.UserConfig = {
   enable_plugin = vim.env.NVIM_PLUGINS ~= '0',
   have_nerd_font = true,
-  lsp = {},
+  lsp = {
+    servers = {
+      tsrs = true,
+    },
+  },
   formatter = {
     default_format_opts = { lsp_format = 'fallback' },
     formatters_by_ft = {
