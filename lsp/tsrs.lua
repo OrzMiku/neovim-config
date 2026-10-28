@@ -1,5 +1,5 @@
 return {
-  cmd = { 'tsrs', '--lsp', '-stdio' }, -- or the absolute path to target/release/tsrs
+  cmd = { 'tsrs', '--lsp', '-stdio' },
   filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
   root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
 }
