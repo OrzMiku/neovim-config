@@ -1,9 +1,11 @@
 --------------------------------------------------------------------------------
 --- user config
 --------------------------------------------------------------------------------
+local utils = require 'utils'
+
 _G.UserConfig = {
-  enable_plugin = vim.env.NVIM_PLUGINS ~= '0',
-  have_nerd_font = true,
+  enable_plugin = utils.env_flag('NVIM_CONFIG_ENABLE_PLUGIN', true),
+  have_nerd_font = utils.env_flag('NVIM_CONFIG_HAVE_NERD_FONT', true),
   lsp = {
     tsrs = true,
     vtsls = false,
