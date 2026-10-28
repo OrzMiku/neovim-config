@@ -83,7 +83,7 @@ if UserConfig.enable_plugin then
   vim.opt.rtp:prepend(lazypath)
 
   require('lazy').setup {
-    spec = require 'plugins',
+    spec = { { import = 'plugins' } },
     install = { colorscheme = { 'catppuccin' } },
   }
 
