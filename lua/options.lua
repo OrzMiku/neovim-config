@@ -1,35 +1,41 @@
-local opt = vim.opt
+local o = vim.o
 
 -- UI
-opt.number = true
-opt.cursorline = true
-opt.list = true
-opt.scrolloff = 3
-opt.signcolumn = 'yes'
+o.number = true
+o.cursorline = true
+o.list = true
+o.scrolloff = 3
+o.signcolumn = 'yes'
 require('vim._core.ui2').enable {
   enable = true,
   msg = {
     targets = {
-      default = 'cmd',
+      progress = 'msg',
     },
   },
 }
 
 -- Editing
-opt.undofile = true
-opt.expandtab = true
-opt.tabstop = 2
-opt.softtabstop = 2
-opt.shiftwidth = 2
-opt.shiftround = true
-opt.smartindent = true
-opt.ignorecase = true
-opt.smartcase = true
-opt.splitbelow = true
-opt.splitright = true
+o.undofile = true
+o.expandtab = true
+o.tabstop = 2
+o.softtabstop = 2
+o.shiftwidth = 2
+o.shiftround = true
+o.smartindent = true
+o.ignorecase = true
+o.smartcase = true
+o.splitbelow = true
+o.splitright = true
+o.autocomplete = not UserConfig.enable_plugin
 
 -- Folding
-opt.foldtext = ''
-opt.foldlevel = 99
-opt.foldmethod = 'expr'
-opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+o.foldtext = ''
+o.foldlevel = 99
+o.foldmethod = 'expr'
+o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+
+-- Diagnostic
+vim.diagnostic.config {
+  virtual_text = true,
+}

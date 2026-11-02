@@ -47,16 +47,12 @@ _G.UserConfig = {
   treesitter = {
     ensure_installed = {
       'bash',
-      'c',
       'cpp',
       'css',
       'fish',
       'html',
       'javascript',
       'json',
-      'lua',
-      'markdown',
-      'markdown_inline',
       'nix',
       'python',
       'rust',
@@ -92,7 +88,8 @@ if UserConfig.enable_plugin then
 
   require('lazy').setup {
     spec = { { import = 'plugins' } },
-    install = { colorscheme = { 'catppuccin' } },
+    install = { colorscheme = { 'catppuccin-nvim' } },
+    rocks = { enabled = false },
   }
 
   vim.keymap.set('n', '<leader>tl', '<cmd>Lazy<cr>', { desc = 'Lazy' })
