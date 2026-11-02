@@ -37,5 +37,11 @@ o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 
 -- Diagnostic
 vim.diagnostic.config {
+  severity_sort = true,
   virtual_text = true,
+  jump = {
+    on_jump = function()
+      vim.diagnostic.open_float()
+    end,
+  },
 }
