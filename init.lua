@@ -7,6 +7,7 @@ _G.UserConfig = {
   enable_plugin = utils.env_flag('NVIM_CONFIG_ENABLE_PLUGIN', true),
   have_nerd_font = utils.env_flag('NVIM_CONFIG_HAVE_NERD_FONT', true),
   lsp = {
+    nixd = true,
     tsrs = true,
     vtsls = false,
     cssls = true,
