@@ -1,9 +1,21 @@
-return {
-  'folke/which-key.nvim',
-  cmd = 'WhichKey',
-  dependencies = { 'nvim-mini/mini.icons' },
-  event = 'VeryLazy',
-  opts = {
+-- Colorscheme (immediate)
+require('catppuccin').setup {}
+vim.cmd.colorscheme 'catppuccin-nvim'
+
+-- Icons (immediate, used by oil.nvim and others)
+local icons = require 'mini.icons'
+icons.setup {
+  style = UserConfig.have_nerd_font and 'glyph' or 'ascii',
+}
+icons.mock_nvim_web_devicons()
+
+-- Tabline & which-key (deferred after first draw)
+vim.schedule(function()
+  vim.cmd.packadd 'mini.tabline'
+  require('mini.tabline').setup {}
+
+  vim.cmd.packadd 'which-key.nvim'
+  require('which-key').setup {
     spec = {
       { '<leader>b', group = 'buffer', icon = { icon = '󰈔', color = 'cyan' } },
       { '<leader>c', group = 'code', icon = { icon = '', color = 'orange' }, mode = { 'n', 'x' } },
@@ -18,5 +30,14 @@ return {
       { ']', group = 'next', icon = { icon = '', color = 'blue' } },
       { 'g', group = 'goto', icon = { icon = '', color = 'blue' } },
     },
-  },
-}
+  }
+end)
+
+-- Indentscope (on first buffer)
+vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
+  once = true,
+  callback = function()
+    vim.cmd.packadd 'mini.indentscope'
+    require('mini.indentscope').setup {}
+  end,
+})
