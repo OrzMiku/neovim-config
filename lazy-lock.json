@@ -20,6 +20,7 @@
   "nvim-bqf": { "branch": "main", "commit": "c282a62bec6c0621a1ef5132aa3f4c9fc4dcc2c7" },
   "nvim-lspconfig": { "branch": "master", "commit": "4648fd8ba5c678d7e2db75ae44ffac269bb589d8" },
   "oil.nvim": { "branch": "master", "commit": "d3733d933833a0e59b813ecec99341527adf0c28" },
+  "open-by-http.nvim": { "branch": "main", "commit": "65ad40fa90ae4fcfadec880d2cc8d2a6716be57a" },
   "plenary.nvim": { "branch": "master", "commit": "74b06c6c75e4eeb3108ec01852001636d85a932b" },
   "render-markdown.nvim": { "branch": "main", "commit": "a67f826164c38c836fc6060f32b275c4c43317a7" },
   "tree-sitter-manager.nvim": { "branch": "main", "commit": "05c2328f1ffd84f1944f9ff9aeb0d5032c6e5c1e" },
